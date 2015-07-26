@@ -24,7 +24,9 @@ class UserRolesController extends UserRolesAppController {
  *
  * @var array
  */
-	//public $uses = array();
+	public $uses = array(
+		'UserRoles.UserRole'
+	);
 
 /**
  * use component
@@ -41,6 +43,8 @@ class UserRolesController extends UserRolesAppController {
  * @return void
  */
 	public function index() {
+		$roles = $this->UserRole->getUserRoles();
+		$this->set('roles', $roles);
 	}
 
 /**
