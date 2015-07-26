@@ -10,7 +10,7 @@
  */
 ?>
 
-<?php $this->assign('title', __d('user_manager', 'User Manager')); ?>
+<?php $this->assign('title', __d('user_roles', 'User Roles')); ?>
 
 <div>
 

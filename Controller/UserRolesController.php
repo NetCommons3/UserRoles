@@ -31,7 +31,9 @@ class UserRolesController extends UserRolesAppController {
  *
  * @var array
  */
-	//public $components = array();
+	public $components = array(
+		'ControlPanel.ControlPanelLayout'
+	);
 
 /**
  * index
