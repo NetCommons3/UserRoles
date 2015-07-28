@@ -25,7 +25,8 @@ class UserRolesController extends UserRolesAppController {
  * @var array
  */
 	public $uses = array(
-		'UserRoles.UserRole'
+		'UserRoles.UserRole',
+		'Roles.Role'
 	);
 
 /**
@@ -70,7 +71,24 @@ class UserRolesController extends UserRolesAppController {
  *
  * @return void
  */
-	public function edit() {
+	public function edit($roleKey = null) {
+		$Role = $this->Role;
+
+		$options = array(
+			'recursive' => -1,
+			'fields' => array('key', 'name'),
+			'conditions' => array(
+				'type' => $Role::ROLE_TYPE_USER,
+				'is_systemized' => true,
+				'language_id' => Configure::read('Config.languageId')
+			),
+			'order' => array('id' => 'asc')
+		);
+
+		$roles = $this->Role->find('list', $options);
+		unset($roles[$Role::ROLE_KEY_SYSTEM_ADMINISTRATOR]);
+
+		$this->set('roles', $roles);
 	}
 
 /**
