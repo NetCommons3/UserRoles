@@ -1,6 +1,6 @@
 <?php
 /**
- * UserRoles Controller
+ * UserRoleSettings Controller
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
@@ -12,12 +12,12 @@
 App::uses('UserRolesAppController', 'UserRoles.Controller');
 
 /**
- * UserRoles Controller
+ * UserRoleSettings Controller
  *
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\UserRoles\Controller
  */
-class UserRolesController extends UserRolesAppController {
+class UserRoleSettingsController extends UserRolesAppController {
 
 /**
  * use model
@@ -38,46 +38,10 @@ class UserRolesController extends UserRolesAppController {
 	);
 
 /**
- * index
- *
- * @return void
- */
-	public function index() {
-		$roles = $this->UserRole->getUserRoles();
-		$this->set('roles', $roles);
-	}
-
-/**
- * view
- *
- * @return void
- */
-	public function view() {
-	}
-
-/**
- * add
- *
- * @return void
- */
-	public function add() {
-		$this->view = 'edit';
-
-	}
-
-/**
  * edit
  *
  * @return void
  */
 	public function edit() {
-	}
-
-/**
- * delete
- *
- * @return void
- */
-	public function delete() {
 	}
 }
