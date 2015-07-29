@@ -15,13 +15,39 @@ echo $this->Html->script(
 	),
 	array('plugin' => false)
 );
-
 ?>
 
 <?php $this->assign('title', __d('user_roles', 'User Roles')); ?>
 
 <?php echo $this->element('UserRoles.tabs'); ?>
 
-<div>
+<div class="panel panel-default">
+	<?php echo $this->Form->create(null, array('novalidate' => true)); ?>
 
+	<div class="panel-body">
+		<?php echo $this->SwitchLanguage->tablist('user_roles_'); ?>
+
+		<?php foreach ($languages as $langId => $langCode) : ?>
+			<div id="user-roles-<?php echo $langCode; ?>"
+					class="tab-pane<?php echo ($activeLangCode === $langCode ? ' active' : ''); ?>">
+
+
+			</div>
+		<?php endforeach; ?>
+
+	</div>
+
+	<div class="panel-footer text-center">
+		<a class="btn btn-default btn-workflow" href="<?php echo $this->Html->url('/user_roles/user_roles/index/'); ?>">
+			<span class="glyphicon glyphicon-remove"></span>
+			<?php echo __d('net_commons', 'Cancel'); ?>
+		</a>
+
+		<?php echo $this->Form->button(__d('net_commons', 'OK'), array(
+				'class' => 'btn btn-primary btn-workflow',
+				'name' => 'save',
+			)); ?>
+	</div>
+
+	<?php echo $this->Form->end(); ?>
 </div>

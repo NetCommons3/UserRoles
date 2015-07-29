@@ -35,7 +35,8 @@ class UserRolesController extends UserRolesAppController {
  * @var array
  */
 	public $components = array(
-		'ControlPanel.ControlPanelLayout'
+		'ControlPanel.ControlPanelLayout',
+		'M17n.SwitchLanguage'
 	);
 
 /**
@@ -101,6 +102,7 @@ class UserRolesController extends UserRolesAppController {
  * @return void
  */
 	private function __prepare() {
+		//ベース権限の取得
 		$Role = $this->UserRole;
 
 		$options = array(
