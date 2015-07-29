@@ -158,7 +158,7 @@ class UserRole extends Role {
  * @param string $roleKey roles.key
  * @return array Role data
  */
-	public function getUserRoles($roleKey = null) {
+	public function getUserRoles($type = 'all', $roleKey = null, $options = array()) {
 		$conditions = array(
 			$this->alias . '.type' => self::ROLE_TYPE_USER
 		);
@@ -166,11 +166,14 @@ class UserRole extends Role {
 			$conditions[$this->alias . '.key'] = $roleKey;
 		}
 
-		if (! $roles = $this->find('all', array(
+		$options = Hash::merge(array(
 			'recursive' => -1,
 			'conditions' => $conditions,
 			'order' => $this->alias . '.id',
-		))) {
+		), $options);
+
+
+		if (! $roles = $this->find($type, $options)) {
 			return $roles;
 		}
 

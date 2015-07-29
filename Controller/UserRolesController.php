@@ -26,7 +26,7 @@ class UserRolesController extends UserRolesAppController {
  */
 	public $uses = array(
 		'UserRoles.UserRole',
-		'Roles.Role'
+		//'Roles.Role'
 	);
 
 /**
@@ -63,6 +63,7 @@ class UserRolesController extends UserRolesAppController {
  */
 	public function add() {
 		$this->view = 'edit';
+		$this->__prepare();
 
 	}
 
@@ -72,23 +73,11 @@ class UserRolesController extends UserRolesAppController {
  * @return void
  */
 	public function edit($roleKey = null) {
-		$Role = $this->Role;
+		$this->__prepare();
 
-		$options = array(
-			'recursive' => -1,
-			'fields' => array('key', 'name'),
-			'conditions' => array(
-				'type' => $Role::ROLE_TYPE_USER,
-				'is_systemized' => true,
-				'language_id' => Configure::read('Config.languageId')
-			),
-			'order' => array('id' => 'asc')
-		);
 
-		$roles = $this->Role->find('list', $options);
-		unset($roles[$Role::ROLE_KEY_SYSTEM_ADMINISTRATOR]);
 
-		$this->set('roles', $roles);
+
 	}
 
 /**
@@ -98,4 +87,28 @@ class UserRolesController extends UserRolesAppController {
  */
 	public function delete() {
 	}
+
+/**
+ * prepare
+ *
+ * @return void
+ */
+	private function __prepare() {
+		$Role = $this->UserRole;
+
+		$options = array(
+			'fields' => array('key', 'name'),
+			'conditions' => array(
+				'is_systemized' => true,
+				'language_id' => Configure::read('Config.languageId')
+			),
+			'order' => array('id' => 'asc')
+		);
+
+		$roles = $this->UserRole->getUserRoles('list', null, $options);
+		unset($roles[$Role::ROLE_KEY_SYSTEM_ADMINISTRATOR]);
+
+		$this->set('baseRoles', $roles);
+	}
+
 }
