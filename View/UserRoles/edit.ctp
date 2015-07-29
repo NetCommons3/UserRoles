@@ -8,6 +8,14 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
  */
+
+echo $this->Html->script(
+	array(
+		'/user_roles/js/user_roles.js'
+	),
+	array('plugin' => false)
+);
+
 ?>
 
 <?php $this->assign('title', __d('user_roles', 'User Roles')); ?>

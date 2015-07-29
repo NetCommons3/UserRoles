@@ -65,6 +65,11 @@ class UserRolesController extends UserRolesAppController {
 		$this->view = 'edit';
 		$this->__prepare();
 
+		if ($this->request->isPost()) {
+
+		} else {
+
+		}
 	}
 
 /**
@@ -75,9 +80,11 @@ class UserRolesController extends UserRolesAppController {
 	public function edit($roleKey = null) {
 		$this->__prepare();
 
+		if ($this->request->isPost()) {
 
+		} else {
 
-
+		}
 	}
 
 /**
