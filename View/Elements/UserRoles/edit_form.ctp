@@ -32,3 +32,10 @@
 			'field' => 'name',
 		]); ?>
 </div>
+
+<div class="form-group">
+	<?php echo $this->UserRoleForm->selectUserRoles($langId . '.' . 'UserRole.data_type_template_key', array(
+			'label' => __d('user_roles', 'Base roles'),
+			'class' => 'form-control',
+		)); ?>
+</div>
