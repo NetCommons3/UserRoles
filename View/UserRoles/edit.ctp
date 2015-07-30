@@ -31,7 +31,9 @@ echo $this->Html->script(
 			<div id="user-roles-<?php echo $langCode; ?>"
 					class="tab-pane<?php echo ($activeLangCode === $langCode ? ' active' : ''); ?>">
 
-
+				<?php echo $this->element('UserRoles/edit_form', array(
+						'langId' => $langId,
+					)); ?>
 			</div>
 		<?php endforeach; ?>
 
@@ -51,3 +53,7 @@ echo $this->Html->script(
 
 	<?php echo $this->Form->end(); ?>
 </div>
+
+<?php if ($this->request->params['action'] === 'edit' && ! $isSystemized) : ?>
+	<?php echo $this->element('UserRoles/delete_form'); ?>
+<?php endif;

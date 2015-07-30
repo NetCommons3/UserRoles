@@ -42,15 +42,9 @@ class UserAttributesRolesController extends UserRolesAppController {
  *
  * @return void
  */
-	public function edit() {
-	}
+	public function edit($roleKey = null) {
 
-/**
- * use_user_manaer
- *
- * @return void
- */
-	public function use_user_manaer() {
+		$this->set('roleKey', $roleKey);
 	}
 
 }

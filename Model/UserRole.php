@@ -5,7 +5,7 @@
  * @property Language $Language
  * @property Plugin $Plugin
  * @property Role $Role
- * @property UserAttribute $UserAttribute
+ * @property UserRole $UserRole
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
@@ -32,13 +32,6 @@ class UserRole extends Role {
 	public $useTable = 'roles';
 
 /**
- * Table name
- *
- * @var string
- */
-	public $alias = 'Role';
-
-/**
  * UserRole keys
  *
  * @var const
@@ -49,6 +42,15 @@ class UserRole extends Role {
 		USER_ROLE_KEY_CHIEF_USER = 'chief_user',
 		USER_ROLE_KEY_GENERAL_USER = 'general_user',
 		USER_ROLE_KEY_GUEST_USER = 'guest_user';
+
+/**
+ * use behaviors
+ *
+ * @var array
+ */
+	public $actsAs = array(
+		'NetCommons.OriginalKey',
+	);
 
 /**
  * Validation rules
@@ -137,8 +139,8 @@ class UserRole extends Role {
 		//	'offset' => '',
 		//	'finderQuery' => '',
 		//),
-		//'UserAttribute' => array(
-		//	'className' => 'UserAttribute',
+		//'UserRole' => array(
+		//	'className' => 'UserRole',
 		//	'joinTable' => 'roles_user_attributes',
 		//	'foreignKey' => 'role_id',
 		//	'associationForeignKey' => 'user_attribute_id',
@@ -156,7 +158,7 @@ class UserRole extends Role {
  * Get UserRoles data
  *
  * @param string $roleKey roles.key
- * @return array Role data
+ * @return array UserRole data
  */
 	public function getUserRoles($type = 'all', $roleKey = null, $options = array()) {
 		$conditions = array(
@@ -172,16 +174,109 @@ class UserRole extends Role {
 			'order' => $this->alias . '.id',
 		), $options);
 
-
 		if (! $roles = $this->find($type, $options)) {
 			return $roles;
 		}
 
-		if (isset($roleKey)) {
+		if ($type === 'first') {
 			return $roles[0];
 		} else {
 			return $roles;
 		}
+	}
+
+/**
+ * Save UserRoles
+ *
+ * @param array $data received post data
+ * @return bool True on success, false on validation errors
+ * @throws InternalErrorException
+ */
+	public function saveUserRole($data) {
+		//トランザクションBegin
+		$this->setDataSource('master');
+		$dataSource = $this->getDataSource();
+		$dataSource->begin();
+
+		//バリデーション
+		foreach ($data as $userRole) {
+			if (! $this->validateUserRole($userRole)) {
+				return false;
+			}
+		}
+
+		try {
+			//登録処理
+			$userRoles = array();
+			foreach ($data as $i => $userRole) {
+				if (! $userRoles[$i] = $this->save($userRole, false, false)) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
+			}
+
+			//トランザクションCommit
+			$dataSource->commit();
+
+		} catch (Exception $ex) {
+			//トランザクションRollback
+			$dataSource->rollback();
+			CakeLog::error($ex);
+			throw $ex;
+		}
+
+		return $userRoles;
+	}
+
+/**
+ * validate of UserRole
+ *
+ * @param array $data received post data
+ * @return bool True on success, false on validation errors
+ */
+	public function validateUserRole($data) {
+		$this->set($data);
+		$this->validates();
+		if ($this->validationErrors) {
+			return false;
+		}
+		return true;
+	}
+
+/**
+ * Delete UserRole
+ *
+ * @param array $data received post data
+ * @return mixed On success Model::$data if its not empty or true, false on failure
+ * @throws InternalErrorException
+ */
+	public function deleteUserRole($data) {
+		$this->loadModels([
+			'UserRoles' => 'UserRoles.UserRole',
+		]);
+
+		//トランザクションBegin
+		$this->setDataSource('master');
+		$dataSource = $this->getDataSource();
+		$dataSource->begin();
+
+		try {
+			//削除処理
+			if (! $this->deleteAll(array($this->alias . '.key' => $data['UserRole']['key']), false)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+
+			//トランザクションCommit
+			$dataSource->commit();
+
+		} catch (Exception $ex) {
+			//トランザクションRollback
+			$dataSource->rollback();
+			//エラー出力
+			CakeLog::error($ex);
+			throw $ex;
+		}
+
+		return true;
 	}
 
 }

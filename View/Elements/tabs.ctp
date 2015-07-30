@@ -17,8 +17,8 @@ if ($this->params['action'] === 'edit') {
 	$disabled = 'disabled';
 }
 
-if (isset($userRole['Role']['key'])) {
-	$roleKey = $userRole['Role']['key'] . '/';
+if (isset($roleKey)) {
+	$roleKey = h($roleKey) . '/';
 } else {
 	$roleKey = '';
 }

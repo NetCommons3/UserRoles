@@ -28,19 +28,19 @@
 		</tr>
 	</thead>
 	<tbody>
-		<?php foreach ($roles as $index => $role) : ?>
+		<?php foreach ($userRoles as $index => $userRole) : ?>
 			<tr>
 				<td>
 					<?php echo ($index + 1); ?>
 				</td>
 				<td>
-					<?php if ($role['Role']['key'] !== UserRole::ROLE_KEY_SYSTEM_ADMINISTRATOR) : ?>
-						<a href="<?php echo $this->Html->url(array('action' => 'edit')) . '/' . h($role['Role']['key']) . '/'; ?>">
+					<?php if ($userRole['UserRole']['key'] !== UserRole::ROLE_KEY_SYSTEM_ADMINISTRATOR) : ?>
+						<a href="<?php echo $this->Html->url(array('action' => 'edit')) . '/' . h($userRole['UserRole']['key']) . '/'; ?>">
 					<?php endif; ?>
 
-						<?php echo h($role['Role']['name']); ?>
+						<?php echo h($userRole['UserRole']['name']); ?>
 
-					<?php if ($role['Role']['key'] !== UserRole::ROLE_KEY_SYSTEM_ADMINISTRATOR) : ?>
+					<?php if ($userRole['UserRole']['key'] !== UserRole::ROLE_KEY_SYSTEM_ADMINISTRATOR) : ?>
 						</a>
 					<?php endif; ?>
 				</td>
