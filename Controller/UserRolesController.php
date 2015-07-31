@@ -46,7 +46,9 @@ class UserRolesController extends UserRolesAppController {
  * @return void
  */
 	public function index() {
-		$userRoles = $this->UserRole->getUserRoles();
+		$userRoles = $this->UserRole->getUserRoles('all', array(
+			'conditions' => array('language_id' => Configure::read('Config.languageId'))
+		));
 		$this->set('userRoles', $userRoles);
 	}
 
@@ -138,6 +140,9 @@ class UserRolesController extends UserRolesAppController {
 				'recursive' => 0,
 				'conditions' => array('key' => $roleKey)
 			));
+
+			$this->set('roleKey', $roleKey);
+			$this->set('isSystemized', $this->request->data[0]['UserRole']['is_systemized']);
 		}
 	}
 

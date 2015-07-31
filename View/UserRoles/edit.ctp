@@ -23,18 +23,23 @@ echo $this->Html->script(
 	<?php echo $this->Form->create(null, array('novalidate' => true)); ?>
 
 	<div class="panel-body">
-		<?php echo $this->SwitchLanguage->tablist('user_roles_'); ?>
+		<?php echo $this->SwitchLanguage->tablist('user-roles-'); ?>
 
-		<?php foreach ($languages as $langId => $langCode) : ?>
-			<div id="user-roles-<?php echo $langCode; ?>"
-					class="tab-pane<?php echo ($activeLangCode === $langCode ? ' active' : ''); ?>">
+		<div class="tab-content">
+			<?php foreach ($this->data as $index => $userRole) : ?>
+				<?php if (! isset($languages[$userRole['UserRole']['language_id']])) : ?>
+					<?php continue; ?>
+				<?php endif; ?>
 
-				<?php echo $this->element('UserRoles/edit_form', array(
-						'langId' => $langId,
-					)); ?>
-			</div>
-		<?php endforeach; ?>
+				<div id="user-roles-<?php echo $userRole['UserRole']['language_id']; ?>"
+						class="tab-pane<?php echo ($activeLangId === $userRole['UserRole']['language_id'] ? ' active' : ''); ?>">
 
+					<?php echo $this->element('UserRoles/edit_form', array(
+							'index' => $index,
+						)); ?>
+				</div>
+			<?php endforeach; ?>
+		</div>
 	</div>
 
 	<div class="panel-footer text-center">
