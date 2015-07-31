@@ -40,7 +40,7 @@ class UserRole extends Role {
 		USER_ROLE_KEY_SYSTEM_ADMINISTRATOR = 'system_administrator',
 		USER_ROLE_KEY_USER_ADMINISTRATOR = 'user_administrator',
 		USER_ROLE_KEY_CHIEF_USER = 'chief_user',
-		USER_ROLE_KEY_GENERAL_USER = 'general_user',
+		USER_ROLE_KEY_COMMON_USER = 'common_user',
 		USER_ROLE_KEY_GUEST_USER = 'guest_user';
 
 /**
@@ -104,6 +104,13 @@ class UserRole extends Role {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+		'UserRoleSetting' => array(
+			'className' => 'UserRoles.UserRoleSetting',
+			'foreignKey' => false,
+			'conditions' => 'UserRoleSetting.role_key = UserRole.key',
+			'fields' => '',
+			'order' => ''
 		)
 	);
 
@@ -160,13 +167,10 @@ class UserRole extends Role {
  * @param string $roleKey roles.key
  * @return array UserRole data
  */
-	public function getUserRoles($type = 'all', $roleKey = null, $options = array()) {
+	public function getUserRoles($type = 'all', $options = array()) {
 		$conditions = array(
 			$this->alias . '.type' => self::ROLE_TYPE_USER
 		);
-		if (isset($roleKey)) {
-			$conditions[$this->alias . '.key'] = $roleKey;
-		}
 
 		$options = Hash::merge(array(
 			'recursive' => -1,
@@ -178,11 +182,7 @@ class UserRole extends Role {
 			return $roles;
 		}
 
-		if ($type === 'first') {
-			return $roles[0];
-		} else {
-			return $roles;
-		}
+		return $roles;
 	}
 
 /**

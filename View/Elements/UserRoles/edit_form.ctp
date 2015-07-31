@@ -33,9 +33,7 @@
 		]); ?>
 </div>
 
-<div class="form-group">
-	<?php echo $this->UserRoleForm->selectUserRoles($langId . '.' . 'UserRole.data_type_template_key', array(
-			'label' => __d('user_roles', 'Base roles'),
-			'class' => 'form-control',
-		)); ?>
-</div>
+<?php echo $this->UserRoleForm->selectBaseRoles($langId . '.' . 'UserRoleSetting.default_role_key', array(
+		'label' => __d('user_roles', 'Base roles'),
+		//'value' => UserRole::USER_ROLE_KEY_COMMON_USER
+	)); ?>

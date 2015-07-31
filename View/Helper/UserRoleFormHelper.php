@@ -23,7 +23,7 @@ class UserRoleFormHelper extends FormHelper {
  *
  * @var array
  */
-	public $helpers = array('Form', 'Html');
+	public $helpers = array('Form');
 
 /**
  * Default Constructor
@@ -45,7 +45,7 @@ class UserRoleFormHelper extends FormHelper {
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
  */
 	public function selectBaseRoles($fieldName, $attributes = array()) {
-		$baseRoles = $this->UserRole->getUserRoles('list', null, array(
+		$baseRoles = $this->UserRole->getUserRoles('list', array(
 			'fields' => array('key', 'name'),
 			'conditions' => array(
 				'is_systemized' => true,
@@ -55,10 +55,17 @@ class UserRoleFormHelper extends FormHelper {
 		));
 		unset($baseRoles[UserRole::ROLE_KEY_SYSTEM_ADMINISTRATOR]);
 
+		$html = '<div class="form-group">';
+
 		$options = Hash::merge(array(
 			'type' => 'select',
+			'class' => 'form-control',
 			'options' => $baseRoles
 		), $attributes);
-		return $this->Form->input($fieldName, $options);
+		$html .= $this->Form->input($fieldName, $options);
+
+		$html .= '</div>';
+
+		return $html;
 	}
 }

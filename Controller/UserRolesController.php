@@ -26,6 +26,7 @@ class UserRolesController extends UserRolesAppController {
  */
 	public $uses = array(
 		'UserRoles.UserRole',
+		'UserRoles.UserRoleSetting',
 		//'Roles.Role'
 	);
 
@@ -89,13 +90,22 @@ class UserRolesController extends UserRolesAppController {
 			$UserRole = $this->UserRole;
 
 			foreach (array_keys($this->viewVars['languages']) as $langId) {
-				$this->request->data[$langId] = $this->UserRole->create(array(
-					'id' => null,
-					'language_id' => $langId,
-					'key' => '',
-					'name' => '',
-					'type' => $UserRole::ROLE_TYPE_USER,
-				));
+				$index = count($this->request->data);
+
+				$this->request->data[$index] = Hash::merge(
+					$this->UserRole->create(array(
+						'id' => null,
+						'language_id' => $langId,
+						'key' => '',
+						'name' => '',
+						'type' => $UserRole::ROLE_TYPE_USER,
+					)),
+					$this->UserRoleSetting->create(array(
+						'id' => null,
+						'role_key' => '',
+						'default_role_key' => $UserRole::USER_ROLE_KEY_COMMON_USER,
+					))
+				);
 			}
 		}
 	}
@@ -124,28 +134,10 @@ class UserRolesController extends UserRolesAppController {
 
 		} else {
 			//既存データ取得
-			$userRoles = $this->UserRole->getUserRoles('all', $roleKey);
-
-			//デフォルトのデータ取得
-			$defaultRole = Hash::extract($userRoles, '{n}.UserRole[language_id=' . Configure::read('Config.languageId') . ']');
-			if (! $defaultRole) {
-				$defaultRole[0] = Hash::extract($userRoles, '0.UserRole');
-			}
-
-			$this->set('roleKey', $roleKey);
-			$this->set('isSystemized', $defaultRole[0]['is_systemized']);
-
-			//request->dataにセット
-			foreach (array_keys($this->viewVars['languages']) as $langId) {
-				$userRole = Hash::extract($userRoles, '{n}.UserRole[language_id=' . $langId . ']');
-				if (! $userRole) {
-					$this->request->data[$langId]['UserRole'] = $defaultRole[0];
-					$this->request->data[$langId]['UserRole']['id'] = null;
-					$this->request->data[$langId]['UserRole']['language_id'] = $langId;
-				} else {
-					$this->request->data[$langId]['UserRole'] = $userRole[0];
-				}
-			}
+			$this->request->data = $this->UserRole->getUserRoles('all', array(
+				'recursive' => 0,
+				'conditions' => array('key' => $roleKey)
+			));
 		}
 	}
 
@@ -170,22 +162,20 @@ class UserRolesController extends UserRolesAppController {
  * @return void
  */
 	private function __prepare() {
-		//ベース権限の取得
-		$Role = $this->UserRole;
-
-		$options = array(
-			'fields' => array('key', 'name'),
-			'conditions' => array(
-				'is_systemized' => true,
-				'language_id' => Configure::read('Config.languageId')
-			),
-			'order' => array('id' => 'asc')
-		);
-
-		$userRoles = $this->UserRole->getUserRoles('list', null, $options);
-		unset($userRoles[$Role::ROLE_KEY_SYSTEM_ADMINISTRATOR]);
-
-		$this->set('baseRoles', $userRoles);
+//		//ベース権限の取得
+//		$Role = $this->UserRole;
+//
+//		$userRoles = $this->UserRole->getUserRoles('list', array(
+//			'fields' => array('key', 'name'),
+//			'conditions' => array(
+//				'is_systemized' => true,
+//				'language_id' => Configure::read('Config.languageId')
+//			),
+//			'order' => array('id' => 'asc')
+//		));
+//		unset($userRoles[$Role::ROLE_KEY_SYSTEM_ADMINISTRATOR]);
+//
+//		$this->set('baseRoles', $userRoles);
 	}
 
 }
