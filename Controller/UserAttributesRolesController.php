@@ -40,10 +40,10 @@ class UserAttributesRolesController extends UserRolesAppController {
 /**
  * edit
  *
+ * @param string $roleKey user_roles.key
  * @return void
  */
 	public function edit($roleKey = null) {
-
 		$this->set('roleKey', $roleKey);
 	}
 

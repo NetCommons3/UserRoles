@@ -35,5 +35,4 @@
 
 <?php echo $this->UserRoleForm->selectBaseRoles($index . '.' . 'UserRoleSetting.default_role_key', array(
 		'label' => __d('user_roles', 'Base roles'),
-		//'value' => UserRole::USER_ROLE_KEY_COMMON_USER
-	)); ?>
+	));

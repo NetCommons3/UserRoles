@@ -162,9 +162,49 @@ class UserRole extends Role {
 	);
 
 /**
+ * Called during validation operations, before validation. Please note that custom
+ * validation rules can be defined in $validate.
+ *
+ * @param array $options Options passed from Model::save().
+ * @return bool True if validate operation should continue, false to abort
+ * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#beforevalidate
+ * @see Model::save()
+ */
+	public function beforeValidate($options = array()) {
+		$this->validate = Hash::merge($this->validate, array(
+			'language_id' => array(
+				'numeric' => array(
+					'rule' => array('numeric'),
+					'message' => __d('net_commons', 'Invalid request.'),
+				),
+			),
+			'type' => array(
+				'numeric' => array(
+					'rule' => array('numeric'),
+					'message' => __d('net_commons', 'Invalid request.'),
+				),
+			),
+			'name' => array(
+				'notBlank' => array(
+					'rule' => array('notBlank'),
+					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('user_roles', 'User role name')),
+					'required' => true
+					//'last' => false, // Stop validation after this rule
+					//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				),
+			),
+
+			//key to set in OriginalKeyBehavior.
+		));
+
+		return parent::beforeValidate($options);
+	}
+
+/**
  * Get UserRoles data
  *
- * @param string $roleKey roles.key
+ * @param string $type Model.find type
+ * @param string $options Model.find options
  * @return array UserRole data
  */
 	public function getUserRoles($type = 'all', $options = array()) {
@@ -193,23 +233,43 @@ class UserRole extends Role {
  * @throws InternalErrorException
  */
 	public function saveUserRole($data) {
+		$this->loadModels([
+			'UserRoleSetting' => 'UserRoles.UserRoleSetting',
+			'UserAttributesRole' => 'UserRoles.UserAttributesRole',
+		]);
+
 		//トランザクションBegin
 		$this->setDataSource('master');
 		$dataSource = $this->getDataSource();
 		$dataSource->begin();
 
-		//バリデーション
-		foreach ($data as $userRole) {
-			if (! $this->validateUserRole($userRole)) {
-				return false;
-			}
+		//UserRoleのバリデーション
+		$roleKey = $data[0]['UserRole']['key'];
+		if (! $this->validateUserRole($data)) {
+			return false;
 		}
 
 		try {
-			//登録処理
+			//UserRoleの登録処理
 			$userRoles = array();
 			foreach ($data as $i => $userRole) {
-				if (! $userRoles[$i] = $this->save($userRole, false, false)) {
+				$userRole['UserRole']['key'] = $roleKey;
+				if (! $userRoles[$i] = $this->save($userRole['UserRole'], false, false)) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
+				$roleKey = $userRoles[$i]['UserRole']['key'];
+			}
+			//UserRoleSettingの登録処理
+			if (isset($data[0]['UserRoleSetting'])) {
+				$data[0]['UserRoleSetting']['role_key'] = $roleKey;
+				if (! $this->UserRoleSetting->save($data[0]['UserRoleSetting'], false)) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
+			}
+			//UserAttributesRoleの登録処理
+			if (isset($data[0]['UserAttributesRole'])) {
+				$data[0]['UserAttributesRole'] = Hash::insert($data[0]['UserAttributesRole'], '{n}.UserAttributesRole.role_key', $roleKey);
+				if (! $this->UserAttributesRole->saveMany($data[0]['UserAttributesRole'], array('validate' => false))) {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}
 			}
@@ -234,10 +294,26 @@ class UserRole extends Role {
  * @return bool True on success, false on validation errors
  */
 	public function validateUserRole($data) {
-		$this->set($data);
-		$this->validates();
-		if ($this->validationErrors) {
-			return false;
+		foreach ($data as $userRole) {
+			$this->set($userRole);
+			$this->validates();
+			if ($this->validationErrors) {
+				return false;
+			}
+		}
+		//UserRoleSettingのバリデーション
+		if (isset($data[0]['UserRoleSetting'])) {
+			if (! $this->UserRoleSetting->validateUserRoleSetting($data[0]['UserRoleSetting'])) {
+				$this->validationErrors = Hash::merge($this->validationErrors, $this->UserRoleSetting->validationErrors);
+				return false;
+			}
+		}
+		//UserAttributesRoleのバリデーション
+		if (isset($data[0]['UserAttributesRole'])) {
+			if (! $this->UserAttributesRole->validateUserAttributesRoles($data[0]['UserAttributesRole'])) {
+				$this->validationErrors = Hash::merge($this->validationErrors, $this->UserAttributesRole->validationErrors);
+				return false;
+			}
 		}
 		return true;
 	}
@@ -251,7 +327,8 @@ class UserRole extends Role {
  */
 	public function deleteUserRole($data) {
 		$this->loadModels([
-			'UserRoles' => 'UserRoles.UserRole',
+			'UserRoleSetting' => 'UserRoles.UserRoleSetting',
+			'UserAttributesRole' => 'UserRoles.UserAttributesRole',
 		]);
 
 		//トランザクションBegin
@@ -262,6 +339,12 @@ class UserRole extends Role {
 		try {
 			//削除処理
 			if (! $this->deleteAll(array($this->alias . '.key' => $data['UserRole']['key']), false)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+			if (! $this->UserRoleSetting->deleteAll(array($this->UserRoleSetting->alias . '.role_key' => $data['UserRole']['key']), false)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+			if (! $this->UserAttributesRole->deleteAll(array($this->UserAttributesRole->alias . '.role_key' => $data['UserRole']['key']), false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 
