@@ -10,8 +10,6 @@
  */
 ?>
 
-<?php $this->assign('title', __d('user_roles', 'User Roles')); ?>
-
 <div class="text-right">
 	<a class="btn btn-success" href="<?php echo $this->Html->url('/user_roles/user_roles/add/');?>">
 		<span class="glyphicon glyphicon-plus"> </span>

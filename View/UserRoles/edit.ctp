@@ -17,8 +17,6 @@ echo $this->Html->script(
 );
 ?>
 
-<?php $this->assign('title', __d('user_roles', 'User Roles')); ?>
-
 <?php echo $this->element('UserRoles.tabs'); ?>
 
 <div class="panel panel-default">
