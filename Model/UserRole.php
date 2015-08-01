@@ -50,6 +50,7 @@ class UserRole extends Role {
  */
 	public $actsAs = array(
 		'NetCommons.OriginalKey',
+		'UserRoles.UserRole',
 	);
 
 /**
@@ -229,13 +230,15 @@ class UserRole extends Role {
  * Save UserRoles
  *
  * @param array $data received post data
+ * @param bool True is created, false is updated
  * @return bool True on success, false on validation errors
  * @throws InternalErrorException
  */
-	public function saveUserRole($data) {
+	public function saveUserRole($data, $created) {
 		$this->loadModels([
 			'UserRoleSetting' => 'UserRoles.UserRoleSetting',
 			'UserAttributesRole' => 'UserRoles.UserAttributesRole',
+			'PluginsRole' => 'PluginManager.PluginsRole',
 		]);
 
 		//トランザクションBegin
@@ -259,19 +262,15 @@ class UserRole extends Role {
 				}
 				$roleKey = $userRoles[$i]['UserRole']['key'];
 			}
-			//UserRoleSettingの登録処理
-			if (isset($data[0]['UserRoleSetting'])) {
-				$data[0]['UserRoleSetting']['role_key'] = $roleKey;
-				if (! $this->UserRoleSetting->save($data[0]['UserRoleSetting'], false)) {
-					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-				}
-			}
-			//UserAttributesRoleの登録処理
-			if (isset($data[0]['UserAttributesRole'])) {
-				$data[0]['UserAttributesRole'] = Hash::insert($data[0]['UserAttributesRole'], '{n}.UserAttributesRole.role_key', $roleKey);
-				if (! $this->UserAttributesRole->saveMany($data[0]['UserAttributesRole'], array('validate' => false))) {
-					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-				}
+			if ($created) {
+				//UserRoleSettingのデフォルトデータ登録処理
+				$this->saveDefaultUserRoleSetting($userRoles[0]);
+
+				//UserAttributesRoleのデフォルトデータ登録処理
+				$this->saveDefaultUserAttributesRole($userRoles[0]);
+
+				//PluginsRoleのデフォルトデータ登録処理
+				$this->saveDefaultPluginsRole($userRoles[0]);
 			}
 
 			//トランザクションCommit
@@ -301,20 +300,6 @@ class UserRole extends Role {
 				return false;
 			}
 		}
-		//UserRoleSettingのバリデーション
-		if (isset($data[0]['UserRoleSetting'])) {
-			if (! $this->UserRoleSetting->validateUserRoleSetting($data[0]['UserRoleSetting'])) {
-				$this->validationErrors = Hash::merge($this->validationErrors, $this->UserRoleSetting->validationErrors);
-				return false;
-			}
-		}
-		//UserAttributesRoleのバリデーション
-		if (isset($data[0]['UserAttributesRole'])) {
-			if (! $this->UserAttributesRole->validateUserAttributesRoles($data[0]['UserAttributesRole'])) {
-				$this->validationErrors = Hash::merge($this->validationErrors, $this->UserAttributesRole->validationErrors);
-				return false;
-			}
-		}
 		return true;
 	}
 
@@ -329,6 +314,7 @@ class UserRole extends Role {
 		$this->loadModels([
 			'UserRoleSetting' => 'UserRoles.UserRoleSetting',
 			'UserAttributesRole' => 'UserRoles.UserAttributesRole',
+			'PluginsRole' => 'PluginManager.PluginsRole',
 		]);
 
 		//トランザクションBegin

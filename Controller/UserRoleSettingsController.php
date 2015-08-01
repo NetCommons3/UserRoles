@@ -25,7 +25,9 @@ class UserRoleSettingsController extends UserRolesAppController {
  * @var array
  */
 	public $uses = array(
-		'UserRoles.UserRole'
+		'UserRoles.UserRole',
+		'UserRoles.UserRoleSetting',
+		'PluginManager.PluginsRole',
 	);
 
 /**
@@ -44,6 +46,44 @@ class UserRoleSettingsController extends UserRolesAppController {
  * @return void
  */
 	public function edit($roleKey = null) {
+		if ($this->request->isPost() || $this->request->isPut()) {
+			$data = $this->data;
+
+			//不要パラメータ除去
+			unset($data['save']);
+			$this->request->data = $data;
+
+			//登録処理
+			$this->UserRoleSetting->saveUserRoleSetting($data);
+			if ($this->handleValidationError($this->UserRoleSetting->validationErrors)) {
+				//正常の場合
+				$this->redirect('/user_roles/user_roles/index/');
+				return;
+			}
+
+		} else {
+			//既存データ取得
+			$this->request->data = $this->UserRole->getUserRoles('first', array(
+				'recursive' => 0,
+				'conditions' => array(
+					'key' => $roleKey,
+					'language_id' => Configure::read('Config.languageId')
+				)
+			));
+			$this->request->data['UserRoleSetting']['is_usable_room_manager'] = (bool)$this->PluginsRole->find('count', array(
+				'recursive' => -1,
+				'conditions' => array(
+					'role_key' => $roleKey,
+					'plugin_key' => 'rooms',
+				)
+			));
+		}
+
+		if ($plugin = Hash::extract($this->ControlPanelLayout->plugins, '{n}.Plugin[key=rooms]')) {
+			$this->set('roomsPluginName', $plugin[0]['name']);
+		} else {
+			$this->set('roomsPluginName',__d('user_roles', 'Room manager'));
+		}
 		$this->set('roleKey', $roleKey);
 	}
 }

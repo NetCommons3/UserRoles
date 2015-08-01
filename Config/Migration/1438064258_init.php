@@ -51,6 +51,7 @@ class Init extends CakeMigration {
 					'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
 					'role_key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 					'default_role_key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+					'default_room_role_key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8', 'comment' => '「ルーム内の役割」のデフォルト値'),
 					'public_room_creatable' => array('type' => 'boolean', 'null' => true, 'default' => null, 'comment' => 'パブリックスペース内にルームの新規作成許可'),
 					'group_room_creatable' => array('type' => 'boolean', 'null' => true, 'default' => null, 'comment' => 'グループスペース内にルームの新規作成許可'),
 					'use_private_room' => array('type' => 'boolean', 'null' => true, 'default' => null, 'comment' => 'プライベートルームの使用有無'),

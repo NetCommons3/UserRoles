@@ -12,6 +12,15 @@
 
 <?php echo $this->element('UserRoles.tabs'); ?>
 
-<div>
+<div class="panel panel-default">
+	<?php echo $this->Form->create(null, array('novalidate' => true)); ?>
+
+	<div class="panel-body">
+
+	</div>
+
+	<?php echo $this->element('UserRoles.edit_btn'); ?>
+
+	<?php echo $this->Form->end(); ?>
 
 </div>

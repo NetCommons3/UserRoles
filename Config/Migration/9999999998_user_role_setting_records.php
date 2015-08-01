@@ -41,11 +41,11 @@ class UserRoleSettingRecords extends NetCommonsMigration {
  */
 	public $records = array(
 		'UserRoleSetting' => array(
-			array('role_key' => 'system_administrator', 'default_role_key' => 'system_administrator', 'public_room_creatable' => '1', 'group_room_creatable' => '1', 'use_private_room' => '1', 'private_room_upload_max_size' => '1073741824', ),
-			array('role_key' => 'user_administrator', 'default_role_key' => 'user_administrator', 'public_room_creatable' => '0', 'group_room_creatable' => '1', 'use_private_room' => '1', 'private_room_upload_max_size' => '104857600', ),
-			array('role_key' => 'chief_user', 'default_role_key' => 'chief_user', 'public_room_creatable' => '0', 'group_room_creatable' => '0', 'use_private_room' => '1', 'private_room_upload_max_size' => '10485760', ),
-			array('role_key' => 'common_user', 'default_role_key' => 'general_user', 'public_room_creatable' => '0', 'group_room_creatable' => '0', 'use_private_room' => '1', 'private_room_upload_max_size' => '10485760', ),
-			array('role_key' => 'guest_user', 'default_role_key' => 'guest_user', 'public_room_creatable' => '0', 'group_room_creatable' => '0', 'use_private_room' => '0', 'private_room_upload_max_size' => '0', ),
+			array('role_key' => 'system_administrator', 'default_role_key' => 'system_administrator', 'default_room_role_key' => 'room_administrator', 'public_room_creatable' => '1', 'group_room_creatable' => '1', 'use_private_room' => '1', 'private_room_upload_max_size' => '1073741824', ),
+			array('role_key' => 'user_administrator', 'default_role_key' => 'user_administrator', 'default_room_role_key' => 'chief_editor', 'public_room_creatable' => '0', 'group_room_creatable' => '1', 'use_private_room' => '1', 'private_room_upload_max_size' => '104857600', ),
+			array('role_key' => 'chief_user', 'default_role_key' => 'chief_user', 'default_room_role_key' => 'editor', 'public_room_creatable' => '0', 'group_room_creatable' => '0', 'use_private_room' => '1', 'private_room_upload_max_size' => '10485760', ),
+			array('role_key' => 'common_user', 'default_role_key' => 'common_user', 'default_room_role_key' => 'general_user', 'public_room_creatable' => '0', 'group_room_creatable' => '0', 'use_private_room' => '1', 'private_room_upload_max_size' => '10485760', ),
+			array('role_key' => 'guest_user', 'default_role_key' => 'guest_user', 'default_room_role_key' => 'visitor', 'public_room_creatable' => '0', 'group_room_creatable' => '0', 'use_private_room' => '0', 'private_room_upload_max_size' => '0', ),
 		),
 	);
 
