@@ -25,7 +25,10 @@ class UserAttributesRolesController extends UserRolesAppController {
  * @var array
  */
 	public $uses = array(
-		'UserRoles.UserRole'
+		'M17n.Language',
+		'UserAttributes.UserAttribute',
+		'UserAttributes.UserAttributeLayout',
+		'UserRoles.UserRole',
 	);
 
 /**
@@ -34,7 +37,8 @@ class UserAttributesRolesController extends UserRolesAppController {
  * @var array
  */
 	public $components = array(
-		'ControlPanel.ControlPanelLayout'
+		'ControlPanel.ControlPanelLayout',
+		'UserAttributes.UserAttributeLayouts',
 	);
 
 /**
@@ -44,6 +48,8 @@ class UserAttributesRolesController extends UserRolesAppController {
  * @return void
  */
 	public function edit($roleKey = null) {
+
+
 		$this->set('roleKey', $roleKey);
 	}
 

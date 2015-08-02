@@ -25,9 +25,9 @@ class UserRoleSettingsController extends UserRolesAppController {
  * @var array
  */
 	public $uses = array(
+		'PluginManager.PluginsRole',
 		'UserRoles.UserRole',
 		'UserRoles.UserRoleSetting',
-		'PluginManager.PluginsRole',
 	);
 
 /**
@@ -46,7 +46,7 @@ class UserRoleSettingsController extends UserRolesAppController {
  * @return void
  */
 	public function edit($roleKey = null) {
-		if ($this->request->isPost() || $this->request->isPut()) {
+		if ($this->request->isPost()) {
 			$data = $this->data;
 
 			//不要パラメータ除去

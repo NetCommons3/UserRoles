@@ -13,7 +13,7 @@
 <?php echo $this->element('UserRoles.tabs'); ?>
 
 <div class="panel panel-default">
-	<?php echo $this->Form->create('UserRoleSetting', array('novalidate' => true)); ?>
+	<?php echo $this->Form->create(null, array('novalidate' => true)); ?>
 
 	<div class="panel-body">
 		<?php echo $this->Form->hidden('UserRoleSetting.id'); ?>
@@ -107,7 +107,9 @@
 		</div>
 	</div>
 
-	<?php echo $this->element('UserRoles.edit_btn'); ?>
+	<div class="panel-footer text-center">
+		<?php echo $this->element('UserRoles.edit_btn'); ?>
+	</div>
 
 	<?php echo $this->Form->end(); ?>
 

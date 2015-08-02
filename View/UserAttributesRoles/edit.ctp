@@ -8,19 +8,28 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
  */
+
+echo $this->Html->css(
+	array(
+		'/user_roles/css/style.css'
+	),
+	array('plugin' => false)
+);
 ?>
 
 <?php echo $this->element('UserRoles.tabs'); ?>
 
-<div class="panel panel-default">
-	<?php echo $this->Form->create(null, array('novalidate' => true)); ?>
+<?php echo $this->Form->create(null, array('novalidate' => true)); ?>
 
-	<div class="panel-body">
 
-	</div>
+<?php foreach ($userAttributeLayouts as $layout) : ?>
+	<?php $row = $layout['UserAttributeLayout']['id']; ?>
 
+	<?php echo $this->element('UserAttributesRoles/render_edit_row', array('row' => $row, 'layout' => $layout)); ?>
+<?php endforeach; ?>
+
+<div class="text-center">
 	<?php echo $this->element('UserRoles.edit_btn'); ?>
-
-	<?php echo $this->Form->end(); ?>
-
 </div>
+
+<?php echo $this->Form->end();

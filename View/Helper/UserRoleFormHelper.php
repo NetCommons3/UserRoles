@@ -141,7 +141,7 @@ class UserRoleFormHelper extends FormHelper {
 			'order' => array('id' => 'asc')
 		));
 
-		$html = '<div class="form-inline"><div class="form-group" style="margin-bottom: 15px;">';
+		$html = '<div class="form-group form-inline">';
 		if (isset($attributes['label'])) {
 			$html .= $this->Form->label($fieldName, $attributes['label']) . ' ';
 			unset($attributes['label']);
@@ -154,7 +154,7 @@ class UserRoleFormHelper extends FormHelper {
 			//'style' => 'margin-bottom: 20px;'
 		), $attributes);
 		$html .= $this->Form->select($fieldName, $defaultRoles, $attributes);
-		$html .= '</div></div>';
+		$html .= '</div>';
 
 		return $html;
 	}

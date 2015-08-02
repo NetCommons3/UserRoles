@@ -27,20 +27,22 @@ echo $this->Html->script(
 
 		<div class="tab-content">
 			<?php foreach ($this->data as $index => $userRole) : ?>
-				<?php if (isset($languages[$userRole['UserRole']['language_id']])) : ?>
-					<div id="user-roles-<?php echo $userRole['UserRole']['language_id']; ?>"
-							class="tab-pane<?php echo ($activeLangId === (string)$userRole['UserRole']['language_id'] ? ' active' : ''); ?>">
+				<?php $languageId = $userRole['UserRole']['language_id']; ?>
 
-						<?php echo $this->element('UserRoles/edit_form', array(
-								'index' => $index,
-							)); ?>
+				<?php if (isset($languages[$languageId])) : ?>
+					<div id="user-roles-<?php echo $languageId; ?>"
+							class="tab-pane<?php echo ($activeLangId === (string)$languageId ? ' active' : ''); ?>">
+
+						<?php echo $this->element('UserRoles/edit_form', array('index' => $index)); ?>
 					</div>
 				<?php endif; ?>
 			<?php endforeach; ?>
 		</div>
 	</div>
 
-	<?php echo $this->element('UserRoles.edit_btn'); ?>
+	<div class="panel-footer text-center">
+		<?php echo $this->element('UserRoles.edit_btn'); ?>
+	</div>
 
 	<?php echo $this->Form->end(); ?>
 </div>
