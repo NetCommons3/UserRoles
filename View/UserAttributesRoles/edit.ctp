@@ -19,8 +19,34 @@ echo $this->Html->css(
 
 <?php echo $this->element('UserRoles.tabs'); ?>
 
-<?php echo $this->Form->create(null, array('novalidate' => true)); ?>
+<?php echo $this->Form->create('UserRoleSetting', array(
+		'novalidate' => true,
+		'url' => '/user_roles/user_attributes_roles/user_manager/'
+	)); ?>
 
+<div class="form-group form-inline">
+	<?php echo $this->Form->hidden('UserRoleSetting.role_key'); ?>
+	<?php echo $this->Form->hidden('UserRoleSetting.default_role_key'); ?>
+
+	<?php echo $this->Form->label('UserRoleSetting.is_usable_user_manager',
+			h($userManagerPluginName),
+			array('class' => 'user-roles-label')
+		); ?>
+
+	<?php echo $this->UserRoleForm->radioUserRole('UserRoleSetting.is_usable_user_manager',
+			$this->UserRoleForm->isUsableOptions,
+			array('onclick' => 'submit()', 'ng-disabled' => 'sending', 'ng-click' => 'sending = true')
+		); ?>
+</div>
+
+<?php echo $this->Form->end(); ?>
+
+<hr>
+
+<?php echo $this->Form->create('UserAttributesRoles', array(
+		'novalidate' => true,
+		'url' => '/user_roles/user_attributes_roles/edit/' . h($this->data['UserRoleSetting']['role_key'])
+	)); ?>
 
 <?php foreach ($userAttributeLayouts as $layout) : ?>
 	<?php $row = $layout['UserAttributeLayout']['id']; ?>
@@ -29,7 +55,7 @@ echo $this->Html->css(
 <?php endforeach; ?>
 
 <div class="text-center">
-	<?php echo $this->element('UserRoles.edit_btn'); ?>
+	<?php echo $this->element('UserRoles.edit_btn', array('disabled' => $this->data['UserRoleSetting']['is_usable_user_manager'])); ?>
 </div>
 
 <?php echo $this->Form->end();

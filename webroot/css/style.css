@@ -9,3 +9,7 @@
 ul.user-attribute-roles-edit {
 	padding-left: 0px;
 }
+
+label.user-roles-label {
+	margin-right: 30px;
+}

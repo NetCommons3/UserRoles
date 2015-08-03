@@ -108,7 +108,7 @@ class UserRoleFormHelper extends FormHelper {
 		));
 		unset($baseRoles[UserRole::ROLE_KEY_SYSTEM_ADMINISTRATOR]);
 
-		$html = '<div class="form-group">';
+		$html = '';
 
 		$options = Hash::merge(array(
 			'type' => 'select',
@@ -116,8 +116,6 @@ class UserRoleFormHelper extends FormHelper {
 			'options' => $baseRoles
 		), $attributes);
 		$html .= $this->Form->input($fieldName, $options);
-
-		$html .= '</div>';
 
 		return $html;
 	}
@@ -141,20 +139,25 @@ class UserRoleFormHelper extends FormHelper {
 			'order' => array('id' => 'asc')
 		));
 
-		$html = '<div class="form-group form-inline">';
+		$html = '';
+
 		if (isset($attributes['label'])) {
-			$html .= $this->Form->label($fieldName, $attributes['label']) . ' ';
+			if (is_array($attributes['label'])) {
+				$label = $attributes['label']['label'];
+				unset($attributes['label']['label']);
+
+				$html .= $this->Form->label($fieldName, $label, $attributes['label']) . ' ';
+			} else {
+				$html .= $this->Form->label($fieldName, $attributes['label']) . ' ';
+			}
 			unset($attributes['label']);
 		}
 		$attributes = Hash::merge(array(
 			'type' => 'select',
 			'class' => 'form-control',
 			'empty' => false
-			//'options' => $defaultRoles,
-			//'style' => 'margin-bottom: 20px;'
 		), $attributes);
 		$html .= $this->Form->select($fieldName, $defaultRoles, $attributes);
-		$html .= '</div>';
 
 		return $html;
 	}
@@ -190,10 +193,65 @@ class UserRoleFormHelper extends FormHelper {
 			'type' => 'select',
 			'class' => 'form-control',
 			'empty' => false
-			//'style' => 'margin-bottom: 20px;',
 		), $attributes);
 
 		return $this->Form->select($fieldName, $maxSizes, $attributes);
+	}
+
+/**
+ * Outputs UserAttributeRole select
+ *
+ * @param string $fieldName Name attribute of the SELECT
+ * @param array $attributes The HTML attributes of the select element.
+ * @return string Formatted SELECT element
+ * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
+ */
+	public function selectUserAttributeRole($userAttributeKey, $attributes = array()) {
+		if (! $userAttributeRole = Hash::extract(
+			$this->_View->request->data['UserAttributesRole'],
+			'{n}.UserAttributesRole[user_attribute_key=' . $userAttributeKey . ']'
+		)) {
+			return;
+		}
+		if (! $userAttribute = Hash::extract(
+			$this->_View->request->data['UserAttribute'],
+			'{n}.{n}.{n}.UserAttribute[key=' . $userAttributeKey . ']'
+		)) {
+			return;
+		}
+
+		$id = $userAttributeRole[0]['id'];
+		$fieldName = 'UserAttributesRole.' . $id . '.UserAttributesRole.other_user_attribute_role';
+
+		if ($userAttributeRole[0]['other_editable']) {
+			$this->_View->request->data['UserAttributesRole'][$id]['other_user_attribute_role'] = UserAttributesRolesController::OTHER_EDITABLE;
+		} elseif ($userAttributeRole[0]['other_readable']) {
+			$this->_View->request->data['UserAttributesRole'][$id]['other_user_attribute_role'] = UserAttributesRolesController::OTHER_READABLE;
+		} else {
+			$this->_View->request->data['UserAttributesRole'][$id]['other_user_attribute_role'] = UserAttributesRolesController::OTHER_NOT_READABLE;
+		}
+
+		if ($this->_View->request->data['UserRoleSetting']['is_usable_user_manager'] || $userAttribute[0]['only_administrator']) {
+			$disabled = true;
+		} else {
+			$disabled = false;
+		}
+
+		$options = array(
+			UserAttributesRolesController::OTHER_NOT_READABLE => __d('user_roles', 'Not readable'),
+			UserAttributesRolesController::OTHER_READABLE => __d('user_roles', 'Readable'),
+			UserAttributesRolesController::OTHER_EDITABLE => __d('user_roles', 'Editable'),
+		);
+
+		$attributes = Hash::merge(array(
+			'type' => 'select',
+			'value' => $this->_View->request->data['UserAttributesRole'][$id]['other_user_attribute_role'],
+			'class' => 'form-control',
+			'empty' => false,
+			'disabled' => $disabled,
+		), $attributes);
+
+		return $this->Form->select($fieldName, $options, $attributes);
 	}
 
 }

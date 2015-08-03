@@ -8,6 +8,13 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
  */
+
+echo $this->Html->css(
+	array(
+		'/user_roles/css/style.css'
+	),
+	array('plugin' => false)
+);
 ?>
 
 <?php echo $this->element('UserRoles.tabs'); ?>
@@ -22,9 +29,14 @@
 
 		<?php echo $this->Form->hidden('UserRoleSetting.default_role_key'); ?>
 
-		<?php echo $this->UserRoleForm->selectDefaultRoomRoles('UserRoleSetting.default_room_role_key', array(
-				'label' => __d('user_roles', 'Default room role'),
-			)); ?>
+		<div class="form-group form-inline">
+			<?php echo $this->UserRoleForm->selectDefaultRoomRoles('UserRoleSetting.default_room_role_key', array(
+					'label' => array(
+						'label' => __d('user_roles', 'Default room role'),
+						'class' => 'user-roles-label'
+					),
+				)); ?>
+		</div>
 
 		<div class="panel panel-default">
 			<div class="panel-heading">

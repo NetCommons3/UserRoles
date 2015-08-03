@@ -77,7 +77,6 @@ class UserRoleSetting extends UserRolesAppModel {
 	public function saveUserRoleSetting($data) {
 		$this->loadModels([
 			'UserRoleSetting' => 'UserRoles.UserRoleSetting',
-			'PluginsRole' => 'PluginManager.PluginsRole',
 		]);
 
 		//トランザクションBegin
@@ -101,6 +100,49 @@ class UserRoleSetting extends UserRolesAppModel {
 			} else {
 				$this->deletePluginsRole($data['UserRoleSetting']['role_key'], 'rooms');
 			}
+
+			//トランザクションCommit
+			$dataSource->commit();
+
+		} catch (Exception $ex) {
+			//トランザクションRollback
+			$dataSource->rollback();
+			CakeLog::error($ex);
+			throw $ex;
+		}
+
+		return true;
+	}
+
+/**
+ * Save UsableUserManager
+ *
+ * @param array $data received post data
+ * @param bool True is created, false is updated
+ * @return bool True on success, false on validation errors
+ * @throws InternalErrorException
+ */
+	public function saveUsableUserManager($data) {
+		$this->loadModels([
+			'UserRole' => 'UserRoles.UserRole',
+			'UserAttributes' => 'UserAttributes.UserAttribute',
+		]);
+
+		//トランザクションBegin
+		$this->setDataSource('master');
+		$dataSource = $this->getDataSource();
+		$dataSource->begin();
+
+		try {
+			//PluginsRoleのデータ登録処理
+			if ($data['UserRoleSetting']['is_usable_user_manager']) {
+				$this->savePluginsRole($data['UserRoleSetting']['role_key'], 'user_manager');
+			} else {
+				$this->deletePluginsRole($data['UserRoleSetting']['role_key'], 'user_manager');
+			}
+
+			//UserAttributesRoleデータの登録
+			$this->saveUserAttributesRole($data);
 
 			//トランザクションCommit
 			$dataSource->commit();

@@ -10,7 +10,6 @@
  */
 
 App::uses('ModelBehavior', 'Model');
-App::uses('File', 'Utility');
 
 /**
  * DefaultUserRole Behavior
@@ -120,6 +119,10 @@ class UserRoleBehavior extends ModelBehavior {
  * @throws InternalErrorException
  */
 	public function savePluginsRole(Model $model, $roleKey, $pluginKey) {
+		$model->loadModels([
+			'PluginsRole' => 'PluginManager.PluginsRole',
+		]);
+
 		$conditions = array(
 			'role_key' => $roleKey,
 			'plugin_key' => $pluginKey
@@ -152,6 +155,10 @@ class UserRoleBehavior extends ModelBehavior {
  * @throws InternalErrorException
  */
 	public function deletePluginsRole(Model $model, $roleKey, $pluginKey) {
+		$model->loadModels([
+			'PluginsRole' => 'PluginManager.PluginsRole',
+		]);
+
 		$conditions = array(
 			'role_key' => $roleKey,
 			'plugin_key' => $pluginKey
@@ -160,6 +167,47 @@ class UserRoleBehavior extends ModelBehavior {
 		//PluginsRoleの削除処理
 		if (! $model->PluginsRole->deleteAll($conditions, false)) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+		}
+
+		return true;
+	}
+
+/**
+ * Save default UserAttributesRole
+ *
+ * @param Model $model Model using this behavior
+ * @param array $data User role data
+ * @return bool True on success
+ * @throws InternalErrorException
+ */
+	public function saveUserAttributesRole(Model $model, $data) {
+		$model->loadModels([
+			'UserRole' => 'UserRoles.UserRole',
+			'UserAttributes' => 'UserAttributes.UserAttribute',
+			'UserAttributesRole' => 'UserRoles.UserAttributesRole'
+		]);
+
+		$userAttributes = $model->UserAttributes->find('all', array(
+			'recursive' => -1,
+			'conditions' => array(
+				'language_id' => Configure::read('Config.languageId')
+			),
+		));
+
+		foreach ($userAttributes as $userAttribute) {
+			$params = array(
+				'role_key' => $data['UserRoleSetting']['role_key'],
+				'default_role_key' => $data['UserRoleSetting']['default_role_key'],
+				'user_attribute_key' => $userAttribute['UserAttribute']['key'],
+				'only_administrator' => (bool)$userAttribute['UserAttribute']['only_administrator'],
+				'is_systemized' => (bool)$userAttribute['UserAttribute']['is_systemized'],
+				'is_usable_user_manager' => (bool)$data['UserRoleSetting']['is_usable_user_manager']
+			);
+
+			$userAttributeRole = $model->UserAttributesRole->defaultUserAttributeRolePermissions($params);
+			if (! $model->UserAttributesRole->save($userAttributeRole, array('validate' => false))) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
 		}
 
 		return true;

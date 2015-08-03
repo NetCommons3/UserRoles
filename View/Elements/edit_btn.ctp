@@ -8,6 +8,9 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
  */
+if (! isset($disabled)) {
+	$disabled = false;
+}
 ?>
 
 <a class="btn btn-default btn-workflow" href="<?php echo $this->Html->url('/user_roles/user_roles/index/'); ?>">
@@ -18,4 +21,5 @@
 <?php echo $this->Form->button(__d('net_commons', 'OK'), array(
 		'class' => 'btn btn-primary btn-workflow',
 		'name' => 'save',
+		'disabled' => $disabled
 	));

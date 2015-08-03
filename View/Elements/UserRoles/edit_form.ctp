@@ -33,6 +33,8 @@
 		]); ?>
 </div>
 
-<?php echo $this->UserRoleForm->selectBaseUserRoles($index . '.' . 'UserRoleSetting.default_role_key', array(
-		'label' => __d('user_roles', 'Base roles'),
-	));
+<div class="form-group">
+	<?php echo $this->UserRoleForm->selectBaseUserRoles($index . '.' . 'UserRoleSetting.default_role_key', array(
+			'label' => __d('user_roles', 'Base roles'),
+		)); ?>
+</div>

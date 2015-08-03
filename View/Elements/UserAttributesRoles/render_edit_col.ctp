@@ -14,9 +14,10 @@
 ?>
 
 <div class="col-xs-12 col-sm-<?php echo (12 / $layout['UserAttributeLayout']['col']); ?>">
-	<?php foreach ($userAttributes[$row][$col] as $userAttribute) : ?>
+	<?php foreach ($userAttributes[$row][$col] as $index => $userAttribute) : ?>
 		<ul class="user-attribute-roles-edit">
-			<li class="list-group-item clearfix">
+			<li class="list-group-item clearfix<?php echo (! $this->data['UserRoleSetting']['is_usable_user_manager'] &&
+																$userAttribute['UserAttribute']['only_administrator'] ? ' disabled' : ''); ?>">
 				<div class="pull-left">
 					<?php echo h($userAttribute['UserAttribute']['name']); ?>
 					<?php if ($userAttribute['UserAttribute']['required']) : ?>
@@ -25,6 +26,8 @@
 				</div>
 
 				<div class="pull-right">
+					<?php echo $this->UserRoleForm->selectUserAttributeRole($userAttribute['UserAttribute']['key']); ?>
+
 				</div>
 			</li>
 		</ul>
