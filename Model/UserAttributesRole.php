@@ -168,4 +168,46 @@ class UserAttributesRole extends UserRolesAppModel {
 		return $userAttributeRole;
 	}
 
+/**
+ * Save UserAttributesRoles
+ *
+ * @param array $data received post data
+ * @param bool True is created, false is updated
+ * @return bool True on success, false on validation errors
+ * @throws InternalErrorException
+ */
+	public function saveUserAttributesRoles($data) {
+		$this->loadModels([
+			'UserAttributesRole' => 'UserRoles.UserAttributesRole',
+		]);
+
+		//トランザクションBegin
+		$this->setDataSource('master');
+		$dataSource = $this->getDataSource();
+		$dataSource->begin();
+
+		//UserAttributesRoleのバリデーション
+		if (! $this->validateUserAttributesRoles($data['UserAttributesRole'])) {
+			return false;
+		}
+
+		try {
+			//UserRoleの登録処理
+			if (! $this->saveMany($data['UserAttributesRole'], array('validate' => false))) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+
+			//トランザクションCommit
+			$dataSource->commit();
+
+		} catch (Exception $ex) {
+			//トランザクションRollback
+			$dataSource->rollback();
+			CakeLog::error($ex);
+			throw $ex;
+		}
+
+		return true;
+	}
+
 }

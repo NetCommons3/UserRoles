@@ -251,7 +251,15 @@ class UserRoleFormHelper extends FormHelper {
 			'disabled' => $disabled,
 		), $attributes);
 
-		return $this->Form->select($fieldName, $options, $attributes);
+		$html = $this->Form->select($fieldName, $options, $attributes);
+
+		if (! $disabled) {
+			$html .= $this->Form->hidden('UserAttributesRole.' . $id . '.UserAttributesRole.id');
+			$html .= $this->Form->hidden('UserAttributesRole.' . $id . '.UserAttributesRole.role_key');
+			$html .= $this->Form->hidden('UserAttributesRole.' . $id . '.UserAttributesRole.user_attribute_key');
+		}
+
+		return $html;
 	}
 
 }

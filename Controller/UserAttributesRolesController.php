@@ -35,8 +35,8 @@ class UserAttributesRolesController extends UserRolesAppController {
 	public $uses = array(
 		'M17n.Language',
 		'PluginManager.PluginsRole',
-		'UserAttributes.UserAttribute',
-		'UserAttributes.UserAttributeLayout',
+		'UserAttributes.UserAttribute', //UserAttributeLayoutsComponent.php
+		'UserAttributes.UserAttributeLayout', //UserAttributeLayoutsComponent.php
 		'UserRoles.UserAttributesRole',
 		'UserRoles.UserRole',
 		'UserRoles.UserRoleSetting',
@@ -65,6 +65,27 @@ class UserAttributesRolesController extends UserRolesAppController {
 			//不要パラメータ除去
 			unset($data['save']);
 			$this->request->data = $data;
+
+			//リクエストの整形
+			foreach (array_keys($data['UserAttributesRole']) as $id) {
+				$data['UserAttributesRole'][$id]['UserAttributesRole']['other_readable'] = false;
+				$data['UserAttributesRole'][$id]['UserAttributesRole']['other_editable'] = false;
+
+				if ($data['UserAttributesRole'][$id]['UserAttributesRole']['other_user_attribute_role'] === self::OTHER_EDITABLE) {
+					$data['UserAttributesRole'][$id]['UserAttributesRole']['other_readable'] = true;
+					$data['UserAttributesRole'][$id]['UserAttributesRole']['other_editable'] = true;
+				} elseif ($data['UserAttributesRole'][$id]['UserAttributesRole']['other_user_attribute_role'] === self::OTHER_READABLE) {
+					$data['UserAttributesRole'][$id]['UserAttributesRole']['other_readable'] = true;
+				}
+			}
+
+			//登録処理
+			$this->UserAttributesRole->saveUserAttributesRoles($data);
+			if ($this->handleValidationError($this->UserAttributesRole->validationErrors)) {
+				//正常の場合
+				$this->redirect('/user_roles/user_roles/index/');
+				return;
+			}
 
 		} else {
 			//既存データ取得

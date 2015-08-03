@@ -27,7 +27,6 @@
 
 				<div class="pull-right">
 					<?php echo $this->UserRoleForm->selectUserAttributeRole($userAttribute['UserAttribute']['key']); ?>
-
 				</div>
 			</li>
 		</ul>
