@@ -113,18 +113,48 @@ class UserAttributesRole extends UserRolesAppModel {
 	public function defaultUserAttributeRolePermissions($params) {
 		$this->loadModels([
 			'PluginsRole' => 'PluginManager.PluginsRole',
+			'UserRole' => 'UserRoles.UserRole'
 		]);
 
-		$default = $this->find('first', array(
+		if (! $default = $this->find('first', array(
 			'recursive' => -1,
 			'fields' => array('self_readable', 'self_editable', 'other_readable', 'other_editable'),
 			'conditions' => array(
 				'role_key' => $params['default_role_key'],
 				'user_attribute_key' => $params['user_attribute_key'],
 			),
-		));
-		if (! $default) {
-			return true;
+		))) {
+			switch ($params['default_role_key']) {
+				case UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR:
+					$default = $this->create(array(
+						'self_readable' => true, 'self_editable' => true,
+						'other_readable' => true, 'other_editable' => true,
+					));
+					break;
+				case UserRole::USER_ROLE_KEY_USER_ADMINISTRATOR:
+					$default = $this->create(array(
+						'self_readable' => true, 'self_editable' => true,
+						'other_readable' => true, 'other_editable' => true,
+					));
+					break;
+				case UserRole::USER_ROLE_KEY_CHIEF_USER:
+					$default = $this->create(array(
+						'self_readable' => true, 'self_editable' => true,
+						'other_readable' => true, 'other_editable' => false,
+					));
+					break;
+				case UserRole::USER_ROLE_KEY_COMMON_USER:
+					$default = $this->create(array(
+						'self_readable' => true, 'self_editable' => true,
+						'other_readable' => false, 'other_editable' => false,
+					));
+					break;
+				default:
+					$default = $this->create(array(
+						'self_readable' => false, 'self_editable' => false,
+						'other_readable' => false, 'other_editable' => false,
+					));
+			}
 		}
 
 		if (! $userAttributeRole = $this->find('first', array(
