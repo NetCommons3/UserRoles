@@ -110,12 +110,12 @@ class UserRoleFormHelper extends FormHelper {
 
 		$html = '';
 
-		$options = Hash::merge(array(
+		$attributes = Hash::merge(array(
 			'type' => 'select',
 			'class' => 'form-control',
 			'options' => $baseRoles
 		), $attributes);
-		$html .= $this->Form->input($fieldName, $options);
+		$html .= $this->Form->input($fieldName, $attributes);
 
 		$html .= $this->_View->element('UserRoles.UserRoles/base_role_description', array(
 			'baseRoles' => $baseRoles,
@@ -125,6 +125,7 @@ class UserRoleFormHelper extends FormHelper {
 				UserRole::USER_ROLE_KEY_COMMON_USER => __d('user_roles', 'A common user'),
 				UserRole::USER_ROLE_KEY_GUEST_USER => __d('user_roles', 'A guest user.  The one with this authority can browse the information, but is not allowed to write or edit the information.'),
 			),
+			'activeUserRole' => ($attributes['value'])
 		));
 
 		return $html;

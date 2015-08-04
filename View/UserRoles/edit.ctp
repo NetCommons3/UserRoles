@@ -15,6 +15,13 @@ echo $this->Html->script(
 	),
 	array('plugin' => false)
 );
+echo $this->Html->css(
+	array(
+		'/user_roles/css/style.css'
+	),
+	array('plugin' => false)
+);
+
 ?>
 
 <?php echo $this->element('UserRoles.tabs'); ?>

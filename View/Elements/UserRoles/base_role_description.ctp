@@ -10,15 +10,15 @@
  */
 ?>
 
-<hr>
-<?php foreach ($baseRoles as $roleKey => $roleName) : ?>
-	<div class="form-group">
-		<div>
-			<strong><?php echo h($roleName); ?></strong>
-		</div>
-
-		<div>
-			<?php echo (isset($baseRoleDescriptions[$roleKey]) ? $baseRoleDescriptions[$roleKey] : ''); ?>
-		</div>
-	</div>
-<?php endforeach;
+<ul class="list-group user-roles-base-role-desc">
+	<?php foreach ($baseRoles as $roleKey => $roleName) : ?>
+		<li class="list-group-item<?php echo ($activeUserRole === $roleKey ? ' list-group-item-info' : '') ; ?>">
+			<h4 class="list-group-item-heading">
+				<?php echo h($roleName); ?>
+			</h4>
+			<p class="list-group-item-text">
+				<?php echo (isset($baseRoleDescriptions[$roleKey]) ? $baseRoleDescriptions[$roleKey] : ''); ?>
+			</p>
+		</li>
+	<?php endforeach; ?>
+</ul>

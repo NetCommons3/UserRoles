@@ -13,3 +13,8 @@ ul.user-attribute-roles-edit {
 label.user-roles-label {
 	margin-right: 30px;
 }
+
+.user-roles-base-role-desc {
+	margin-top: 5px;
+	/*margin-left: 20px;*/
+}
