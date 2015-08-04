@@ -21,7 +21,7 @@
 		<tr>
 			<th></th>
 			<th>
-				<?php echo __d('user_roles', 'Role name'); ?>
+				<?php echo __d('user_roles', 'User role name'); ?>
 			</th>
 		</tr>
 	</thead>
