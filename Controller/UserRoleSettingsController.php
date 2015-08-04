@@ -85,5 +85,6 @@ class UserRoleSettingsController extends UserRolesAppController {
 			$this->set('roomsPluginName',__d('user_roles', 'Room manager'));
 		}
 		$this->set('roleKey', $roleKey);
+		$this->set('subtitle', $this->request->data['UserRole']['name']);
 	}
 }

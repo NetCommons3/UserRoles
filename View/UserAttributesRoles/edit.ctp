@@ -17,6 +17,8 @@ echo $this->Html->css(
 );
 ?>
 
+<?php echo $this->element('UserRoles.subtitle'); ?>
+
 <?php echo $this->element('UserRoles.tabs'); ?>
 
 <?php echo $this->Form->create('UserRoleSetting', array(

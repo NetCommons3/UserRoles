@@ -113,6 +113,7 @@ class UserAttributesRolesController extends UserRolesAppController {
 			$this->set('userManagerPluginName',__d('user_roles', 'User manager'));
 		}
 		$this->set('roleKey', $roleKey);
+		$this->set('subtitle', $this->request->data['UserRole']['name']);
 	}
 
 /**

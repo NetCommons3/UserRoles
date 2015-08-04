@@ -24,6 +24,8 @@ echo $this->Html->css(
 
 ?>
 
+<?php echo $this->element('UserRoles.subtitle'); ?>
+
 <?php echo $this->element('UserRoles.tabs'); ?>
 
 <div class="panel panel-default">

@@ -145,6 +145,7 @@ class UserRolesController extends UserRolesAppController {
 		}
 		$this->set('roleKey', $roleKey);
 		$this->set('isSystemized', $this->request->data[0]['UserRole']['is_systemized']);
+		$this->set('subtitle', $this->request->data[0]['UserRole']['name']);
 	}
 
 /**
