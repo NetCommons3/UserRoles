@@ -248,9 +248,9 @@ class UserRoleFormHelper extends FormHelper {
 		}
 
 		$options = array(
-			UserAttributesRolesController::OTHER_NOT_READABLE => __d('user_roles', 'Not readable'),
-			UserAttributesRolesController::OTHER_READABLE => __d('user_roles', 'Readable'),
-			UserAttributesRolesController::OTHER_EDITABLE => __d('user_roles', 'Editable'),
+			UserAttributesRolesController::OTHER_NOT_READABLE => __d('user_roles', 'Not readable of others'),
+			UserAttributesRolesController::OTHER_READABLE => __d('user_roles', 'Readable of others'),
+			UserAttributesRolesController::OTHER_EDITABLE => __d('user_roles', 'Editable of others'),
 		);
 
 		$attributes = Hash::merge(array(
