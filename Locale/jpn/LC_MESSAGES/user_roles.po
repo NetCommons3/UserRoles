@@ -64,16 +64,16 @@ msgid "Not permitted"
 msgstr "許可しない"
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:123
-msgid "Super user of the system. The one with this authority can browse and edit all the acquired data of the users, and is assigned as a head of all the grouprooms built in the NetCommons. He/She is also a system manager of the NetCommons."
-msgstr "システムの最高責任者。すべての会員情報を閲覧でき、必要に応じて制限を加えることができます。ルームの新設／名称変更等の権限を持ち、全ルームの主担であり、ルームごとに運営メンバー（主担やモデレータ）を指定することができます。"
+msgid "Super user of the site. The one with this authority can browse and edit all the acquired data of the users, and is assigned as a head of all the grouprooms built in the NetCommons. He/She is also a system manager of the NetCommons."
+msgstr "サイトの最高責任者。すべての会員情報を閲覧でき、必要に応じて制限を加えることができます。ルームの新設／名称変更等の権限を持ち、全ルームの主担であり、ルームごとに運営メンバーを指定することができます。"
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:124
-msgid "A head of a grouproom.  The one with this authority can design and manage a grouproom by using modules and assining roles to group members."
-msgstr "ルームの管理者。モジュールを活用して、自由にルームをデザインし、運営することができます。"
+msgid "A head of a grouproom.  The one with this authority can design and manage a grouproom by using plugins and assining roles to group members."
+msgstr "ルームの管理者。プラグインを活用して、自由にルームをデザインし、運営することができます。"
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:125
 msgid "A common user"
-msgstr "一般会員。情報共有用のモジュールを活用して、オンラインコミュニティを形成する主体となります。"
+msgstr "一般会員。情報共有用のプラグインを活用して、オンラインコミュニティを形成する主体となります。"
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:126
 msgid "A guest user.  The one with this authority can browse the information, but is not allowed to write or edit the information."

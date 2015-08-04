@@ -14,7 +14,7 @@
 	<?php foreach ($baseRoles as $roleKey => $roleName) : ?>
 		<li class="list-group-item<?php echo ($activeUserRole === $roleKey ? ' list-group-item-info' : '') ; ?>">
 			<h4 class="list-group-item-heading">
-				<?php echo h($roleName); ?>
+				<strong><?php echo h($roleName); ?></strong>
 			</h4>
 			<p class="list-group-item-text">
 				<?php echo (isset($baseRoleDescriptions[$roleKey]) ? $baseRoleDescriptions[$roleKey] : ''); ?>

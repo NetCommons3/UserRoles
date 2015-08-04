@@ -120,8 +120,8 @@ class UserRoleFormHelper extends FormHelper {
 		$html .= $this->_View->element('UserRoles.UserRoles/base_role_description', array(
 			'baseRoles' => $baseRoles,
 			'baseRoleDescriptions' => array(
-				UserRole::USER_ROLE_KEY_USER_ADMINISTRATOR => __d('user_roles', 'Super user of the system. The one with this authority can browse and edit all the acquired data of the users, and is assigned as a head of all the grouprooms built in the NetCommons. He/She is also a system manager of the NetCommons.'),
-				UserRole::USER_ROLE_KEY_CHIEF_USER => __d('user_roles', 'A head of a grouproom.  The one with this authority can design and manage a grouproom by using modules and assining roles to group members.'),
+				UserRole::USER_ROLE_KEY_USER_ADMINISTRATOR => __d('user_roles', 'Super user of the site. The one with this authority can browse and edit all the acquired data of the users, and is assigned as a head of all the grouprooms built in the NetCommons. He/She is also a system manager of the NetCommons.'),
+				UserRole::USER_ROLE_KEY_CHIEF_USER => __d('user_roles', 'A head of a grouproom.  The one with this authority can design and manage a grouproom by using plugins and assining roles to group members.'),
 				UserRole::USER_ROLE_KEY_COMMON_USER => __d('user_roles', 'A common user'),
 				UserRole::USER_ROLE_KEY_GUEST_USER => __d('user_roles', 'A guest user.  The one with this authority can browse the information, but is not allowed to write or edit the information.'),
 			),

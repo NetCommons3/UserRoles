@@ -64,11 +64,11 @@ msgid "Not permitted"
 msgstr ""
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:123
-msgid "Super user of the system. The one with this authority can browse and edit all the acquired data of the users, and is assigned as a head of all the grouprooms built in the NetCommons. He/She is also a system manager of the NetCommons."
+msgid "Super user of the site. The one with this authority can browse and edit all the acquired data of the users, and is assigned as a head of all the grouprooms built in the NetCommons. He/She is also a system manager of the NetCommons."
 msgstr ""
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:124
-msgid "A head of a grouproom.  The one with this authority can design and manage a grouproom by using modules and assining roles to group members."
+msgid "A head of a grouproom.  The one with this authority can design and manage a grouproom by using plugins and assining roles to group members."
 msgstr ""
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:125
