@@ -33,10 +33,7 @@ class UserAttributesRolesController extends UserRolesAppController {
  * @var array
  */
 	public $uses = array(
-		'M17n.Language',
 		'PluginManager.PluginsRole',
-		'UserAttributes.UserAttribute', //UserAttributeLayoutsComponent.php
-		'UserAttributes.UserAttributeLayout', //UserAttributeLayoutsComponent.php
 		'UserRoles.UserAttributesRole',
 		'UserRoles.UserRole',
 		'UserRoles.UserRoleSetting',
