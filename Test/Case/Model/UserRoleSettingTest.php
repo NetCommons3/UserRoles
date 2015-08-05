@@ -23,13 +23,6 @@ class UserRoleSettingTest extends CakeTestCase {
  */
 	public $fixtures = array(
 		'plugin.user_roles.user_role_setting',
-		'plugin.user_roles.user',
-		'plugin.user_roles.role',
-		'plugin.user_roles.language',
-		'plugin.user_roles.plugin',
-		'plugin.user_roles.plugins_role',
-		'plugin.user_roles.room',
-		'plugin.user_roles.roles_room'
 	);
 
 /**
@@ -51,6 +44,14 @@ class UserRoleSettingTest extends CakeTestCase {
 		unset($this->UserRoleSetting);
 
 		parent::tearDown();
+	}
+
+/**
+ * test mock
+ *
+ * @return void
+ */
+	public function test() {
 	}
 
 }
