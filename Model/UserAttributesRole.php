@@ -79,7 +79,7 @@ class UserAttributesRole extends UserRolesAppModel {
 		}
 
 		$userAttributesRole = array();
-		foreach ($ret as $i => $data) {
+		foreach ($ret as $data) {
 			$userAttributesRole[$data[$this->alias]['id']] = $data;
 		}
 
@@ -116,6 +116,55 @@ class UserAttributesRole extends UserRolesAppModel {
 			'UserRole' => 'UserRoles.UserRole'
 		]);
 
+		$default = $this->__getDefaultUserAttributeRolePermission($params);
+
+		if (! $userAttributeRole = $this->find('first', array(
+			'recursive' => -1,
+			'conditions' => array(
+				'role_key' => $params['role_key'],
+				'user_attribute_key' => $params['user_attribute_key'],
+			),
+		))) {
+			$userAttributeRole = $this->create(array(
+				'role_key' => $params['role_key'],
+				'user_attribute_key' => $params['user_attribute_key']
+			));
+		}
+
+		$setting = array();
+		if ($params['is_usable_user_manager']) {
+			if ($params['is_systemized']) {
+				$setting = array(
+					'self_readable' => true, 'self_editable' => false,
+					'other_readable' => true, 'other_editable' => false,
+				);
+			} else {
+				$setting = array(
+					'self_readable' => true, 'self_editable' => true,
+					'other_readable' => true, 'other_editable' => true,
+				);
+			}
+		} elseif ($params['only_administrator']) {
+			$setting = array(
+				'self_readable' => false, 'self_editable' => false,
+				'other_readable' => false, 'other_editable' => false,
+			);
+		}
+
+		$userAttributeRole['UserAttributesRole'] =
+				array_merge($userAttributeRole['UserAttributesRole'], $default['UserAttributesRole'], $setting);
+
+		return $userAttributeRole;
+	}
+
+/**
+ * Get default of UserAttributesRoles
+ *
+ * @param array $params received data
+ *		array('role_key' => '', 'default_role_key' => '', 'user_attribute_key' => '', 'only_administrator' => false, 'is_systemized' => false)
+ * @return mixed default user attribute role permission
+ */
+	private function __getDefaultUserAttributeRolePermission($params) {
 		if (! $default = $this->find('first', array(
 			'recursive' => -1,
 			'fields' => array('self_readable', 'self_editable', 'other_readable', 'other_editable'),
@@ -157,45 +206,7 @@ class UserAttributesRole extends UserRolesAppModel {
 			}
 		}
 
-		if (! $userAttributeRole = $this->find('first', array(
-			'recursive' => -1,
-			'conditions' => array(
-				'role_key' => $params['role_key'],
-				'user_attribute_key' => $params['user_attribute_key'],
-			),
-		))) {
-			$userAttributeRole = $this->create(array(
-				'role_key' => $params['role_key'],
-				'user_attribute_key' => $params['user_attribute_key']
-			));
-		}
-
-		$setting = array();
-		if ($params['is_usable_user_manager']) {
-			if ($params['is_systemized']) {
-				$setting = array(
-					'self_readable' => true, 'self_editable' => false,
-					'other_readable' => true, 'other_editable' => false,
-				);
-			} else {
-				$setting = array(
-					'self_readable' => true, 'self_editable' => true,
-					'other_readable' => true, 'other_editable' => true,
-				);
-			}
-		} elseif ($params['only_administrator']) {
-			$setting = array(
-				'self_readable' => false, 'self_editable' => false,
-				'other_readable' => false, 'other_editable' => false,
-			);
-		} else {
-			$setting = array();
-		}
-
-		$userAttributeRole['UserAttributesRole'] =
-				array_merge($userAttributeRole['UserAttributesRole'], $default['UserAttributesRole'], $setting);
-
-		return $userAttributeRole;
+		return $default;
 	}
 
 /**
