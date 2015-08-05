@@ -202,31 +202,6 @@ class UserRole extends Role {
 	}
 
 /**
- * Get UserRoles data
- *
- * @param string $type Model.find type
- * @param string $options Model.find options
- * @return array UserRole data
- */
-	public function getUserRoles($type = 'all', $options = array()) {
-		$conditions = array(
-			$this->alias . '.type' => self::ROLE_TYPE_USER
-		);
-
-		$options = Hash::merge(array(
-			'recursive' => -1,
-			'conditions' => $conditions,
-			'order' => $this->alias . '.id',
-		), $options);
-
-		if (! $roles = $this->find($type, $options)) {
-			return $roles;
-		}
-
-		return $roles;
-	}
-
-/**
  * Save UserRoles
  *
  * @param array $data received post data
@@ -247,15 +222,15 @@ class UserRole extends Role {
 		$dataSource->begin();
 
 		//UserRoleのバリデーション
-		$roleKey = $data[0]['UserRole']['key'];
-		if (! $this->validateUserRole($data)) {
+		$roleKey = $data['UserRole'][0]['UserRole']['key'];
+		if (! $this->validateUserRole($data['UserRole'])) {
 			return false;
 		}
 
 		try {
 			//UserRoleの登録処理
 			$userRoles = array();
-			foreach ($data as $i => $userRole) {
+			foreach ($data['UserRole'] as $i => $userRole) {
 				$userRole['UserRole']['key'] = $roleKey;
 				if (! $userRoles[$i] = $this->save($userRole['UserRole'], false, false)) {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
@@ -263,14 +238,16 @@ class UserRole extends Role {
 				$roleKey = $userRoles[$i]['UserRole']['key'];
 			}
 			if ($created) {
+				$data['UserRoleSetting']['role_key'] = $roleKey;
+
 				//UserRoleSettingのデフォルトデータ登録処理
-				$this->saveDefaultUserRoleSetting($userRoles[0]);
+				$this->saveDefaultUserRoleSetting($data);
 
 				//UserAttributesRoleのデフォルトデータ登録処理
-				$this->saveDefaultUserAttributesRole($userRoles[0]);
+				$this->saveDefaultUserAttributesRole($data);
 
 				//PluginsRoleのデフォルトデータ登録処理
-				$this->saveDefaultPluginsRole($userRoles[0]);
+				$this->saveDefaultPluginsRole($data);
 			}
 
 			//トランザクションCommit

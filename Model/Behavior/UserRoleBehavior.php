@@ -34,14 +34,14 @@ class UserRoleBehavior extends ModelBehavior {
 			'conditions' => array('role_key' => $data['UserRoleSetting']['default_role_key'])
 		));
 		if (! $userRoleSetting) {
-			return true;
+			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 
 		//UserRoleSettingの登録処理
 		foreach (['id', 'created', 'created_user', 'modified', 'modified_user'] as $field) {
 			$userRoleSetting = Hash::remove($userRoleSetting, 'UserRoleSetting.' . $field);
 		}
-		$userRoleSetting['UserRoleSetting']['role_key'] = $data['UserRole']['key'];
+		$userRoleSetting['UserRoleSetting']['role_key'] = $data['UserRoleSetting']['role_key'];
 		if (! $model->UserRoleSetting->save($userRoleSetting, false)) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
@@ -64,14 +64,14 @@ class UserRoleBehavior extends ModelBehavior {
 			'conditions' => array('role_key' => $data['UserRoleSetting']['default_role_key'])
 		));
 		if (! $userAttributesRole) {
-			return true;
+			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 
 		//UserAttributesRoleの登録処理
 		foreach (['id', 'created', 'created_user', 'modified', 'modified_user'] as $field) {
 			$userAttributesRole = Hash::remove($userAttributesRole, '{n}.UserAttributesRole.' . $field);
 		}
-		$userAttributesRole = Hash::insert($userAttributesRole, '{n}.UserAttributesRole.role_key', $data['UserRole']['key']);
+		$userAttributesRole = Hash::insert($userAttributesRole, '{n}.UserAttributesRole.role_key', $data['UserRoleSetting']['role_key']);
 		if (! $model->UserAttributesRole->saveMany($userAttributesRole, array('validate' => false))) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
@@ -101,7 +101,7 @@ class UserRoleBehavior extends ModelBehavior {
 		foreach (['id', 'created', 'created_user', 'modified', 'modified_user'] as $field) {
 			$pluginsRole = Hash::remove($pluginsRole, '{n}.PluginsRole.' . $field);
 		}
-		$pluginsRole = Hash::insert($pluginsRole, '{n}.PluginsRole.role_key', $data['UserRole']['key']);
+		$pluginsRole = Hash::insert($pluginsRole, '{n}.PluginsRole.role_key', $data['UserRoleSetting']['role_key']);
 		if (! $model->PluginsRole->saveMany($pluginsRole, array('validate' => false))) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}

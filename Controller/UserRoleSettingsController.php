@@ -63,9 +63,10 @@ class UserRoleSettingsController extends UserRolesAppController {
 
 		} else {
 			//既存データ取得
-			$this->request->data = $this->UserRole->getUserRoles('first', array(
+			$this->request->data = $this->UserRole->find('first', array(
 				'recursive' => 0,
 				'conditions' => array(
+					'type' => UserRole::ROLE_TYPE_USER,
 					'key' => $roleKey,
 					'language_id' => Configure::read('Config.languageId')
 				)

@@ -97,9 +97,11 @@ class UserRoleFormHelper extends FormHelper {
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
  */
 	public function selectBaseUserRoles($fieldName, $attributes = array()) {
-		$baseRoles = $this->UserRole->getUserRoles('list', array(
+		$baseRoles = $this->UserRole->find('list', array(
+			'recursive' => -1,
 			'fields' => array('key', 'name'),
 			'conditions' => array(
+				'type' => UserRole::ROLE_TYPE_USER,
 				'is_systemized' => true,
 				'language_id' => Configure::read('Config.languageId')
 			),

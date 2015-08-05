@@ -45,8 +45,11 @@ class UserRolesController extends UserRolesAppController {
  * @return void
  */
 	public function index() {
-		$userRoles = $this->UserRole->getUserRoles('all', array(
-			'conditions' => array('language_id' => Configure::read('Config.languageId'))
+		$userRoles = $this->UserRole->find('all', array(
+			'conditions' => array(
+				'type' => UserRole::ROLE_TYPE_USER,
+				'language_id' => Configure::read('Config.languageId')
+			)
 		));
 		$this->set('userRoles', $userRoles);
 	}
@@ -66,7 +69,6 @@ class UserRolesController extends UserRolesAppController {
  */
 	public function add() {
 		$this->view = 'edit';
-		$this->__prepare();
 
 		if ($this->request->isPost()) {
 			$data = $this->data;
@@ -90,25 +92,25 @@ class UserRolesController extends UserRolesAppController {
 		} else {
 			//初期値セット
 			$UserRole = $this->UserRole;
-
+			$this->request->data['UserRole'] = array();
 			foreach (array_keys($this->viewVars['languages']) as $langId) {
-				$index = count($this->request->data);
+				$index = count($this->request->data['UserRole']);
 
-				$this->request->data[$index] = Hash::merge(
-					$this->UserRole->create(array(
-						'id' => null,
-						'language_id' => $langId,
-						'key' => '',
-						'name' => '',
-						'type' => $UserRole::ROLE_TYPE_USER,
-					)),
-					$this->UserRoleSetting->create(array(
-						'id' => null,
-						'role_key' => '',
-						'default_role_key' => $UserRole::USER_ROLE_KEY_COMMON_USER,
-					))
-				);
+				$this->request->data['UserRole'][$index] = $this->UserRole->create(array(
+					'id' => null,
+					'language_id' => $langId,
+					'key' => '',
+					'name' => '',
+					'type' => $UserRole::ROLE_TYPE_USER,
+				));
 			}
+			$this->request->data = Hash::merge($this->request->data,
+				$this->UserRoleSetting->create(array(
+					'id' => null,
+					'role_key' => '',
+					'default_role_key' => $UserRole::USER_ROLE_KEY_COMMON_USER,
+				))
+			);
 		}
 	}
 
@@ -119,8 +121,6 @@ class UserRolesController extends UserRolesAppController {
  * @return void
  */
 	public function edit($roleKey = null) {
-		$this->__prepare();
-
 		if ($this->request->isPost()) {
 			$data = $this->data;
 
@@ -138,14 +138,28 @@ class UserRolesController extends UserRolesAppController {
 
 		} else {
 			//既存データ取得
-			$this->request->data = $this->UserRole->getUserRoles('all', array(
-				'recursive' => 0,
-				'conditions' => array('key' => $roleKey)
+			$this->request->data['UserRole'] = $this->UserRole->find('all', array(
+				'recursive' => -1,
+				'conditions' => array(
+					'type' => UserRole::ROLE_TYPE_USER,
+					'key' => $roleKey
+				)
 			));
+
+			$data = $this->UserRoleSetting->find('first', array(
+				'recursive' => -1,
+				'conditions' => array(
+					'role_key' => $roleKey
+				),
+			));
+			$this->request->data = Hash::merge($this->request->data, $data);
 		}
+
 		$this->set('roleKey', $roleKey);
-		$this->set('isSystemized', $this->request->data[0]['UserRole']['is_systemized']);
-		$this->set('subtitle', $this->request->data[0]['UserRole']['name']);
+
+		$userRole = Hash::extract($this->request->data['UserRole'], '{n}.UserRole[language_id=' . Configure::read('Config.languageId') . ']');
+		$this->set('isSystemized', $userRole[0]['is_systemized']);
+		$this->set('subtitle', $userRole[0]['name']);
 	}
 
 /**
@@ -159,30 +173,7 @@ class UserRolesController extends UserRolesAppController {
 			return;
 		}
 
-		$this->UserRole->deleteUserRole($this->data[0]);
+		$this->UserRole->deleteUserRole($this->data['UserRole'][0]);
 		$this->redirect('/user_roles/user_roles/index/');
 	}
-
-/**
- * prepare
- *
- * @return void
- */
-	private function __prepare() {
-		////ベース権限の取得
-		//$Role = $this->UserRole;
-		//
-		//$userRoles = $this->UserRole->getUserRoles('list', array(
-		//	'fields' => array('key', 'name'),
-		//	'conditions' => array(
-		//		'is_systemized' => true,
-		//		'language_id' => Configure::read('Config.languageId')
-		//	),
-		//	'order' => array('id' => 'asc')
-		//));
-		//unset($userRoles[$Role::ROLE_KEY_SYSTEM_ADMINISTRATOR]);
-		//
-		//$this->set('baseRoles', $userRoles);
-	}
-
 }

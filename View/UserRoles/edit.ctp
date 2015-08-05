@@ -35,17 +35,19 @@ echo $this->Html->css(
 		<?php echo $this->SwitchLanguage->tablist('user-roles-'); ?>
 
 		<div class="tab-content">
-			<?php foreach ($this->data as $index => $userRole) : ?>
+			<?php foreach ($this->data['UserRole'] as $index => $userRole) : ?>
 				<?php $languageId = $userRole['UserRole']['language_id']; ?>
 
 				<?php if (isset($languages[$languageId])) : ?>
 					<div id="user-roles-<?php echo $languageId; ?>"
 							class="tab-pane<?php echo ($activeLangId === (string)$languageId ? ' active' : ''); ?>">
 
-						<?php echo $this->element('UserRoles/edit_form', array('index' => $index)); ?>
+						<?php echo $this->element('UserRoles/edit_form_for_user_role', array('index' => $index)); ?>
 					</div>
 				<?php endif; ?>
 			<?php endforeach; ?>
+
+			<?php echo $this->element('UserRoles/edit_form_for_user_role_setting'); ?>
 		</div>
 	</div>
 
