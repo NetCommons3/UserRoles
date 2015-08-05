@@ -67,10 +67,9 @@ class UserRoleSetting extends UserRolesAppModel {
 	}
 
 /**
- * Save UserRoles
+ * Save UserRoleSetting
  *
  * @param array $data received post data
- * @param bool True is created, false is updated
  * @return bool True on success, false on validation errors
  * @throws InternalErrorException
  */
@@ -118,7 +117,6 @@ class UserRoleSetting extends UserRolesAppModel {
  * Save UsableUserManager
  *
  * @param array $data received post data
- * @param bool True is created, false is updated
  * @return bool True on success, false on validation errors
  * @throws InternalErrorException
  */

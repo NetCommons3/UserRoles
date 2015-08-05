@@ -202,7 +202,6 @@ class UserAttributesRole extends UserRolesAppModel {
  * Save UserAttributesRoles
  *
  * @param array $data received post data
- * @param bool True is created, false is updated
  * @return bool True on success, false on validation errors
  * @throws InternalErrorException
  */

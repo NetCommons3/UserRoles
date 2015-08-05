@@ -230,7 +230,7 @@ class UserRole extends Role {
  * Save UserRoles
  *
  * @param array $data received post data
- * @param bool True is created, false is updated
+ * @param bool $created True is created, false is updated
  * @return bool True on success, false on validation errors
  * @throws InternalErrorException
  */

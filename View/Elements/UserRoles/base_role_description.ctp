@@ -12,7 +12,7 @@
 
 <ul class="list-group user-roles-base-role-desc">
 	<?php foreach ($baseRoles as $roleKey => $roleName) : ?>
-		<li class="list-group-item<?php echo ($activeUserRole === $roleKey ? ' list-group-item-info' : '') ; ?>">
+		<li class="list-group-item<?php echo ($activeUserRole === $roleKey ? ' list-group-item-info' : ''); ?>">
 			<h4 class="list-group-item-heading">
 				<strong><?php echo h($roleName); ?></strong>
 			</h4>

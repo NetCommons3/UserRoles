@@ -107,7 +107,7 @@ class UserAttributesRolesController extends UserRolesAppController {
 		if ($plugin = Hash::extract($this->ControlPanelLayout->plugins, '{n}.Plugin[key=user_manager]')) {
 			$this->set('userManagerPluginName', $plugin[0]['name']);
 		} else {
-			$this->set('userManagerPluginName',__d('user_roles', 'User manager'));
+			$this->set('userManagerPluginName', __d('user_roles', 'User manager'));
 		}
 		$this->set('roleKey', $roleKey);
 		$this->set('subtitle', $this->request->data['UserRole']['name']);

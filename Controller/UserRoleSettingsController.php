@@ -82,7 +82,7 @@ class UserRoleSettingsController extends UserRolesAppController {
 		if ($plugin = Hash::extract($this->ControlPanelLayout->plugins, '{n}.Plugin[key=rooms]')) {
 			$this->set('roomsPluginName', $plugin[0]['name']);
 		} else {
-			$this->set('roomsPluginName',__d('user_roles', 'Room manager'));
+			$this->set('roomsPluginName', __d('user_roles', 'Room manager'));
 		}
 		$this->set('roleKey', $roleKey);
 		$this->set('subtitle', $this->request->data['UserRole']['name']);

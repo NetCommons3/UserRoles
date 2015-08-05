@@ -86,7 +86,6 @@ class UserRoleFormHelper extends FormHelper {
 			'1' => __d('user_roles', 'Permitted'),
 			'0' => __d('user_roles', 'Not permitted'),
 		);
-
 	}
 
 /**
@@ -212,7 +211,7 @@ class UserRoleFormHelper extends FormHelper {
 /**
  * Outputs UserAttributeRole select
  *
- * @param string $fieldName Name attribute of the SELECT
+ * @param string $userAttributeKey user_attributes.key
  * @param array $attributes The HTML attributes of the select element.
  * @return string Formatted SELECT element
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
