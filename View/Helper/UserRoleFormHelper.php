@@ -227,7 +227,7 @@ class UserRoleFormHelper extends FormHelper {
 		}
 		if (! $userAttribute = Hash::extract(
 			$this->_View->request->data['UserAttribute'],
-			'{n}.{n}.{n}.UserAttribute[key=' . $userAttributeKey . ']'
+			'{n}.{n}.{n}.UserAttributeSetting[user_attribute_key=' . $userAttributeKey . ']'
 		)) {
 			return;
 		}

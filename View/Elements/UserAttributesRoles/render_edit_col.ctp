@@ -17,10 +17,10 @@
 	<?php foreach ($userAttributes[$row][$col] as $index => $userAttribute) : ?>
 		<ul class="user-attribute-roles-edit">
 			<li class="list-group-item clearfix<?php echo (! $this->data['UserRoleSetting']['is_usable_user_manager'] &&
-																$userAttribute['UserAttribute']['only_administrator'] ? ' disabled' : ''); ?>">
+																$userAttribute['UserAttributeSetting']['only_administrator'] ? ' disabled' : ''); ?>">
 				<div class="pull-left">
 					<?php echo h($userAttribute['UserAttribute']['name']); ?>
-					<?php if ($userAttribute['UserAttribute']['required']) : ?>
+					<?php if ($userAttribute['UserAttributeSetting']['required']) : ?>
 						<?php echo $this->element('NetCommons.required'); ?>
 					<?php endif; ?>
 				</div>
