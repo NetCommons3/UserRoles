@@ -182,7 +182,6 @@ class UserRoleBehavior extends ModelBehavior {
  */
 	public function saveUserAttributesRole(Model $model, $data) {
 		$model->loadModels([
-			'UserRole' => 'UserRoles.UserRole',
 			'UserAttributes' => 'UserAttributes.UserAttribute',
 			'UserAttributesRole' => 'UserRoles.UserAttributesRole'
 		]);

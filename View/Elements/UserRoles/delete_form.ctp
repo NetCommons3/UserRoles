@@ -25,9 +25,9 @@
 					<?php echo sprintf(__d('net_commons', 'Delete all data associated with the %s.'), __d('user_roles', 'User role')); ?>
 				</div>
 
-				<?php echo $this->Form->hidden('UserRole.0.UserRole.id'); ?>
+				<?php echo $this->Form->hidden('UserRole.0.id'); ?>
 
-				<?php echo $this->Form->hidden('UserRole.0.UserRole.key'); ?>
+				<?php echo $this->Form->hidden('UserRole.0.key'); ?>
 
 				<?php echo $this->Form->button('<span class="glyphicon glyphicon-trash"> </span> ' . __d('net_commons', 'Delete'), array(
 						'name' => 'delete',

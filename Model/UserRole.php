@@ -222,7 +222,7 @@ class UserRole extends Role {
 		$dataSource->begin();
 
 		//UserRoleのバリデーション
-		$roleKey = $data['UserRole'][0]['UserRole']['key'];
+		$roleKey = $data['UserRole'][0]['key'];
 		if (! $this->validateUserRole($data['UserRole'])) {
 			return false;
 		}
@@ -231,8 +231,8 @@ class UserRole extends Role {
 			//UserRoleの登録処理
 			$userRoles = array();
 			foreach ($data['UserRole'] as $i => $userRole) {
-				$userRole['UserRole']['key'] = $roleKey;
-				if (! $userRoles[$i] = $this->save($userRole['UserRole'], false, false)) {
+				$userRole['key'] = $roleKey;
+				if (! $userRoles[$i] = $this->save($userRole, false, false)) {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}
 				$roleKey = $userRoles[$i]['UserRole']['key'];
@@ -301,13 +301,13 @@ class UserRole extends Role {
 
 		try {
 			//削除処理
-			if (! $this->deleteAll(array($this->alias . '.key' => $data['UserRole']['key']), false)) {
+			if (! $this->deleteAll(array($this->alias . '.key' => $data['key']), false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
-			if (! $this->UserRoleSetting->deleteAll(array($this->UserRoleSetting->alias . '.role_key' => $data['UserRole']['key']), false)) {
+			if (! $this->UserRoleSetting->deleteAll(array($this->UserRoleSetting->alias . '.role_key' => $data['key']), false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
-			if (! $this->UserAttributesRole->deleteAll(array($this->UserAttributesRole->alias . '.role_key' => $data['UserRole']['key']), false)) {
+			if (! $this->UserAttributesRole->deleteAll(array($this->UserAttributesRole->alias . '.role_key' => $data['key']), false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 

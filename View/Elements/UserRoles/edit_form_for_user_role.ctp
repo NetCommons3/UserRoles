@@ -10,16 +10,16 @@
  */
 ?>
 
-<?php echo $this->Form->hidden('UserRole.' . $index . '.' . 'UserRole.id'); ?>
+<?php echo $this->Form->hidden('UserRole.' . $index . '.id'); ?>
 
-<?php echo $this->Form->hidden('UserRole.' . $index . '.' . 'UserRole.key'); ?>
+<?php echo $this->Form->hidden('UserRole.' . $index . '.key'); ?>
 
-<?php echo $this->Form->hidden('UserRole.' . $index . '.' . 'UserRole.language_id'); ?>
+<?php echo $this->Form->hidden('UserRole.' . $index . '.language_id'); ?>
 
-<?php echo $this->Form->hidden('UserRole.' . $index . '.' . 'UserRole.type'); ?>
+<?php echo $this->Form->hidden('UserRole.' . $index . '.type'); ?>
 
 <div class="form-group">
-	<?php echo $this->Form->input('UserRole.' . $index . '.' . 'UserRole.name', array(
+	<?php echo $this->Form->input('UserRole.' . $index . '.name', array(
 			'type' => 'text',
 			'label' => __d('user_roles', 'User role name') . $this->element('NetCommons.required'),
 			'class' => 'form-control',

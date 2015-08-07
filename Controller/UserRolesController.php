@@ -96,13 +96,14 @@ class UserRolesController extends UserRolesAppController {
 			foreach (array_keys($this->viewVars['languages']) as $langId) {
 				$index = count($this->request->data['UserRole']);
 
-				$this->request->data['UserRole'][$index] = $this->UserRole->create(array(
+				$userRole = $this->UserRole->create(array(
 					'id' => null,
 					'language_id' => $langId,
 					'key' => '',
 					'name' => '',
 					'type' => $UserRole::ROLE_TYPE_USER,
 				));
+				$this->request->data['UserRole'][$index] = $userRole['UserRole'];
 			}
 			$this->request->data = Hash::merge($this->request->data,
 				$this->UserRoleSetting->create(array(
@@ -138,13 +139,14 @@ class UserRolesController extends UserRolesAppController {
 
 		} else {
 			//既存データ取得
-			$this->request->data['UserRole'] = $this->UserRole->find('all', array(
+			$userRole = $this->UserRole->find('all', array(
 				'recursive' => -1,
 				'conditions' => array(
 					'type' => UserRole::ROLE_TYPE_USER,
 					'key' => $roleKey
 				)
 			));
+			$this->request->data['UserRole'] = Hash::extract($userRole, '{n}.UserRole');
 
 			$data = $this->UserRoleSetting->find('first', array(
 				'recursive' => -1,
@@ -154,10 +156,9 @@ class UserRolesController extends UserRolesAppController {
 			));
 			$this->request->data = Hash::merge($this->request->data, $data);
 		}
-
 		$this->set('roleKey', $roleKey);
 
-		$userRole = Hash::extract($this->request->data['UserRole'], '{n}.UserRole[language_id=' . Configure::read('Config.languageId') . ']');
+		$userRole = Hash::extract($this->request->data['UserRole'], '{n}[language_id=' . Configure::read('Config.languageId') . ']');
 		$this->set('isSystemized', $userRole[0]['is_systemized']);
 		$this->set('subtitle', $userRole[0]['name']);
 	}

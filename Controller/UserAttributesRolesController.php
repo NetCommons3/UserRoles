@@ -89,9 +89,9 @@ class UserAttributesRolesController extends UserRolesAppController {
 			$this->request->data = $this->UserRole->find('first', array(
 				'recursive' => 0,
 				'conditions' => array(
-					'type' => UserRole::ROLE_TYPE_USER,
-					'key' => $roleKey,
-					'language_id' => Configure::read('Config.languageId')
+					'UserRole.type' => UserRole::ROLE_TYPE_USER,
+					'UserRole.key' => $roleKey,
+					'UserRole.language_id' => Configure::read('Config.languageId')
 				)
 			));
 			$this->request->data['UserRoleSetting']['is_usable_user_manager'] = (bool)$this->PluginsRole->find('count', array(

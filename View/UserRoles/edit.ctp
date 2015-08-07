@@ -36,7 +36,7 @@ echo $this->Html->css(
 
 		<div class="tab-content">
 			<?php foreach ($this->data['UserRole'] as $index => $userRole) : ?>
-				<?php $languageId = $userRole['UserRole']['language_id']; ?>
+				<?php $languageId = $userRole['language_id']; ?>
 
 				<?php if (isset($languages[$languageId])) : ?>
 					<div id="user-roles-<?php echo $languageId; ?>"
