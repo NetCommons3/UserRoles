@@ -27,4 +27,14 @@ class UserRolesAppController extends AppController {
 	public $components = array(
 		'Security'
 	);
+
+/**
+ * beforeFilter
+ *
+ * @return void
+ */
+	public function beforeFilter() {
+		parent::beforeFilter();
+		$this->Auth->deny('index', 'view');
+	}
 }
