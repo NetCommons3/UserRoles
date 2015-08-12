@@ -8,4 +8,4 @@ UserRoles for NetComomns3
 
 | dependencies  | status |
 | ------------- | ------ |
-| composer.json | [![Dependency Status](https://www.versioneye.com/user/projects/(versioneye_project_ID)/badge.png)](https://www.versioneye.com/user/projects/(versioneye_project_ID)) |
+| composer.json | [![Dependency Status](https://www.versioneye.com/user/projects/55cbc577c7d56744d20001a9/badge.png)](https://www.versioneye.com/user/projects/55cbc577c7d56744d20001a9) |
