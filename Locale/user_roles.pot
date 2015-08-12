@@ -1,0 +1,124 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: UserRoles/Controller/UserAttributesRolesController.php:113
+msgid "User manager"
+msgstr ""
+
+#: UserRoles/Controller/UserRoleSettingsController.php:85
+msgid "Room manager"
+msgstr ""
+
+#: UserRoles/Model/UserRole.php:191
+#: UserRoles/View/Elements/UserRoles/edit_form.ctp:24
+msgid "User role name"
+msgstr ""
+
+#: UserRoles/View/Elements/tabs.ctp:30
+msgid "General setting"
+msgstr ""
+
+#: UserRoles/View/Elements/tabs.ctp:35
+msgid "Details setting"
+msgstr ""
+
+#: UserRoles/View/Elements/tabs.ctp:41
+msgid "Information Policy"
+msgstr ""
+
+#: UserRoles/View/Elements/UserRoles/delete_form.ctp:25;35
+msgid "User role"
+msgstr ""
+
+#: UserRoles/View/Elements/UserRoles/edit_form.ctp:38
+msgid "Base roles"
+msgstr ""
+
+#: UserRoles/View/Helper/UserRoleFormHelper.php:81
+msgid "Use"
+msgstr ""
+
+#: UserRoles/View/Helper/UserRoleFormHelper.php:82
+msgid "Not use"
+msgstr ""
+
+#: UserRoles/View/Helper/UserRoleFormHelper.php:86
+msgid "Permitted"
+msgstr ""
+
+#: UserRoles/View/Helper/UserRoleFormHelper.php:87
+msgid "Not permitted"
+msgstr ""
+
+#: UserRoles/View/Helper/UserRoleFormHelper.php:123
+msgid "Super user of the system. The one with this authority can browse and edit all the acquired data of the users, and is assigned as a head of all the grouprooms built in the NetCommons. He/She is also a system manager of the NetCommons."
+msgstr ""
+
+#: UserRoles/View/Helper/UserRoleFormHelper.php:124
+msgid "A head of a grouproom.  The one with this authority can design and manage a grouproom by using modules and assining roles to group members."
+msgstr ""
+
+#: UserRoles/View/Helper/UserRoleFormHelper.php:125
+msgid "A common user"
+msgstr ""
+
+#: UserRoles/View/Helper/UserRoleFormHelper.php:126
+msgid "A guest user.  The one with this authority can browse the information, but is not allowed to write or edit the information."
+msgstr ""
+
+#: UserRoles/View/Helper/UserRoleFormHelper.php:252
+msgid "Not readable of others"
+msgstr ""
+
+#: UserRoles/View/Helper/UserRoleFormHelper.php:253
+msgid "Readable of others"
+msgstr ""
+
+#: UserRoles/View/Helper/UserRoleFormHelper.php:254
+msgid "Editable of others"
+msgstr ""
+
+#: UserRoles/View/UserRoleSettings/edit.ctp:35
+msgid "Default room role"
+msgstr ""
+
+#: UserRoles/View/UserRoleSettings/edit.ctp:43
+msgid "%s plugin setting"
+msgstr ""
+
+#: UserRoles/View/UserRoleSettings/edit.ctp:62
+msgid "Allow to create room in Public Space."
+msgstr ""
+
+#: UserRoles/View/UserRoleSettings/edit.ctp:75
+msgid "Allow to create room in Grouproom Space."
+msgstr ""
+
+#: UserRoles/View/UserRoleSettings/edit.ctp:90
+msgid "Private room setting"
+msgstr ""
+
+#: UserRoles/View/UserRoleSettings/edit.ctp:96
+msgid "Use private room?"
+msgstr ""
+
+#: UserRoles/View/UserRoleSettings/edit.ctp:110
+msgid "The total size of Private Room"
+msgstr ""
+
+#: UserRoles/View/UserRoles/index.ctp:24
+msgid "Role name"
+msgstr ""
+
