@@ -71,15 +71,12 @@ class UserRolesController extends UserRolesAppController {
 		$this->view = 'edit';
 
 		if ($this->request->isPost()) {
-			$data = $this->data;
-
 			//不要パラメータ除去
+			$data = $this->data;
 			unset($data['save'], $data['active_lang_id']);
-			$this->request->data = $data;
 
 			//登録処理
-			$userRoles = $this->UserRole->saveUserRole($data, true);
-			if ($this->handleValidationError($this->UserRole->validationErrors)) {
+			if ($userRoles = $this->UserRole->saveUserRole($data, true)) {
 				//正常の場合
 				$userRole = Hash::extract($userRoles, '{n}.UserRole[language_id=' . Configure::read('Config.languageId') . ']');
 				if (! $userRole) {
@@ -88,6 +85,8 @@ class UserRolesController extends UserRolesAppController {
 				$this->redirect('/user_roles/user_role_settings/edit/' . $userRole[0]['key'] . '/');
 				return;
 			}
+			$this->handleValidationError($this->UserRole->validationErrors);
+			$this->request->data = $data;
 
 		} else {
 			//初期値セット
@@ -123,19 +122,18 @@ class UserRolesController extends UserRolesAppController {
  */
 	public function edit($roleKey = null) {
 		if ($this->request->isPost()) {
-			$data = $this->data;
-
 			//不要パラメータ除去
+			$data = $this->data;
 			unset($data['save'], $data['active_lang_id']);
-			$this->request->data = $data;
 
 			//登録処理
-			$this->UserRole->saveUserRole($data, false);
-			if ($this->handleValidationError($this->UserRole->validationErrors)) {
+			if ($this->UserRole->saveUserRole($data, false)) {
 				//正常の場合
 				$this->redirect('/user_roles/user_roles/index/');
 				return;
 			}
+			$this->handleValidationError($this->UserRole->validationErrors);
+			$this->request->data = $data;
 
 		} else {
 			//既存データ取得
