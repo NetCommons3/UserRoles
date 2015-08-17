@@ -14,7 +14,8 @@ label.user-roles-label {
 	margin-right: 30px;
 }
 
-.user-roles-base-role-desc {
-	margin-top: 5px;
-	/*margin-left: 20px;*/
+.user-roles-origin-role-desc {
+	margin-top: 6px;
+	padding: 10px;
 }
+

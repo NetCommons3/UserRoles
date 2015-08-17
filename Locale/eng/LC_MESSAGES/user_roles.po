@@ -44,7 +44,7 @@ msgid "User role"
 msgstr ""
 
 #: UserRoles/View/Elements/UserRoles/edit_form.ctp:38
-msgid "Base roles"
+msgid "Origin roles"
 msgstr ""
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:81

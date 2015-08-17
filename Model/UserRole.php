@@ -38,10 +38,8 @@ class UserRole extends Role {
  */
 	const
 		USER_ROLE_KEY_SYSTEM_ADMINISTRATOR = 'system_administrator',
-		USER_ROLE_KEY_USER_ADMINISTRATOR = 'user_administrator',
-		USER_ROLE_KEY_CHIEF_USER = 'chief_user',
-		USER_ROLE_KEY_COMMON_USER = 'common_user',
-		USER_ROLE_KEY_GUEST_USER = 'guest_user';
+		USER_ROLE_KEY_ADMINISTRATOR = 'administrator',
+		USER_ROLE_KEY_COMMON_USER = 'common_user';
 
 /**
  * use behaviors

@@ -47,28 +47,24 @@ class UserRoleSettingsController extends UserRolesAppController {
  */
 	public function edit($roleKey = null) {
 		if ($this->request->isPost()) {
-			$data = $this->data;
-
 			//不要パラメータ除去
+			$data = $this->data;
 			unset($data['save']);
-			$this->request->data = $data;
 
 			//登録処理
-			$this->UserRoleSetting->saveUserRoleSetting($data);
-			if ($this->handleValidationError($this->UserRoleSetting->validationErrors)) {
+			if ($this->UserRoleSetting->saveUserRoleSetting($data)) {
 				//正常の場合
 				$this->redirect('/user_roles/user_roles/index/');
 				return;
 			}
+			$this->handleValidationError($this->UserRoleSetting->validationErrors);
+			$this->request->data = $data;
 
 		} else {
-			//既存データ取得
-			$this->request->data = $this->UserRole->find('first', array(
-				'recursive' => 0,
+			$this->request->data = $this->UserRoleSetting->find('first', array(
+				'recursive' => -1,
 				'conditions' => array(
-					'UserRole.type' => UserRole::ROLE_TYPE_USER,
-					'UserRole.key' => $roleKey,
-					'UserRole.language_id' => Configure::read('Config.languageId')
+					'role_key' => $roleKey,
 				)
 			));
 			$this->request->data['UserRoleSetting']['is_usable_room_manager'] = (bool)$this->PluginsRole->find('count', array(
@@ -79,6 +75,17 @@ class UserRoleSettingsController extends UserRolesAppController {
 				)
 			));
 		}
+
+		//既存データ取得
+		$userRole = $this->UserRole->find('first', array(
+			'recursive' => -1,
+			'conditions' => array(
+				'type' => UserRole::ROLE_TYPE_USER,
+				'key' => $roleKey,
+				'language_id' => Configure::read('Config.languageId')
+			)
+		));
+		$this->request->data = Hash::merge($userRole, $this->request->data);
 
 		if ($plugin = Hash::extract($this->ControlPanelLayout->plugins, '{n}.Plugin[key=rooms]')) {
 			$this->set('roomsPluginName', $plugin[0]['name']);

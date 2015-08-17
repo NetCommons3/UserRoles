@@ -108,7 +108,7 @@ class UserRolesController extends UserRolesAppController {
 				$this->UserRoleSetting->create(array(
 					'id' => null,
 					'role_key' => '',
-					'default_role_key' => $UserRole::USER_ROLE_KEY_COMMON_USER,
+					'origin_role_key' => $UserRole::USER_ROLE_KEY_COMMON_USER,
 				))
 			);
 		}

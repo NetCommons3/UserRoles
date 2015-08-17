@@ -54,7 +54,7 @@ class UserRoleSetting extends UserRolesAppModel {
 					'on' => 'update', // Limit validation to 'create' or 'update' operations
 				),
 			),
-			'default_role_key' => array(
+			'origin_role_key' => array(
 				'notBlank' => array(
 					'rule' => array('notBlank'),
 					'message' => __d('net_commons', 'Invalid request.'),

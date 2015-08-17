@@ -44,8 +44,8 @@ msgid "User role"
 msgstr "権限"
 
 #: UserRoles/View/Elements/UserRoles/edit_form.ctp:38
-msgid "Base roles"
-msgstr "ベース権限"
+msgid "Origin roles"
+msgstr "コピー元の権限"
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:81
 msgid "Use"
@@ -89,7 +89,7 @@ msgstr "他人の会員情報を閲覧させる"
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:254
 msgid "Editable of others"
-msgstr "他人の会員情報を編集させない"
+msgstr "他人の会員情報を編集させる"
 
 #: UserRoles/View/UserRoleSettings/edit.ctp:35
 msgid "Default room role"
