@@ -231,7 +231,10 @@ class UserRoleFormHelper extends FormHelper {
 			$this->_View->request->data['UserAttributesRole'][$id]['other_user_attribute_role'] = UserAttributesRolesController::OTHER_NOT_READABLE;
 		}
 
-		if ($this->_View->request->data['UserRoleSetting']['is_usable_user_manager'] || $userAttribute[0]['only_administrator']) {
+		if ($this->_View->request->data['UserRoleSetting']['is_usable_user_manager'] ||
+				$userAttribute[0]['only_administrator'] ||
+				$this->_View->request->data['UserRole']['is_systemized']) {
+
 			$disabled = true;
 		} else {
 			$disabled = false;
