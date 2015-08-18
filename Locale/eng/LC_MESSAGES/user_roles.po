@@ -118,3 +118,7 @@ msgstr ""
 #: UserRoles/View/UserRoleSettings/edit.ctp:110
 msgid "The total size of Private Room"
 msgstr ""
+
+#: UserRoles/View/UserRoleSettings/edit.ctp:96
+msgid "Role description"
+msgstr "When you create a new to the authority, there is a possibility that the outflow will occur of personal information If you do not properly set."

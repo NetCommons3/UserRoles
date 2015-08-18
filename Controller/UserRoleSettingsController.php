@@ -46,7 +46,7 @@ class UserRoleSettingsController extends UserRolesAppController {
  * @return void
  */
 	public function edit($roleKey = null) {
-		if ($this->request->isPost()) {
+		if ($this->request->isPut()) {
 			//不要パラメータ除去
 			$data = $this->data;
 			unset($data['save']);

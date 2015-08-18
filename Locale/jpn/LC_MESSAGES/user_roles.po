@@ -118,3 +118,7 @@ msgstr "プライベートルーム"
 #: UserRoles/View/UserRoleSettings/edit.ctp:110
 msgid "The total size of Private Room"
 msgstr "プライベートルームの容量"
+
+#: UserRoles/View/UserRoleSettings/edit.ctp:96
+msgid "Role description"
+msgstr "新規に権限を作成するときは、適切に設定しないと個人情報の流出が起こる可能性があります。"

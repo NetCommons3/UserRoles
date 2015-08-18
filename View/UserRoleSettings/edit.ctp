@@ -26,7 +26,7 @@ echo $this->Html->css(
 <?php echo $this->element('UserRoles.tabs'); ?>
 
 <div class="panel panel-default">
-	<?php echo $this->Form->create(null, array('novalidate' => true)); ?>
+	<?php echo $this->Form->create('UserRoleSetting', array('novalidate' => true)); ?>
 
 	<div class="panel-body">
 		<?php echo $this->Form->hidden('UserRoleSetting.id'); ?>
@@ -34,16 +34,7 @@ echo $this->Html->css(
 		<?php echo $this->Form->hidden('UserRoleSetting.role_key'); ?>
 
 		<?php echo $this->Form->hidden('UserRoleSetting.origin_role_key'); ?>
-<!--
-		<div class="form-group form-inline">
-			<?php echo $this->UserRoleForm->selectDefaultRoomRoles('UserRoleSetting.default_room_role_key', array(
-					'label' => array(
-						'label' => __d('user_roles', 'Default room role'),
-						'class' => 'user-roles-label'
-					),
-				)); ?>
-		</div>
--->
+
 		<div class="row form-group">
 			<div class="col-xs-12 col-sm-6 col-md-4">
 				<?php echo $this->Form->label('UserRoleSetting.is_usable_room_manager',
@@ -52,9 +43,25 @@ echo $this->Html->css(
 			</div>
 
 			<div class="col-xs-12 col-sm-6 col-md-8">
-				<?php echo $this->UserRoleForm->radioUserRole('UserRoleSetting.is_usable_room_manager',
-						$this->UserRoleForm->isUsableOptions
-					); ?>
+				<?php if ($this->data['UserRole']['is_systemized']) : ?>
+					<?php echo $this->Form->hidden('UserRoleSetting.is_usable_room_manager', array(
+						'value' => (int)$this->data['UserRoleSetting']['is_usable_room_manager']
+					)); ?>
+
+					<?php echo $this->UserRoleForm->radioUserRole(null,
+							$this->UserRoleForm->isUsableOptions,
+							array('disabled' => true, 'hiddenField' => false)
+						); ?>
+				<?php else : ?>
+					<?php echo $this->UserRoleForm->radioUserRole('UserRoleSetting.is_usable_room_manager',
+							$this->UserRoleForm->isUsableOptions,
+							array(
+								'onclick' => 'submit()',
+								'ng-disabled' => '(sending || ' . (int)$this->data['UserRole']['is_systemized'] . ')',
+								'ng-click' => 'sending = true'
+							)
+						); ?>
+				<?php endif; ?>
 			</div>
 		</div>
 
