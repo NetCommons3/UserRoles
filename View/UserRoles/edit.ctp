@@ -13,7 +13,11 @@ echo $this->Html->script(
 	array(
 		'/user_roles/js/user_roles.js'
 	),
-	array('plugin' => false)
+	array(
+		'plugin' => false,
+		'once' => true,
+		'inline' => false
+	)
 );
 echo $this->Html->css(
 	array(
