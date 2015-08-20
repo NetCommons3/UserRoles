@@ -13,16 +13,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: UserRoles/Controller/UserAttributesRolesController.php:113
+#: UserRoles/Controller/UserAttributesRolesController.php:118
 msgid "User manager"
 msgstr ""
 
-#: UserRoles/Controller/UserRoleSettingsController.php:85
+#: UserRoles/Controller/UserRoleSettingsController.php:93
 msgid "Room manager"
 msgstr ""
 
-#: UserRoles/Model/UserRole.php:191
-#: UserRoles/View/Elements/UserRoles/edit_form.ctp:24
+#: UserRoles/Model/UserRole.php:189
+#: UserRoles/View/Elements/UserRoles/edit_form_for_user_role.ctp:24
 #: UserRoles/View/UserRoles/index.ctp:24
 msgid "User role name"
 msgstr ""
@@ -43,8 +43,12 @@ msgstr ""
 msgid "User role"
 msgstr ""
 
-#: UserRoles/View/Elements/UserRoles/edit_form.ctp:38
+#: UserRoles/View/Elements/UserRoles/edit_form_for_user_role_setting.ctp:15
 msgid "Origin roles"
+msgstr ""
+
+#: UserRoles/View/Elements/UserRoles/edit_form_for_user_role_setting.ctp:21
+msgid "Role description"
 msgstr ""
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:81
@@ -63,62 +67,23 @@ msgstr ""
 msgid "Not permitted"
 msgstr ""
 
-#: UserRoles/View/Helper/UserRoleFormHelper.php:123
-msgid "Super user of the site. The one with this authority can browse and edit all the acquired data of the users, and is assigned as a head of all the grouprooms built in the NetCommons. He/She is also a system manager of the NetCommons."
-msgstr ""
-
-#: UserRoles/View/Helper/UserRoleFormHelper.php:124
-msgid "A head of a grouproom.  The one with this authority can design and manage a grouproom by using plugins and assining roles to group members."
-msgstr ""
-
-#: UserRoles/View/Helper/UserRoleFormHelper.php:125
-msgid "A common user"
-msgstr ""
-
-#: UserRoles/View/Helper/UserRoleFormHelper.php:126
-msgid "A guest user.  The one with this authority can browse the information, but is not allowed to write or edit the information."
-msgstr ""
-
-#: UserRoles/View/Helper/UserRoleFormHelper.php:252
+#: UserRoles/View/Helper/UserRoleFormHelper.php:244
 msgid "Not readable of others"
 msgstr ""
 
-#: UserRoles/View/Helper/UserRoleFormHelper.php:253
+#: UserRoles/View/Helper/UserRoleFormHelper.php:245
 msgid "Readable of others"
 msgstr ""
 
-#: UserRoles/View/Helper/UserRoleFormHelper.php:254
+#: UserRoles/View/Helper/UserRoleFormHelper.php:246
 msgid "Editable of others"
 msgstr ""
 
-#: UserRoles/View/UserRoleSettings/edit.ctp:35
-msgid "Default room role"
-msgstr ""
-
-#: UserRoles/View/UserRoleSettings/edit.ctp:43
-msgid "%s plugin setting"
-msgstr ""
-
-#: UserRoles/View/UserRoleSettings/edit.ctp:62
-msgid "Allow to create room in Public Space."
-msgstr ""
-
-#: UserRoles/View/UserRoleSettings/edit.ctp:75
-msgid "Allow to create room in Grouproom Space."
-msgstr ""
-
-#: UserRoles/View/UserRoleSettings/edit.ctp:90
-msgid "Private room setting"
-msgstr ""
-
-#: UserRoles/View/UserRoleSettings/edit.ctp:96
+#: UserRoles/View/UserRoleSettings/edit.ctp:71
 msgid "Use private room?"
 msgstr ""
 
-#: UserRoles/View/UserRoleSettings/edit.ctp:110
+#: UserRoles/View/UserRoleSettings/edit.ctp:85
 msgid "The total size of Private Room"
 msgstr ""
 
-#: UserRoles/View/UserRoleSettings/edit.ctp:96
-msgid "Role description"
-msgstr "When you create a new to the authority, there is a possibility that the outflow will occur of personal information If you do not properly set."
