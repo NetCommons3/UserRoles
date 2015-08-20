@@ -221,7 +221,7 @@ class UserRole extends Role {
 
 		//UserRoleのバリデーション
 		$roleKey = $data['UserRole'][0]['key'];
-		if (! $this->validateUserRole($data['UserRole'])) {
+		if (! $this->validateMany($data['UserRole'])) {
 			return false;
 		}
 
@@ -259,23 +259,6 @@ class UserRole extends Role {
 		}
 
 		return $userRoles;
-	}
-
-/**
- * validate of UserRole
- *
- * @param array $data received post data
- * @return bool True on success, false on validation errors
- */
-	public function validateUserRole($data) {
-		foreach ($data as $userRole) {
-			$this->set($userRole);
-			$this->validates();
-			if ($this->validationErrors) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 /**
