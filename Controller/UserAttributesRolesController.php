@@ -133,7 +133,7 @@ class UserAttributesRolesController extends UserRolesAppController {
 		}
 
 		$this->UserRoleSetting->saveUsableUserManager($this->data);
-		$this->setFlashNotification(__d('net_commons', 'Successfully saved.'), array('type' => 'success'));
+		$this->setFlashNotification(__d('net_commons', 'Successfully saved.'), array('class' => 'success'));
 
 		$this->redirect('/user_roles/user_attributes_roles/edit/' . h($this->data['UserRoleSetting']['role_key']));
 	}
