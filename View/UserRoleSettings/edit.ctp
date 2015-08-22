@@ -56,9 +56,9 @@ echo $this->Html->css(
 					<?php echo $this->UserRoleForm->radioUserRole('UserRoleSetting.is_usable_room_manager',
 							$this->UserRoleForm->isUsableOptions,
 							array(
-								'onclick' => 'submit()',
+								//'onclick' => 'submit()',
 								'ng-disabled' => '(sending || ' . (int)$this->data['UserRole']['is_systemized'] . ')',
-								'ng-click' => 'sending = true'
+								//'ng-click' => 'sending = true'
 							)
 						); ?>
 				<?php endif; ?>
