@@ -38,10 +38,8 @@ class UserRole extends Role {
  */
 	const
 		USER_ROLE_KEY_SYSTEM_ADMINISTRATOR = 'system_administrator',
-		USER_ROLE_KEY_USER_ADMINISTRATOR = 'user_administrator',
-		USER_ROLE_KEY_CHIEF_USER = 'chief_user',
-		USER_ROLE_KEY_COMMON_USER = 'common_user',
-		USER_ROLE_KEY_GUEST_USER = 'guest_user';
+		USER_ROLE_KEY_ADMINISTRATOR = 'administrator',
+		USER_ROLE_KEY_COMMON_USER = 'common_user';
 
 /**
  * use behaviors
@@ -223,7 +221,7 @@ class UserRole extends Role {
 
 		//UserRoleのバリデーション
 		$roleKey = $data['UserRole'][0]['key'];
-		if (! $this->validateUserRole($data['UserRole'])) {
+		if (! $this->validateMany($data['UserRole'])) {
 			return false;
 		}
 
@@ -261,23 +259,6 @@ class UserRole extends Role {
 		}
 
 		return $userRoles;
-	}
-
-/**
- * validate of UserRole
- *
- * @param array $data received post data
- * @return bool True on success, false on validation errors
- */
-	public function validateUserRole($data) {
-		foreach ($data as $userRole) {
-			$this->set($userRole);
-			$this->validates();
-			if ($this->validationErrors) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 /**

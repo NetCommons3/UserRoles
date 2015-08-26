@@ -32,7 +32,7 @@ echo $this->Html->css(
 
 <div class="form-group form-inline">
 	<?php echo $this->Form->hidden('UserRoleSetting.role_key'); ?>
-	<?php echo $this->Form->hidden('UserRoleSetting.default_role_key'); ?>
+	<?php echo $this->Form->hidden('UserRoleSetting.origin_role_key'); ?>
 
 	<?php echo $this->Form->label('UserRoleSetting.is_usable_user_manager',
 			h($userManagerPluginName),
@@ -41,7 +41,11 @@ echo $this->Html->css(
 
 	<?php echo $this->UserRoleForm->radioUserRole('UserRoleSetting.is_usable_user_manager',
 			$this->UserRoleForm->isUsableOptions,
-			array('onclick' => 'submit()', 'ng-disabled' => 'sending', 'ng-click' => 'sending = true')
+			array(
+				'onclick' => 'submit()',
+				'ng-disabled' => '(sending || ' . (int)$this->data['UserRole']['is_systemized'] . ')',
+				'ng-click' => 'sending = true'
+			)
 		); ?>
 </div>
 

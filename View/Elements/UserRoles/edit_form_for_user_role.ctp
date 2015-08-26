@@ -23,12 +23,12 @@
 			'type' => 'text',
 			'label' => __d('user_roles', 'User role name') . $this->element('NetCommons.required'),
 			'class' => 'form-control',
+			'error' => false,
 		)); ?>
 
-	<?php echo $this->element(
-		'NetCommons.errors', [
-			'errors' => $this->validationErrors,
-			'model' => 'UserRole',
-			'field' => 'name',
-		]); ?>
+	<div class="has-error">
+		<?php echo $this->Form->error('UserRole.' . $index . '.name', null, array(
+				'class' => 'help-block'
+			)); ?>
+	</div>
 </div>

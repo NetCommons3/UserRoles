@@ -11,9 +11,13 @@
 ?>
 
 <div class="form-group">
-	<?php echo $this->UserRoleForm->selectBaseUserRoles('UserRoleSetting.default_role_key', array(
-			'label' => __d('user_roles', 'Base roles'),
-			'value' => $this->data['UserRoleSetting']['default_role_key'],
+	<?php echo $this->UserRoleForm->selectOriginUserRoles('UserRoleSetting.origin_role_key', array(
+			'label' => __d('user_roles', 'Origin roles'),
+			'value' => $this->data['UserRoleSetting']['origin_role_key'],
 			'disabled' => ($this->params['action'] === 'edit'),
 		)); ?>
+
+	<div class="user-roles-origin-role-desc bg-warning text-danger">
+		<?php echo __d('user_roles', 'Role description'); ?>
+	</div>
 </div>

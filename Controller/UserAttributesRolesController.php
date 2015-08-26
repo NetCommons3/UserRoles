@@ -57,9 +57,8 @@ class UserAttributesRolesController extends UserRolesAppController {
  */
 	public function edit($roleKey = null) {
 		if ($this->request->isPost()) {
-			$data = $this->data;
-
 			//不要パラメータ除去
+			$data = $this->data;
 			unset($data['save']);
 			$this->request->data = $data;
 
@@ -86,12 +85,10 @@ class UserAttributesRolesController extends UserRolesAppController {
 
 		} else {
 			//既存データ取得
-			$this->request->data = $this->UserRole->find('first', array(
-				'recursive' => 0,
+			$this->request->data = $this->UserRoleSetting->find('first', array(
+				'recursive' => -1,
 				'conditions' => array(
-					'UserRole.type' => UserRole::ROLE_TYPE_USER,
-					'UserRole.key' => $roleKey,
-					'UserRole.language_id' => Configure::read('Config.languageId')
+					'role_key' => $roleKey,
 				)
 			));
 			$this->request->data['UserRoleSetting']['is_usable_user_manager'] = (bool)$this->PluginsRole->find('count', array(
@@ -104,6 +101,16 @@ class UserAttributesRolesController extends UserRolesAppController {
 			$this->request->data['UserAttributesRole'] = $this->UserAttributesRole->getUserAttributesRole($roleKey);
 			$this->request->data['UserAttribute'] = $this->viewVars['userAttributes'];
 		}
+
+		$userRole = $this->UserRole->find('first', array(
+			'recursive' => -1,
+			'conditions' => array(
+				'type' => UserRole::ROLE_TYPE_USER,
+				'key' => $roleKey,
+				'language_id' => Configure::read('Config.languageId')
+			)
+		));
+		$this->request->data = Hash::merge($userRole, $this->request->data);
 
 		if ($plugin = Hash::extract($this->ControlPanelLayout->plugins, '{n}.Plugin[key=user_manager]')) {
 			$this->set('userManagerPluginName', $plugin[0]['name']);

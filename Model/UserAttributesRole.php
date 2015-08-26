@@ -169,27 +169,21 @@ class UserAttributesRole extends UserRolesAppModel {
 			'recursive' => -1,
 			'fields' => array('self_readable', 'self_editable', 'other_readable', 'other_editable'),
 			'conditions' => array(
-				'role_key' => $params['default_role_key'],
+				'role_key' => $params['origin_role_key'],
 				'user_attribute_key' => $params['user_attribute_key'],
 			),
 		))) {
-			switch ($params['default_role_key']) {
+			switch ($params['origin_role_key']) {
 				case UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR:
 					$default = $this->create(array(
 						'self_readable' => true, 'self_editable' => true,
 						'other_readable' => true, 'other_editable' => true,
 					));
 					break;
-				case UserRole::USER_ROLE_KEY_USER_ADMINISTRATOR:
+				case UserRole::USER_ROLE_KEY_ADMINISTRATOR:
 					$default = $this->create(array(
 						'self_readable' => true, 'self_editable' => true,
 						'other_readable' => true, 'other_editable' => true,
-					));
-					break;
-				case UserRole::USER_ROLE_KEY_CHIEF_USER:
-					$default = $this->create(array(
-						'self_readable' => true, 'self_editable' => true,
-						'other_readable' => true, 'other_editable' => false,
 					));
 					break;
 				case UserRole::USER_ROLE_KEY_COMMON_USER:

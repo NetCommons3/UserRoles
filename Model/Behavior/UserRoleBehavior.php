@@ -31,7 +31,7 @@ class UserRoleBehavior extends ModelBehavior {
 		//UserRoleSettingデフォルトのデータ取得
 		$userRoleSetting = $model->UserRoleSetting->find('first', array(
 			'recursive' => -1,
-			'conditions' => array('role_key' => $data['UserRoleSetting']['default_role_key'])
+			'conditions' => array('role_key' => $data['UserRoleSetting']['origin_role_key'])
 		));
 		if (! $userRoleSetting) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
@@ -61,7 +61,7 @@ class UserRoleBehavior extends ModelBehavior {
 		//UserAttributesRoleデフォルトのデータ取得
 		$userAttributesRole = $model->UserAttributesRole->find('all', array(
 			'recursive' => -1,
-			'conditions' => array('role_key' => $data['UserRoleSetting']['default_role_key'])
+			'conditions' => array('role_key' => $data['UserRoleSetting']['origin_role_key'])
 		));
 		if (! $userAttributesRole) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
@@ -91,7 +91,7 @@ class UserRoleBehavior extends ModelBehavior {
 		//PluginsRoleデフォルトのデータ取得
 		$pluginsRole = $model->PluginsRole->find('all', array(
 			'recursive' => -1,
-			'conditions' => array('role_key' => $data['UserRoleSetting']['default_role_key'])
+			'conditions' => array('role_key' => $data['UserRoleSetting']['origin_role_key'])
 		));
 		if (! $pluginsRole) {
 			return true;
@@ -182,12 +182,13 @@ class UserRoleBehavior extends ModelBehavior {
  */
 	public function saveUserAttributesRole(Model $model, $data) {
 		$model->loadModels([
-			'UserAttributes' => 'UserAttributes.UserAttribute',
+			'UserAttribute' => 'UserAttributes.UserAttribute',
+			'UserAttributeSetting' => 'UserAttributes.UserAttributeSetting',
 			'UserAttributesRole' => 'UserRoles.UserAttributesRole'
 		]);
 
-		$userAttributes = $model->UserAttributes->find('all', array(
-			'recursive' => -1,
+		$userAttributes = $model->UserAttribute->find('all', array(
+			'recursive' => 0,
 			'conditions' => array(
 				'language_id' => Configure::read('Config.languageId')
 			),
@@ -196,10 +197,10 @@ class UserRoleBehavior extends ModelBehavior {
 		foreach ($userAttributes as $userAttribute) {
 			$params = array(
 				'role_key' => $data['UserRoleSetting']['role_key'],
-				'default_role_key' => $data['UserRoleSetting']['default_role_key'],
+				'origin_role_key' => $data['UserRoleSetting']['origin_role_key'],
 				'user_attribute_key' => $userAttribute['UserAttribute']['key'],
-				'only_administrator' => (bool)$userAttribute['UserAttribute']['only_administrator'],
-				'is_systemized' => (bool)$userAttribute['UserAttribute']['is_systemized'],
+				'only_administrator' => (bool)$userAttribute['UserAttributeSetting']['only_administrator'],
+				'is_systemized' => (bool)$userAttribute['UserAttributeSetting']['is_systemized'],
 				'is_usable_user_manager' => (bool)$data['UserRoleSetting']['is_usable_user_manager']
 			);
 

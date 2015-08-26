@@ -96,38 +96,26 @@ class UserRoleFormHelper extends FormHelper {
  * @return string Formatted SELECT element
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
  */
-	public function selectBaseUserRoles($fieldName, $attributes = array()) {
-		$baseRoles = $this->UserRole->find('list', array(
+	public function selectOriginUserRoles($fieldName, $attributes = array()) {
+		$userRoles = $this->UserRole->find('list', array(
 			'recursive' => -1,
 			'fields' => array('key', 'name'),
 			'conditions' => array(
 				'type' => UserRole::ROLE_TYPE_USER,
-				'is_systemized' => true,
 				'language_id' => Configure::read('Config.languageId')
 			),
 			'order' => array('id' => 'asc')
 		));
-		unset($baseRoles[UserRole::ROLE_KEY_SYSTEM_ADMINISTRATOR]);
+		unset($userRoles[UserRole::ROLE_KEY_SYSTEM_ADMINISTRATOR]);
 
 		$html = '';
 
 		$attributes = Hash::merge(array(
 			'type' => 'select',
 			'class' => 'form-control',
-			'options' => $baseRoles
+			'options' => $userRoles
 		), $attributes);
 		$html .= $this->Form->input($fieldName, $attributes);
-
-		$html .= $this->_View->element('UserRoles.UserRoles/base_role_description', array(
-			'baseRoles' => $baseRoles,
-			'baseRoleDescriptions' => array(
-				UserRole::USER_ROLE_KEY_USER_ADMINISTRATOR => __d('user_roles', 'Super user of the site. The one with this authority can browse and edit all the acquired data of the users, and is assigned as a head of all the grouprooms built in the NetCommons. He/She is also a system manager of the NetCommons.'),
-				UserRole::USER_ROLE_KEY_CHIEF_USER => __d('user_roles', 'A head of a grouproom.  The one with this authority can design and manage a grouproom by using plugins and assining roles to group members.'),
-				UserRole::USER_ROLE_KEY_COMMON_USER => __d('user_roles', 'A common user'),
-				UserRole::USER_ROLE_KEY_GUEST_USER => __d('user_roles', 'A guest user.  The one with this authority can browse the information, but is not allowed to write or edit the information.'),
-			),
-			'activeUserRole' => ($attributes['value'])
-		));
 
 		return $html;
 	}
@@ -243,7 +231,10 @@ class UserRoleFormHelper extends FormHelper {
 			$this->_View->request->data['UserAttributesRole'][$id]['other_user_attribute_role'] = UserAttributesRolesController::OTHER_NOT_READABLE;
 		}
 
-		if ($this->_View->request->data['UserRoleSetting']['is_usable_user_manager'] || $userAttribute[0]['only_administrator']) {
+		if ($this->_View->request->data['UserRoleSetting']['is_usable_user_manager'] ||
+				$userAttribute[0]['only_administrator'] ||
+				$this->_View->request->data['UserRole']['is_systemized']) {
+
 			$disabled = true;
 		} else {
 			$disabled = false;
