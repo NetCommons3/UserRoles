@@ -139,6 +139,11 @@ class UserRoleFormHelper extends FormHelper {
 			'order' => array('id' => 'asc')
 		));
 
+		if (isset($attributes['options'])) {
+			$defaultRoles = Hash::merge($defaultRoles, $attributes['options']);
+			unset($attributes['options']);
+		}
+
 		$html = '';
 
 		if (isset($attributes['label'])) {
