@@ -85,7 +85,7 @@ class UserRolesController extends UserRolesAppController {
 				$this->redirect('/user_roles/user_role_settings/edit/' . $userRole[0]['key'] . '/');
 				return;
 			}
-			$this->handleValidationError($this->UserRole->validationErrors);
+			$this->NetCommons->handleValidationError($this->UserRole->validationErrors);
 			$this->request->data = $data;
 
 		} else {
@@ -132,7 +132,7 @@ class UserRolesController extends UserRolesAppController {
 				$this->redirect('/user_roles/user_roles/index/');
 				return;
 			}
-			$this->handleValidationError($this->UserRole->validationErrors);
+			$this->NetCommons->handleValidationError($this->UserRole->validationErrors);
 			$this->request->data = $data;
 
 		} else {
