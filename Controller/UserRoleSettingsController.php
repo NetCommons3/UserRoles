@@ -57,7 +57,7 @@ class UserRoleSettingsController extends UserRolesAppController {
 				$this->redirect('/user_roles/user_roles/index/');
 				return;
 			}
-			$this->handleValidationError($this->UserRoleSetting->validationErrors);
+			$this->NetCommons->handleValidationError($this->UserRoleSetting->validationErrors);
 			$this->request->data = $data;
 
 		} else {
