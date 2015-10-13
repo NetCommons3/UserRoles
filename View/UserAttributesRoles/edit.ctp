@@ -9,16 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-echo $this->Html->css(
-	array(
-		'/user_roles/css/style.css'
-	),
-	array(
-		'plugin' => false,
-		'once' => true,
-		'inline' => false
-	)
-);
+echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 ?>
 
 <?php echo $this->element('UserRoles.subtitle'); ?>
