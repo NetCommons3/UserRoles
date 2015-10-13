@@ -106,7 +106,7 @@ class UserRoleFormHelper extends FormHelper {
 			),
 			'order' => array('id' => 'asc')
 		));
-		unset($userRoles[UserRole::ROLE_KEY_SYSTEM_ADMINISTRATOR]);
+		unset($userRoles[UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR]);
 
 		$html = '';
 
