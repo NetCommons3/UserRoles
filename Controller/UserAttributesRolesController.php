@@ -107,7 +107,7 @@ class UserAttributesRolesController extends UserRolesAppController {
 			'conditions' => array(
 				'type' => UserRole::ROLE_TYPE_USER,
 				'key' => $roleKey,
-				'language_id' => Configure::read('Config.languageId')
+				'language_id' => Current::read('Language.id')
 			)
 		));
 		$this->request->data = Hash::merge($userRole, $this->request->data);

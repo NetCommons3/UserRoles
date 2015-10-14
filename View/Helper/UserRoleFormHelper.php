@@ -102,7 +102,7 @@ class UserRoleFormHelper extends FormHelper {
 			'fields' => array('key', 'name'),
 			'conditions' => array(
 				'type' => UserRole::ROLE_TYPE_USER,
-				'language_id' => Configure::read('Config.languageId')
+				'language_id' => Current::read('Language.id')
 			),
 			'order' => array('id' => 'asc')
 		));
@@ -133,7 +133,7 @@ class UserRoleFormHelper extends FormHelper {
 			'fields' => array('key', 'name'),
 			'conditions' => array(
 				'is_systemized' => true,
-				'language_id' => Configure::read('Config.languageId'),
+				'language_id' => Current::read('Language.id'),
 				'type' => Role::ROLE_TYPE_ROOM
 			),
 			'order' => array('id' => 'asc')
