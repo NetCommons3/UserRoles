@@ -216,9 +216,7 @@ class UserAttributesRole extends UserRolesAppModel {
 		]);
 
 		//トランザクションBegin
-		$this->setDataSource('master');
-		$dataSource = $this->getDataSource();
-		$dataSource->begin();
+		$this->begin();
 
 		//UserAttributesRoleのバリデーション
 		if (! $this->validateUserAttributesRoles($data['UserAttributesRole'])) {
@@ -232,13 +230,11 @@ class UserAttributesRole extends UserRolesAppModel {
 			}
 
 			//トランザクションCommit
-			$dataSource->commit();
+			$this->commit();
 
 		} catch (Exception $ex) {
 			//トランザクションRollback
-			$dataSource->rollback();
-			CakeLog::error($ex);
-			throw $ex;
+			$this->rollback($ex);
 		}
 
 		return true;
