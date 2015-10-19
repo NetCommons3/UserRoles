@@ -20,6 +20,15 @@ App::uses('UserRolesAppModel', 'UserRoles.Model');
 class UserAttributesRole extends UserRolesAppModel {
 
 /**
+ * use behaviors
+ *
+ * @var array
+ */
+	public $actsAs = array(
+		'UserRoles.UserAttributesRole',
+	);
+
+/**
  * Validation rules
  *
  * @var array
@@ -101,106 +110,6 @@ class UserAttributesRole extends UserRolesAppModel {
 			}
 		}
 		return true;
-	}
-
-/**
- * Validate of UserAttributesRoles
- *
- * @param array $params received data
- *		array('role_key' => '', 'default_role_key' => '', 'user_attribute_key' => '', 'only_administrator' => false, 'is_systemized' => false)
- * @return bool True on success, false on validation errors
- */
-	public function defaultUserAttributeRolePermissions($params) {
-		$this->loadModels([
-			'PluginsRole' => 'PluginManager.PluginsRole',
-			'UserRole' => 'UserRoles.UserRole'
-		]);
-
-		$default = $this->__getDefaultUserAttributeRolePermission($params);
-
-		if (! $userAttributeRole = $this->find('first', array(
-			'recursive' => -1,
-			'conditions' => array(
-				'role_key' => $params['role_key'],
-				'user_attribute_key' => $params['user_attribute_key'],
-			),
-		))) {
-			$userAttributeRole = $this->create(array(
-				'role_key' => $params['role_key'],
-				'user_attribute_key' => $params['user_attribute_key']
-			));
-		}
-
-		$setting = array();
-		if ($params['is_usable_user_manager']) {
-			if ($params['is_systemized']) {
-				$setting = array(
-					'self_readable' => true, 'self_editable' => false,
-					'other_readable' => true, 'other_editable' => false,
-				);
-			} else {
-				$setting = array(
-					'self_readable' => true, 'self_editable' => true,
-					'other_readable' => true, 'other_editable' => true,
-				);
-			}
-		} elseif ($params['only_administrator']) {
-			$setting = array(
-				'self_readable' => false, 'self_editable' => false,
-				'other_readable' => false, 'other_editable' => false,
-			);
-		}
-
-		$userAttributeRole['UserAttributesRole'] =
-				array_merge($userAttributeRole['UserAttributesRole'], $default['UserAttributesRole'], $setting);
-
-		return $userAttributeRole;
-	}
-
-/**
- * Get default of UserAttributesRoles
- *
- * @param array $params received data
- *		array('role_key' => '', 'default_role_key' => '', 'user_attribute_key' => '', 'only_administrator' => false, 'is_systemized' => false)
- * @return mixed default user attribute role permission
- */
-	private function __getDefaultUserAttributeRolePermission($params) {
-		if (! $default = $this->find('first', array(
-			'recursive' => -1,
-			'fields' => array('self_readable', 'self_editable', 'other_readable', 'other_editable'),
-			'conditions' => array(
-				'role_key' => $params['origin_role_key'],
-				'user_attribute_key' => $params['user_attribute_key'],
-			),
-		))) {
-			switch ($params['origin_role_key']) {
-				case UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR:
-					$default = $this->create(array(
-						'self_readable' => true, 'self_editable' => true,
-						'other_readable' => true, 'other_editable' => true,
-					));
-					break;
-				case UserRole::USER_ROLE_KEY_ADMINISTRATOR:
-					$default = $this->create(array(
-						'self_readable' => true, 'self_editable' => true,
-						'other_readable' => true, 'other_editable' => true,
-					));
-					break;
-				case UserRole::USER_ROLE_KEY_COMMON_USER:
-					$default = $this->create(array(
-						'self_readable' => true, 'self_editable' => true,
-						'other_readable' => false, 'other_editable' => false,
-					));
-					break;
-				default:
-					$default = $this->create(array(
-						'self_readable' => false, 'self_editable' => false,
-						'other_readable' => false, 'other_editable' => false,
-					));
-			}
-		}
-
-		return $default;
 	}
 
 /**
