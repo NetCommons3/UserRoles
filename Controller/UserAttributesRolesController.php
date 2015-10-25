@@ -46,7 +46,16 @@ class UserAttributesRolesController extends UserRolesAppController {
  */
 	public $components = array(
 		'ControlPanel.ControlPanelLayout',
-		'UserAttributes.UserAttributeLayouts',
+		'UserAttributes.UserAttributeLayout',
+	);
+
+/**
+ * use helpers
+ *
+ * @var array
+ */
+	public $helpers = array(
+		'UserAttributes.UserAttributeLayout',
 	);
 
 /**

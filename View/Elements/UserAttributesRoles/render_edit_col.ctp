@@ -13,22 +13,19 @@
  */
 ?>
 
-<div class="col-xs-12 col-sm-<?php echo (12 / $layout['UserAttributeLayout']['col']); ?>">
-	<?php foreach ($userAttributes[$row][$col] as $index => $userAttribute) : ?>
-		<ul class="user-attribute-roles-edit">
-			<li class="list-group-item clearfix<?php echo (! $this->data['UserRoleSetting']['is_usable_user_manager'] &&
-																$userAttribute['UserAttributeSetting']['only_administrator'] ? ' disabled' : ''); ?>">
-				<div class="pull-left">
-					<?php echo h($userAttribute['UserAttribute']['name']); ?>
-					<?php if ($userAttribute['UserAttributeSetting']['required']) : ?>
-						<?php echo $this->element('NetCommons.required'); ?>
-					<?php endif; ?>
-				</div>
+<ul class="user-attribute-roles-edit">
+	<li class="list-group-item clearfix<?php echo (! $this->data['UserRoleSetting']['is_usable_user_manager'] &&
+														$userAttribute['UserAttributeSetting']['only_administrator'] ? ' disabled' : ''); ?>">
+		<div class="pull-left">
+			<?php if ($userAttribute['UserAttributeSetting']['required']) : ?>
+				<?php echo $this->NetCommonsHtml->requireTitle($userAttribute['UserAttribute']['name']); ?>
+			<?php else : ?>
+				<?php echo h($userAttribute['UserAttribute']['name']); ?>
+			<?php endif; ?>
+		</div>
 
-				<div class="pull-right">
-					<?php echo $this->UserRoleForm->selectUserAttributeRole($userAttribute['UserAttribute']['key']); ?>
-				</div>
-			</li>
-		</ul>
-	<?php endforeach; ?>
-</div>
+		<div class="pull-right">
+			<?php echo $this->UserRoleForm->selectUserAttributeRole($userAttribute['UserAttribute']['key']); ?>
+		</div>
+	</li>
+</ul>
