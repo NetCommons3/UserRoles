@@ -22,6 +22,7 @@ class UserAttributesRoleBehavior extends ModelBehavior {
 /**
  * UserAttributesRoleのデフォルト値
  *
+ * @param Model $model Model using this behavior
  * @param array $params received data
  *		array('role_key' => '', 'default_role_key' => '', 'user_attribute_key' => '', 'only_administrator' => false, 'is_systemized' => false)
  * @return bool True on success, false on validation errors
@@ -76,6 +77,7 @@ class UserAttributesRoleBehavior extends ModelBehavior {
 /**
  * UserAttributesRoleのデフォルト値を取得
  *
+ * @param Model $model Model using this behavior
  * @param array $params received data
  *		array('role_key' => '', 'default_role_key' => '', 'user_attribute_key' => '', 'only_administrator' => false, 'is_systemized' => false)
  * @return mixed default user attribute role permission

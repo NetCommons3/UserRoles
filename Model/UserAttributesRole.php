@@ -67,32 +67,25 @@ class UserAttributesRole extends UserRolesAppModel {
 	}
 
 /**
- * Get UserAttributesRole data
+ * UserAttributesRoleデータ取得
  *
- * @param string $roleKey roles.key
- * @return array UserAttributesRole data
+ * @param string $roleKey 権限キー
+ * @return array UserAttributesRoleデータ配列
  */
 	public function getUserAttributesRole($roleKey) {
-		$conditions = array(
-			$this->alias . '.role_key' => $roleKey
-		);
-
-		$options = array(
+		$result = $this->find('all', array(
 			'recursive' => -1,
-			'conditions' => $conditions,
+			'conditions' => array(
+				$this->alias . '.role_key' => $roleKey
+			),
 			'order' => $this->alias . '.id',
-		);
+		));
 
-		if (! $ret = $this->find('all', $options)) {
-			return $ret;
+		if (! $result) {
+			return $result;
 		}
 
-		$userAttributesRole = array();
-		foreach ($ret as $data) {
-			$userAttributesRole[$data[$this->alias]['id']] = $data;
-		}
-
-		return $userAttributesRole;
+		return Hash::combine($result, '{n}.' . $this->alias . '.id', '{n}');
 	}
 
 /**
