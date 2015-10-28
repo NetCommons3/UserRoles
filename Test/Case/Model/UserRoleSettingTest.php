@@ -32,7 +32,7 @@ class UserRoleSettingTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->UserRoleSetting = ClassRegistry::init('UserRoles.UserRoleSetting');
+		//$this->UserRoleSetting = ClassRegistry::init('UserRoles.UserRoleSetting');
 	}
 
 /**
@@ -41,7 +41,7 @@ class UserRoleSettingTest extends CakeTestCase {
  * @return void
  */
 	public function tearDown() {
-		unset($this->UserRoleSetting);
+		//unset($this->UserRoleSetting);
 
 		parent::tearDown();
 	}
