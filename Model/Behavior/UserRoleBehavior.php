@@ -190,7 +190,7 @@ class UserRoleBehavior extends ModelBehavior {
 		$userAttributes = $model->UserAttribute->find('all', array(
 			'recursive' => 0,
 			'conditions' => array(
-				'language_id' => Configure::read('Config.languageId')
+				'language_id' => Current::read('Language.id')
 			),
 		));
 

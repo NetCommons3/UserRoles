@@ -10,6 +10,9 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
  */
+
+$row = $layout['UserAttributeLayout']['id'];
+$col = $layout['UserAttributeLayout']['col'];
 ?>
 
 <div class="panel panel-default">
@@ -19,9 +22,7 @@
 
 	<div class="panel-body">
 		<div class="row">
-			<?php for($col = 1; $col <= $layout['UserAttributeLayout']['col']; $col++) : ?>
-				<?php echo $this->element('UserAttributesRoles/render_edit_col', array('row' => $row, 'col' => $col, 'layout' => $layout)); ?>
-			<?php endfor; ?>
+			<?php echo $this->UserAttributeLayout->renderCol('UserAttributesRoles/render_edit_col', $layout); ?>
 		</div>
 	</div>
 </div>

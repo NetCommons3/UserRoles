@@ -48,7 +48,7 @@ class UserRolesController extends UserRolesAppController {
 		$userRoles = $this->UserRole->find('all', array(
 			'conditions' => array(
 				'type' => UserRole::ROLE_TYPE_USER,
-				'language_id' => Configure::read('Config.languageId')
+				'language_id' => Current::read('Language.id')
 			)
 		));
 		$this->set('userRoles', $userRoles);
@@ -78,7 +78,7 @@ class UserRolesController extends UserRolesAppController {
 			//登録処理
 			if ($userRoles = $this->UserRole->saveUserRole($data, true)) {
 				//正常の場合
-				$userRole = Hash::extract($userRoles, '{n}.UserRole[language_id=' . Configure::read('Config.languageId') . ']');
+				$userRole = Hash::extract($userRoles, '{n}.UserRole[language_id=' . Current::read('Language.id') . ']');
 				if (! $userRole) {
 					$userRole[0] = Hash::extract($userRoles, '0.UserRole');
 				}
@@ -156,7 +156,7 @@ class UserRolesController extends UserRolesAppController {
 		}
 		$this->set('roleKey', $roleKey);
 
-		$userRole = Hash::extract($this->request->data['UserRole'], '{n}[language_id=' . Configure::read('Config.languageId') . ']');
+		$userRole = Hash::extract($this->request->data['UserRole'], '{n}[language_id=' . Current::read('Language.id') . ']');
 		$this->set('isSystemized', $userRole[0]['is_systemized']);
 		$this->set('subtitle', $userRole[0]['name']);
 	}

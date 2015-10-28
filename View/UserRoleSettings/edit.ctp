@@ -9,16 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-echo $this->Html->css(
-	array(
-		'/user_roles/css/style.css'
-	),
-	array(
-		'plugin' => false,
-		'once' => true,
-		'inline' => false
-	)
-);
+echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 ?>
 
 <?php echo $this->element('UserRoles.subtitle'); ?>
@@ -93,7 +84,11 @@ echo $this->Html->css(
 	</div>
 
 	<div class="panel-footer text-center">
-		<?php echo $this->element('UserRoles.edit_btn'); ?>
+		<?php echo $this->Button->cancelAndSave(
+				__d('net_commons', 'Cancel'),
+				__d('net_commons', 'OK'),
+				$this->NetCommonsHtml->url(array('action' => 'index'))
+			); ?>
 	</div>
 
 	<?php echo $this->Form->end(); ?>

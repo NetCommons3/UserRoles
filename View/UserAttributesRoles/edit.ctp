@@ -9,17 +9,10 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-echo $this->Html->css(
-	array(
-		'/user_roles/css/style.css'
-	),
-	array(
-		'plugin' => false,
-		'once' => true,
-		'inline' => false
-	)
-);
+echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
+echo $this->NetCommonsHtml->css('/user_attributes/css/style.css');
 ?>
+
 
 <?php echo $this->element('UserRoles.subtitle'); ?>
 
@@ -58,14 +51,16 @@ echo $this->Html->css(
 		'url' => '/user_roles/user_attributes_roles/edit/' . h($this->data['UserRoleSetting']['role_key'])
 	)); ?>
 
-<?php foreach ($userAttributeLayouts as $layout) : ?>
-	<?php $row = $layout['UserAttributeLayout']['id']; ?>
-
-	<?php echo $this->element('UserAttributesRoles/render_edit_row', array('row' => $row, 'layout' => $layout)); ?>
-<?php endforeach; ?>
+<?php echo $this->UserAttributeLayout->renderRow('UserAttributesRoles/render_edit_row'); ?>
 
 <div class="text-center">
-	<?php echo $this->element('UserRoles.edit_btn', array('disabled' => $this->data['UserRoleSetting']['is_usable_user_manager'])); ?>
+	<?php echo $this->Button->cancelAndSave(
+			__d('net_commons', 'Cancel'),
+			__d('net_commons', 'OK'),
+			$this->NetCommonsHtml->url(array('action' => 'index')),
+			array(),
+			array('disabled' => $this->data['UserRoleSetting']['is_usable_user_manager'])
+		); ?>
 </div>
 
 <?php echo $this->Form->end();

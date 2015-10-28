@@ -13,7 +13,7 @@ if (! isset($disabled)) {
 }
 ?>
 
-<a class="btn btn-default btn-workflow" href="<?php echo $this->Html->url('/user_roles/user_roles/index/'); ?>">
+<a class="btn btn-default btn-workflow" href="<?php echo $this->NetCommonsHtml->url(array('action' => 'index')); ?>">
 	<span class="glyphicon glyphicon-remove"></span>
 	<?php echo __d('net_commons', 'Cancel'); ?>
 </a>

@@ -46,7 +46,16 @@ class UserAttributesRolesController extends UserRolesAppController {
  */
 	public $components = array(
 		'ControlPanel.ControlPanelLayout',
-		'UserAttributes.UserAttributeLayouts',
+		'UserAttributes.UserAttributeLayout',
+	);
+
+/**
+ * use helpers
+ *
+ * @var array
+ */
+	public $helpers = array(
+		'UserAttributes.UserAttributeLayout',
 	);
 
 /**
@@ -107,7 +116,7 @@ class UserAttributesRolesController extends UserRolesAppController {
 			'conditions' => array(
 				'type' => UserRole::ROLE_TYPE_USER,
 				'key' => $roleKey,
-				'language_id' => Configure::read('Config.languageId')
+				'language_id' => Current::read('Language.id')
 			)
 		));
 		$this->request->data = Hash::merge($userRole, $this->request->data);

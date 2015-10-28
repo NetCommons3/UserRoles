@@ -79,9 +79,7 @@ class UserRoleSetting extends UserRolesAppModel {
 		]);
 
 		//トランザクションBegin
-		$this->setDataSource('master');
-		$dataSource = $this->getDataSource();
-		$dataSource->begin();
+		$this->begin();
 
 		//UserRoleSettingのバリデーション
 		if (! $this->validateUserRoleSetting($data)) {
@@ -101,13 +99,11 @@ class UserRoleSetting extends UserRolesAppModel {
 			}
 
 			//トランザクションCommit
-			$dataSource->commit();
+			$this->commit();
 
 		} catch (Exception $ex) {
 			//トランザクションRollback
-			$dataSource->rollback();
-			CakeLog::error($ex);
-			throw $ex;
+			$this->rollback($ex);
 		}
 
 		return true;
@@ -127,9 +123,7 @@ class UserRoleSetting extends UserRolesAppModel {
 		]);
 
 		//トランザクションBegin
-		$this->setDataSource('master');
-		$dataSource = $this->getDataSource();
-		$dataSource->begin();
+		$this->begin();
 
 		try {
 			//PluginsRoleのデータ登録処理
@@ -143,13 +137,11 @@ class UserRoleSetting extends UserRolesAppModel {
 			$this->saveUserAttributesRole($data);
 
 			//トランザクションCommit
-			$dataSource->commit();
+			$this->commit();
 
 		} catch (Exception $ex) {
 			//トランザクションRollback
-			$dataSource->rollback();
-			CakeLog::error($ex);
-			throw $ex;
+			$this->rollback($ex);
 		}
 
 		return true;
