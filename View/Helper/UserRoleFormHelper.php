@@ -124,45 +124,6 @@ class UserRoleFormHelper extends AppHelper {
 	}
 
 /**
- * ルーム内の役割のデフォルト値のSELECTタグ
- *
- * @param string $fieldName フィールド名
- * @param array $attributes HTML属性オプション
- * @return string HTMLタグ
- * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
- */
-	public function selectDefaultRoomRoles($fieldName, $attributes = array()) {
-		$defaultRoles = $this->_View->viewVars['defaultRoles'];
-		if (isset($attributes['options'])) {
-			$defaultRoles = Hash::merge($defaultRoles, $attributes['options']);
-			unset($attributes['options']);
-		}
-
-		$html = '<div class="form-group">';
-
-		if (isset($attributes['label'])) {
-			if (is_array($attributes['label'])) {
-				$label = $attributes['label']['label'];
-				unset($attributes['label']['label']);
-
-				$html .= $this->NetCommonsForm->label($fieldName, $label, $attributes['label']) . ' ';
-			} else {
-				$html .= $this->NetCommonsForm->label($fieldName, $attributes['label']) . ' ';
-			}
-			unset($attributes['label']);
-		}
-		$attributes = Hash::merge(array(
-			'type' => 'select',
-			'class' => 'form-control',
-			'empty' => false
-		), $attributes);
-		$html .= $this->NetCommonsForm->select($fieldName, $defaultRoles, $attributes);
-
-		$html .= '</div>';
-		return $html;
-	}
-
-/**
  * Outputs radio
  *
  * @param string $fieldName Name attribute of the RADIO
