@@ -1,6 +1,6 @@
 <?php
 /**
- * RoomsRolesForm Component
+ * UserRoleForm Component
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
@@ -12,10 +12,10 @@
 App::uses('Component', 'Controller');
 
 /**
- * RoomsRolesForm Component
+ * UserRoleForm Component
  *
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
- * @package NetCommons\Rooms\Controller
+ * @package NetCommons\UserRoles\Controller\Component
  */
 class UserRoleFormComponent extends Component {
 
