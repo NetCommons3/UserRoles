@@ -10,7 +10,6 @@
  */
 
 echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
-echo $this->NetCommonsHtml->css('/user_attributes/css/style.css');
 ?>
 
 
