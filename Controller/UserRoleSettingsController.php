@@ -31,15 +31,6 @@ class UserRoleSettingsController extends UserRolesAppController {
 	);
 
 /**
- * use component
- *
- * @var array
- */
-	public $components = array(
-		'ControlPanel.ControlPanelLayout'
-	);
-
-/**
  * edit
  *
  * @param string $roleKey user_roles.key

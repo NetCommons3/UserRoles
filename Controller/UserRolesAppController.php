@@ -25,7 +25,7 @@ class UserRolesAppController extends AppController {
  * @var array
  */
 	public $components = array(
-		//アクセスの権限
+		'ControlPanel.ControlPanelLayout',
 		'NetCommons.Permission' => array(
 			'type' => PermissionComponent::CHECK_TYEP_SYSTEM_PLUGIN,
 			'allow' => array()

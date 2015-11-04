@@ -35,7 +35,6 @@ class UserRolesController extends UserRolesAppController {
  * @var array
  */
 	public $components = array(
-		'ControlPanel.ControlPanelLayout',
 		'M17n.SwitchLanguage'
 	);
 
