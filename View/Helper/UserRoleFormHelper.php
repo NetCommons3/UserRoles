@@ -1,6 +1,6 @@
 <?php
 /**
- * EdumapHelper
+ * UserRolesForm Helper
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
@@ -9,22 +9,25 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('FormHelper', 'View/Helper');
+App::uses('AppHelper', 'View/Helper');
 App::uses('CakeNumber', 'Utility');
 
 /**
- * DataTypesHelper
+ * UserRolesForm Helper
  *
- * @package NetCommons\UserAttributes\View\Helper
+ * @package NetCommons\UserRoles\View\Helper
  */
-class UserRoleFormHelper extends FormHelper {
+class UserRoleFormHelper extends AppHelper {
 
 /**
- * Other helpers used by FormHelper
+ * 使用ヘルパー
  *
  * @var array
  */
-	public $helpers = array('Form');
+	public $helpers = array(
+		'Form',
+		'NetCommons.NetCommonsForm',
+	);
 
 /**
  * Option is_usable
@@ -116,53 +119,6 @@ class UserRoleFormHelper extends FormHelper {
 			'options' => $userRoles
 		), $attributes);
 		$html .= $this->Form->input($fieldName, $attributes);
-
-		return $html;
-	}
-
-/**
- * Outputs default room roles select
- *
- * @param string $fieldName Name attribute of the SELECT
- * @param array $attributes The HTML attributes of the select element.
- * @return string Formatted SELECT element
- * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
- */
-	public function selectDefaultRoomRoles($fieldName, $attributes = array()) {
-		$defaultRoles = $this->Role->find('list', array(
-			'fields' => array('key', 'name'),
-			'conditions' => array(
-				'is_systemized' => true,
-				'language_id' => Current::read('Language.id'),
-				'type' => Role::ROLE_TYPE_ROOM
-			),
-			'order' => array('id' => 'asc')
-		));
-
-		if (isset($attributes['options'])) {
-			$defaultRoles = Hash::merge($defaultRoles, $attributes['options']);
-			unset($attributes['options']);
-		}
-
-		$html = '';
-
-		if (isset($attributes['label'])) {
-			if (is_array($attributes['label'])) {
-				$label = $attributes['label']['label'];
-				unset($attributes['label']['label']);
-
-				$html .= $this->Form->label($fieldName, $label, $attributes['label']) . ' ';
-			} else {
-				$html .= $this->Form->label($fieldName, $attributes['label']) . ' ';
-			}
-			unset($attributes['label']);
-		}
-		$attributes = Hash::merge(array(
-			'type' => 'select',
-			'class' => 'form-control',
-			'empty' => false
-		), $attributes);
-		$html .= $this->Form->select($fieldName, $defaultRoles, $attributes);
 
 		return $html;
 	}
