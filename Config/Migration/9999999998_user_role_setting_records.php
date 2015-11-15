@@ -41,9 +41,9 @@ class UserRoleSettingRecords extends NetCommonsMigration {
  */
 	public $records = array(
 		'UserRoleSetting' => array(
-			array('role_key' => 'system_administrator', 'origin_role_key' => 'system_administrator', 'private_room_upload_max_size' => '1', '' => '1073741824', ),
-			array('role_key' => 'administrator', 'origin_role_key' => 'administrator', 'private_room_upload_max_size' => '1', '' => '104857600', ),
-			array('role_key' => 'common_user', 'origin_role_key' => 'common_user', 'private_room_upload_max_size' => '1', '' => '10485760', ),
+			array('role_key' => 'system_administrator', 'origin_role_key' => 'system_administrator', 'use_private_room' => '1', 'private_room_upload_max_size' => '1073741824', ),
+			array('role_key' => 'administrator', 'origin_role_key' => 'administrator', 'use_private_room' => '1', 'private_room_upload_max_size' => '104857600', ),
+			array('role_key' => 'common_user', 'origin_role_key' => 'common_user', 'use_private_room' => '1', 'private_room_upload_max_size' => '10485760', ),
 		),
 	);
 
