@@ -194,7 +194,7 @@ class UserRoleFormHelper extends AppHelper {
 
 		if ($this->_View->request->data['UserRoleSetting']['is_usable_user_manager'] ||
 				$userAttribute[0]['only_administrator'] ||
-				$this->_View->request->data['UserRole']['is_systemized']) {
+				$this->_View->request->data['UserRole']['is_system']) {
 
 			$disabled = true;
 		} else {

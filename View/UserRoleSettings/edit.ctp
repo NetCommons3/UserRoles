@@ -34,7 +34,7 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 			</div>
 
 			<div class="col-xs-12 col-sm-6 col-md-8">
-				<?php if ($this->data['UserRole']['is_systemized']) : ?>
+				<?php if ($this->data['UserRole']['is_system']) : ?>
 					<?php echo $this->Form->hidden('UserRoleSetting.is_usable_room_manager', array(
 						'value' => (int)$this->data['UserRoleSetting']['is_usable_room_manager']
 					)); ?>
@@ -48,7 +48,7 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 							$this->UserRoleForm->isUsableOptions,
 							array(
 								//'onclick' => 'submit()',
-								'ng-disabled' => '(sending || ' . (int)$this->data['UserRole']['is_systemized'] . ')',
+								'ng-disabled' => '(sending || ' . (int)$this->data['UserRole']['is_system'] . ')',
 								//'ng-click' => 'sending = true'
 							)
 						); ?>

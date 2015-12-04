@@ -156,7 +156,7 @@ class UserRolesController extends UserRolesAppController {
 		$this->set('roleKey', $roleKey);
 
 		$userRole = Hash::extract($this->request->data['UserRole'], '{n}[language_id=' . Current::read('Language.id') . ']');
-		$this->set('isSystemized', $userRole[0]['is_systemized']);
+		$this->set('isSystemized', $userRole[0]['is_system']);
 		$this->set('subtitle', $userRole[0]['name']);
 	}
 

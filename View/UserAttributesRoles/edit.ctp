@@ -35,7 +35,7 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 			$this->UserRoleForm->isUsableOptions,
 			array(
 				'onclick' => 'submit()',
-				'ng-disabled' => '(sending || ' . (int)$this->data['UserRole']['is_systemized'] . ')',
+				'ng-disabled' => '(sending || ' . (int)$this->data['UserRole']['is_system'] . ')',
 				'ng-click' => 'sending = true'
 			)
 		); ?>

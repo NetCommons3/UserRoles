@@ -38,7 +38,7 @@ class UserRoleFormComponent extends Component {
 			'recursive' => -1,
 			'fields' => array('key', 'name'),
 			'conditions' => array(
-				'is_systemized' => true,
+				'is_system' => true,
 				'language_id' => Current::read('Language.id'),
 				'type' => Role::ROLE_TYPE_ROOM
 			),

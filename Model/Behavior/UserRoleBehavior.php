@@ -200,7 +200,7 @@ class UserRoleBehavior extends ModelBehavior {
 				'origin_role_key' => $data['UserRoleSetting']['origin_role_key'],
 				'user_attribute_key' => $userAttribute['UserAttribute']['key'],
 				'only_administrator' => (bool)$userAttribute['UserAttributeSetting']['only_administrator'],
-				'is_systemized' => (bool)$userAttribute['UserAttributeSetting']['is_systemized'],
+				'is_system' => (bool)$userAttribute['UserAttributeSetting']['is_system'],
 				'is_usable_user_manager' => (bool)$data['UserRoleSetting']['is_usable_user_manager']
 			);
 

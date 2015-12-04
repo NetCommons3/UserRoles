@@ -24,7 +24,7 @@ class UserAttributesRoleBehavior extends ModelBehavior {
  *
  * @param Model $model Model using this behavior
  * @param array $params received data
- *		array('role_key' => '', 'default_role_key' => '', 'user_attribute_key' => '', 'only_administrator' => false, 'is_systemized' => false)
+ *		array('role_key' => '', 'default_role_key' => '', 'user_attribute_key' => '', 'only_administrator' => false, 'is_system' => false)
  * @return bool True on success, false on validation errors
  */
 	public function defaultUserAttributeRolePermissions(Model $model, $params) {
@@ -50,7 +50,7 @@ class UserAttributesRoleBehavior extends ModelBehavior {
 
 		$setting = array();
 		if ($params['is_usable_user_manager']) {
-			if ($params['is_systemized']) {
+			if ($params['is_system']) {
 				$setting = array(
 					'self_readable' => true, 'self_editable' => false,
 					'other_readable' => true, 'other_editable' => false,
@@ -79,7 +79,7 @@ class UserAttributesRoleBehavior extends ModelBehavior {
  *
  * @param Model $model Model using this behavior
  * @param array $params received data
- *		array('role_key' => '', 'default_role_key' => '', 'user_attribute_key' => '', 'only_administrator' => false, 'is_systemized' => false)
+ *		array('role_key' => '', 'default_role_key' => '', 'user_attribute_key' => '', 'only_administrator' => false, 'is_system' => false)
  * @return mixed default user attribute role permission
  */
 	private function __getDefaultUserAttributeRolePermission(Model $model, $params) {
