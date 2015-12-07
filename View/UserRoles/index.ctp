@@ -1,6 +1,6 @@
 <?php
 /**
- * UserRoles index template
+ * 権限管理の一覧表示テンプレート
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>

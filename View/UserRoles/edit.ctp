@@ -1,6 +1,6 @@
 <?php
 /**
- * UserRoles edit template
+ * 権限管理の会員権限の追加・編集テンプレート
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
@@ -14,7 +14,6 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 ?>
 
 <?php echo $this->element('UserRoles.subtitle'); ?>
-
 <?php echo $this->element('UserRoles.tabs'); ?>
 
 <div class="panel panel-default">

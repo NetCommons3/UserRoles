@@ -1,6 +1,6 @@
 <?php
 /**
- * UserRoleSettings edit template
+ * 会員管理の詳細設定テンプレート
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
@@ -13,66 +13,43 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 ?>
 
 <?php echo $this->element('UserRoles.subtitle'); ?>
-
 <?php echo $this->element('UserRoles.tabs'); ?>
 
 <div class="panel panel-default">
-	<?php echo $this->Form->create('UserRoleSetting', array('novalidate' => true)); ?>
+	<?php echo $this->NetCommonsForm->create('UserRoleSetting'); ?>
 
 	<div class="panel-body">
-		<?php echo $this->Form->hidden('UserRoleSetting.id'); ?>
-
-		<?php echo $this->Form->hidden('UserRoleSetting.role_key'); ?>
-
-		<?php echo $this->Form->hidden('UserRoleSetting.origin_role_key'); ?>
+		<?php echo $this->NetCommonsForm->hidden('UserRoleSetting.id'); ?>
+		<?php echo $this->NetCommonsForm->hidden('UserRoleSetting.role_key'); ?>
+		<?php echo $this->NetCommonsForm->hidden('UserRoleSetting.origin_role_key'); ?>
 
 		<div class="row form-group">
 			<div class="col-xs-12 col-sm-6 col-md-4">
-				<?php echo $this->Form->label('UserRoleSetting.is_usable_room_manager',
-						h($roomsPluginName)
-					); ?>
+				<?php echo $this->NetCommonsForm->label('UserRoleSetting.is_usable_room_manager', h($roomsPluginName)); ?>
 			</div>
 
 			<div class="col-xs-12 col-sm-6 col-md-8">
-				<?php if ($this->data['UserRole']['is_system']) : ?>
-					<?php echo $this->Form->hidden('UserRoleSetting.is_usable_room_manager', array(
-						'value' => (int)$this->data['UserRoleSetting']['is_usable_room_manager']
-					)); ?>
-
-					<?php echo $this->UserRoleForm->radioUserRole(null,
-							$this->UserRoleForm->isUsableOptions,
-							array('disabled' => true, 'hiddenField' => false)
-						); ?>
-				<?php else : ?>
-					<?php echo $this->UserRoleForm->radioUserRole('UserRoleSetting.is_usable_room_manager',
-							$this->UserRoleForm->isUsableOptions,
-							array(
-								//'onclick' => 'submit()',
-								'ng-disabled' => '(sending || ' . (int)$this->data['UserRole']['is_system'] . ')',
-								//'ng-click' => 'sending = true'
-							)
-						); ?>
-				<?php endif; ?>
+				<?php echo $this->UserRoleForm->radioUserRole('UserRoleSetting.is_usable_room_manager', null, array(
+					'verifySystem' => true
+				)); ?>
 			</div>
 		</div>
 
 		<div class="row form-group">
 			<div class="col-xs-12 col-sm-6 col-md-4">
-				<?php echo $this->Form->label('UserRoleSetting.use_private_room',
+				<?php echo $this->NetCommonsForm->label('UserRoleSetting.use_private_room',
 						__d('user_roles', 'Use private room?')
 					); ?>
 			</div>
 
 			<div class="col-xs-12 col-sm-6 col-md-8">
-				<?php echo $this->UserRoleForm->radioUserRole('UserRoleSetting.use_private_room',
-						$this->UserRoleForm->isUsableOptions
-					); ?>
+				<?php echo $this->UserRoleForm->radioUserRole('UserRoleSetting.use_private_room'); ?>
 			</div>
 		</div>
 
 		<div class="row form-group">
 			<div class="col-xs-12 col-sm-6 col-md-4">
-				<?php echo $this->Form->label('UserRoleSetting.private_room_upload_max_size',
+				<?php echo $this->NetCommonsForm->label('UserRoleSetting.private_room_upload_max_size',
 						__d('user_roles', 'The total size of Private Room')
 					); ?>
 			</div>
@@ -91,6 +68,6 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 			); ?>
 	</div>
 
-	<?php echo $this->Form->end(); ?>
+	<?php echo $this->NetCommonsForm->end(); ?>
 
 </div>

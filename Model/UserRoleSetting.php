@@ -67,6 +67,41 @@ class UserRoleSetting extends UserRolesAppModel {
 	}
 
 /**
+ * UserRoleSettingデータ取得
+ *
+ * @param string $roleKey 権限キー
+ * @return array UserRoleSettingデータ配列
+ */
+	public function getUserRoleSetting($roleKey) {
+		$this->loadModels([
+			'PluginsRole' => 'PluginManager.PluginsRole',
+		]);
+
+		$userRoleSetting = $this->find('first', array(
+			'recursive' => -1,
+			'conditions' => array(
+				'role_key' => $roleKey,
+			)
+		));
+		$userRoleSetting['UserRoleSetting']['is_usable_room_manager'] = (bool)$this->PluginsRole->find('count', array(
+			'recursive' => -1,
+			'conditions' => array(
+				'role_key' => $roleKey,
+				'plugin_key' => 'rooms',
+			)
+		));
+		$userRoleSetting['UserRoleSetting']['is_usable_user_manager'] = (bool)$this->PluginsRole->find('count', array(
+			'recursive' => -1,
+			'conditions' => array(
+				'role_key' => $roleKey,
+				'plugin_key' => 'user_manager',
+			)
+		));
+
+		return $userRoleSetting;
+	}
+
+/**
  * Save UserRoleSetting
  *
  * @param array $data received post data

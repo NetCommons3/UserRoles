@@ -93,12 +93,11 @@ class UserRoleFormHelper extends AppHelper {
 	}
 
 /**
- * Outputs base user roles select
+ * コピー元の権限のSELECTボックス出力
  *
- * @param string $fieldName Name attribute of the SELECT
- * @param array $attributes The HTML attributes of the select element.
- * @return string Formatted SELECT element
- * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
+ * @param string $fieldName フィールド名(Modelname.fieldname形式)
+ * @param array $attributes タグ属性
+ * @return string Formatted HTMLタグ
  */
 	public function selectOriginUserRoles($fieldName, $attributes = array()) {
 		$html = '';
@@ -120,27 +119,40 @@ class UserRoleFormHelper extends AppHelper {
 	}
 
 /**
- * Outputs radio
+ * ユーザ毎のプラグインの利用(ルーム管理、会員管理)RADIOボタンの出力
  *
- * @param string $fieldName Name attribute of the RADIO
- * @param array $options The HTML options of the radio element.
- * @param array $attributes The HTML attributes of the radio element.
- * @return string Formatted RADIO element
- * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
+ * @param string $fieldName フィールド名(Modelname.fieldname形式)
+ * @param array $options ラジオボタンのOPTION
+ * @param array $attributes タグ属性
+ * @return string HTMLタグ
  */
-	public function radioUserRole($fieldName, $options, $attributes = array()) {
-		$attributes = Hash::merge($this->radioAttributes, $attributes);
+	public function radioUserRole($fieldName, $options = null, $attributes = array()) {
+		$html = '';
+		if (! isset($options)) {
+			$options = $this->isUsableOptions;
+		}
 
-		return $this->Form->radio($fieldName, $options, $attributes);
+		$verifySystem = Hash::get($attributes, 'verifySystem', false);
+		Hash::remove($attributes, 'verifySystem');
+
+		if ($verifySystem && $this->_View->data['UserRole']['is_system']) {
+			$html .= $this->NetCommonsForm->hidden($fieldName);
+			$html .= $this->NetCommonsForm->radio(null, $options,
+					Hash::merge($this->radioAttributes, array('disabled' => true, 'hiddenField' => false), $attributes));
+		} else {
+			$html .= $this->NetCommonsForm->radio($fieldName, $options,
+					Hash::merge($this->radioAttributes, $attributes));
+		}
+
+		return $html;
 	}
 
 /**
- * Outputs upload max size select
+ * アップロード容量SELECTボックスの出力
  *
- * @param string $fieldName Name attribute of the SELECT
- * @param array $attributes The HTML attributes of the select element.
- * @return string Formatted SELECT element
- * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
+ * @param string $fieldName フィールド名(Modelname.fieldname形式)
+ * @param array $attributes タグ属性
+ * @return string HTMLタグ
  */
 	public function selectMaxSize($fieldName, $attributes = array()) {
 		$maxSizes = array_combine($this->optionsMaxSize, $this->optionsMaxSize);
@@ -149,7 +161,7 @@ class UserRoleFormHelper extends AppHelper {
 		$attributes = Hash::merge(array(
 			'type' => 'select',
 			'class' => 'form-control',
-			'empty' => false
+			'empty' => false,
 		), $attributes);
 
 		return $this->Form->select($fieldName, $maxSizes, $attributes);

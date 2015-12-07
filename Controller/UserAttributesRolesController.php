@@ -84,19 +84,7 @@ class UserAttributesRolesController extends UserRolesAppController {
 
 		} else {
 			//既存データ取得
-			$this->request->data = $this->UserRoleSetting->find('first', array(
-				'recursive' => -1,
-				'conditions' => array(
-					'role_key' => $roleKey,
-				)
-			));
-			$this->request->data['UserRoleSetting']['is_usable_user_manager'] = (bool)$this->PluginsRole->find('count', array(
-				'recursive' => -1,
-				'conditions' => array(
-					'role_key' => $roleKey,
-					'plugin_key' => 'user_manager',
-				)
-			));
+			$this->request->data = $this->UserRoleSetting->getUserRoleSetting($roleKey);
 			$this->request->data['UserAttributesRole'] = $this->UserAttributesRole->getUserAttributesRole($roleKey);
 			$this->request->data['UserAttribute'] = $this->viewVars['userAttributes'];
 		}
@@ -111,11 +99,10 @@ class UserAttributesRolesController extends UserRolesAppController {
 		));
 		$this->request->data = Hash::merge($userRole, $this->request->data);
 
-		if ($plugin = Hash::extract($this->ControlPanelLayout->plugins, '{n}.Plugin[key=user_manager]')) {
-			$this->set('userManagerPluginName', $plugin[0]['name']);
-		} else {
-			$this->set('userManagerPluginName', __d('user_roles', 'User manager'));
-		}
+		//プラグイン名取得
+		$plugin = $this->Plugin->getPlugins(Plugin::PLUGIN_TYPE_FOR_CONTROL_PANEL, 'user_manager');
+		$this->set('userManagerPluginName', Hash::get($plugin, '0.Plugin.name', __d('user_roles', 'User manager')));
+
 		$this->set('roleKey', $roleKey);
 		$this->set('subtitle', $this->request->data['UserRole']['name']);
 	}
