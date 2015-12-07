@@ -51,44 +51,6 @@ class UserRole extends Role {
 		'UserRoles.UserRole',
 	);
 
-/**
- * Validation rules
- *
- * @var array
- */
-	//public $validate = array(
-	//	'language_id' => array(
-	//		'numeric' => array(
-	//			'rule' => array('numeric'),
-	//			//'message' => 'Your custom message here',
-	//			//'allowEmpty' => false,
-	//			//'required' => false,
-	//			//'last' => false, // Stop validation after this rule
-	//			//'on' => 'create', // Limit validation to 'create' or 'update' operations
-	//		),
-	//	),
-	//	'type' => array(
-	//		'numeric' => array(
-	//			'rule' => array('numeric'),
-	//			//'message' => 'Your custom message here',
-	//			//'allowEmpty' => false,
-	//			//'required' => false,
-	//			//'last' => false, // Stop validation after this rule
-	//			//'on' => 'create', // Limit validation to 'create' or 'update' operations
-	//		),
-	//	),
-	//	'name' => array(
-	//		'notBlank' => array(
-	//			'rule' => array('notBlank'),
-	//			//'message' => 'Your custom message here',
-	//			//'allowEmpty' => false,
-	//			//'required' => false,
-	//			//'last' => false, // Stop validation after this rule
-	//			//'on' => 'create', // Limit validation to 'create' or 'update' operations
-	//		),
-	//	),
-	//);
-
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 /**
@@ -118,47 +80,7 @@ class UserRole extends Role {
  *
  * @var array
  */
-	public $hasAndBelongsToMany = array(
-		//'Plugin' => array(
-		//	'className' => 'Plugin',
-		//	'joinTable' => 'plugins_roles',
-		//	'foreignKey' => 'role_id',
-		//	'associationForeignKey' => 'plugin_id',
-		//	'unique' => 'keepExisting',
-		//	'conditions' => '',
-		//	'fields' => '',
-		//	'order' => '',
-		//	'limit' => '',
-		//	'offset' => '',
-		//	'finderQuery' => '',
-		//),
-		//'Room' => array(
-		//	'className' => 'Rooms.Room',
-		//	'joinTable' => 'roles_rooms',
-		//	'foreignKey' => 'role_id',
-		//	'associationForeignKey' => 'room_id',
-		//	'unique' => 'keepExisting',
-		//	'conditions' => '',
-		//	'fields' => '',
-		//	'order' => '',
-		//	'limit' => '',
-		//	'offset' => '',
-		//	'finderQuery' => '',
-		//),
-		//'UserRole' => array(
-		//	'className' => 'UserRole',
-		//	'joinTable' => 'roles_user_attributes',
-		//	'foreignKey' => 'role_id',
-		//	'associationForeignKey' => 'user_attribute_id',
-		//	'unique' => 'keepExisting',
-		//	'conditions' => '',
-		//	'fields' => '',
-		//	'order' => '',
-		//	'limit' => '',
-		//	'offset' => '',
-		//	'finderQuery' => '',
-		//)
-	);
+	public $hasAndBelongsToMany = array();
 
 /**
  * Called during validation operations, before validation. Please note that custom
@@ -200,7 +122,21 @@ class UserRole extends Role {
 	}
 
 /**
- * Save UserRoles
+ * Called before each find operation. Return false if you want to halt the find
+ * call, otherwise return the (modified) query data.
+ *
+ * @param array $query Data used to execute this query, i.e. conditions, order, etc.
+ * @return mixed true if the operation should continue, false if it should abort; or, modified
+ *  $query to continue with new $query
+ * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#beforefind
+ */
+	public function beforeFind($query) {
+		$query['conditions']['UserRole.type'] = UserRole::ROLE_TYPE_USER;
+		return $query;
+	}
+
+/**
+ * 会員権限の登録
  *
  * @param array $data received post data
  * @param bool $created True is created, false is updated
@@ -258,7 +194,7 @@ class UserRole extends Role {
 	}
 
 /**
- * Delete UserRole
+ * 会員権限の削除
  *
  * @param array $data received post data
  * @return mixed On success Model::$data if its not empty or true, false on failure
@@ -273,6 +209,9 @@ class UserRole extends Role {
 
 		//トランザクションBegin
 		$this->begin();
+		if (! $this->verifyDeletable($data['key'])) {
+			return false;
+		}
 
 		try {
 			//削除処理
@@ -292,6 +231,44 @@ class UserRole extends Role {
 		} catch (Exception $ex) {
 			//トランザクションRollback
 			$this->rollback($ex);
+		}
+
+		return true;
+	}
+
+/**
+ * 削除可能か検証する
+ *
+ * @param array $roleKey received post data
+ * @return bool True：削除可、False：削除不可
+ */
+	public function verifyDeletable($roleKey) {
+//		return true;
+
+		$this->loadModels([
+			'User' => 'Users.User',
+		]);
+
+		$userRole = $this->find('first', array(
+			'recursive' => -1,
+			'conditions' => array('key' => $roleKey),
+		));
+
+		//システムフラグがONになっているものは、削除不可
+		if (Hash::get($userRole, $this->alias . '.is_system')) {
+			return false;
+		}
+
+		$count = $this->User->find('count', array(
+			'recursive' => -1,
+			'conditions' => array('role_key' => $roleKey),
+		));
+		if ($count === false) {
+			return false;
+		}
+		if ($count > 0) {
+			$this->validationErrors['key'][] = __d('user_roles', 'Fail to delete the selected authority.' . chr(10) . 'Please confirm whether the authority is used.');
+			return false;
 		}
 
 		return true;

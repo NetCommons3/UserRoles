@@ -27,6 +27,7 @@ class UserRoleFormHelper extends AppHelper {
 	public $helpers = array(
 		'Form',
 		'NetCommons.NetCommonsForm',
+		'NetCommons.NetCommonsHtml',
 	);
 
 /**
@@ -100,26 +101,21 @@ class UserRoleFormHelper extends AppHelper {
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
  */
 	public function selectOriginUserRoles($fieldName, $attributes = array()) {
-		$userRoles = $this->UserRole->find('list', array(
-			'recursive' => -1,
-			'fields' => array('key', 'name'),
-			'conditions' => array(
-				'type' => UserRole::ROLE_TYPE_USER,
-				'language_id' => Current::read('Language.id')
-			),
-			'order' => array('id' => 'asc')
-		));
-		unset($userRoles[UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR]);
-
 		$html = '';
+		$displayDescription = Hash::get($attributes, 'description', false);
+		Hash::remove($attributes, 'description');
 
 		$attributes = Hash::merge(array(
 			'type' => 'select',
-			'class' => 'form-control',
-			'options' => $userRoles
+			'div' => false,
+			'options' => $this->_View->viewVars['userRoles']
 		), $attributes);
-		$html .= $this->Form->input($fieldName, $attributes);
+		$html .= $this->NetCommonsForm->input($fieldName, $attributes);
 
+		if ($displayDescription) {
+			$html .= $this->NetCommonsHtml->div(array('user-roles-origin-role-desc', 'bg-warning', 'text-danger'),
+					__d('user_roles', 'Role description'));
+		}
 		return $html;
 	}
 
