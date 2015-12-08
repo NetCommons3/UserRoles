@@ -133,7 +133,7 @@ class UserRoleFormHelper extends AppHelper {
 		}
 
 		$verifySystem = Hash::get($attributes, 'verifySystem', false);
-		Hash::remove($attributes, 'verifySystem');
+		$attributes = Hash::remove($attributes, 'verifySystem');
 
 		if ($verifySystem && $this->_View->data['UserRole']['is_system']) {
 			$html .= $this->NetCommonsForm->hidden($fieldName);
@@ -172,7 +172,6 @@ class UserRoleFormHelper extends AppHelper {
  */
 	public function selectUserAttributeRole($userAttribute) {
 		$userAttributeKey = $userAttribute['UserAttribute']['key'];
-
 		$userAttributeRole = Hash::extract(
 			$this->_View->request->data['UserAttributesRole'],
 			'{n}.UserAttributesRole[user_attribute_key=' . $userAttributeKey . ']'
@@ -189,17 +188,6 @@ class UserRoleFormHelper extends AppHelper {
 			$this->_View->request->data = Hash::insert($this->_View->request->data, $fieldName, UserAttributesRolesController::OTHER_NOT_READABLE);
 		}
 
-		$options = array(
-			UserAttributesRolesController::OTHER_NOT_READABLE => __d('user_roles', 'Not readable of others'),
-			UserAttributesRolesController::OTHER_READABLE => __d('user_roles', 'Readable of others'),
-		);
-
-		if ($userAttribute['UserAttributeSetting']['data_type_key'] !== DataType::DATA_TYPE_LABEL &&
-				($this->_View->request->data['UserRoleSetting']['is_usable_user_manager'] ||
-					! $userAttribute['UserAttributeSetting']['only_administrator'])) {
-			$options[UserAttributesRolesController::OTHER_EDITABLE] = __d('user_roles', 'Editable of others');
-		}
-
 		$html = '';
 		$html .= '<div class="form-group">';
 		$html .= '<div class="input-group input-group-sm user-attribute-roles-edit">';
@@ -214,23 +202,58 @@ class UserRoleFormHelper extends AppHelper {
 			$html .= $this->Form->hidden('UserAttributesRole.' . $id . '.UserAttributesRole.role_key');
 			$html .= $this->Form->hidden('UserAttributesRole.' . $id . '.UserAttributesRole.user_attribute_key');
 		}
-		$attributes = array(
-			'type' => 'select',
-			'class' => 'form-control',
-			'empty' => false,
-			'disabled' => $disabled,
-		);
 
 		$label = h($userAttribute['UserAttribute']['name']);
 		if ($userAttribute['UserAttributeSetting']['required']) {
 			$label .= $this->_View->element('NetCommons.required', array('size' => 'h5'));
 		}
 		$html .= $this->Form->label($fieldName, $label, array('class' => 'input-group-addon user-attribute-roles-edit'));
+
+		$attributes = array(
+			'type' => 'select',
+			'class' => 'form-control',
+			'empty' => false,
+			'disabled' => $disabled,
+		);
+		$options = $this->__optionsUserAttributeRole($userAttribute);
 		$html .= $this->Form->select($fieldName, $options, $attributes);
 
 		$html .= '</div>';
 		$html .= '</div>';
 		return $html;
+	}
+
+/**
+ * 権限管理の個人情報設定のOptions
+ *
+ * @param array $userAttribute UserAttributeデータ
+ * @return string HTMLタグ
+ */
+	private function __optionsUserAttributeRole($userAttribute) {
+		$userAttributeKey = $userAttribute['UserAttribute']['key'];
+		$userAttributeRole = Hash::extract(
+			$this->_View->request->data['UserAttributesRole'],
+			'{n}.UserAttributesRole[user_attribute_key=' . $userAttributeKey . ']'
+		);
+
+		if ($userAttributeRole[0]['user_attribute_key'] === 'handlename') {
+			$options = array(
+				UserAttributesRolesController::OTHER_READABLE => __d('user_roles', 'Readable of others'),
+			);
+		} else {
+			$options = array(
+				UserAttributesRolesController::OTHER_NOT_READABLE => __d('user_roles', 'Not readable of others'),
+				UserAttributesRolesController::OTHER_READABLE => __d('user_roles', 'Readable of others'),
+			);
+		}
+
+		if ($userAttribute['UserAttributeSetting']['data_type_key'] !== DataType::DATA_TYPE_LABEL &&
+				($this->_View->request->data['UserRoleSetting']['is_usable_user_manager'] ||
+					! $userAttribute['UserAttributeSetting']['only_administrator'])) {
+			$options[UserAttributesRolesController::OTHER_EDITABLE] = __d('user_roles', 'Editable of others');
+		}
+
+		return $options;
 	}
 
 }

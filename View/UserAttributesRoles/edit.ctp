@@ -28,10 +28,11 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 			h($userManagerPluginName),
 			array('class' => 'user-roles-label')
 		);
-		echo $this->UserRoleForm->radioUserRole('UserRoleSetting.is_usable_room_manager', null, array(
+		echo $this->UserRoleForm->radioUserRole('UserRoleSetting.is_usable_user_manager', null, array(
 			'verifySystem' => true,
 			'onclick' => 'submit()',
-			'ng-disabled' => 'sending',
+			'ng-click' => 'sending=true',
+			'ng-disabled' => ($this->data['UserRole']['is_system'] ? 'true' : 'sending')
 		));
 
 		echo $this->NetCommonsForm->end();
