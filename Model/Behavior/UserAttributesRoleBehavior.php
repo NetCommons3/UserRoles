@@ -35,13 +35,14 @@ class UserAttributesRoleBehavior extends ModelBehavior {
 
 		$default = $this->__getDefaultUserAttributeRolePermission($model, $params);
 
-		if (! $userAttributeRole = $model->find('first', array(
+		$userAttributeRole = $model->find('first', array(
 			'recursive' => -1,
 			'conditions' => array(
 				'role_key' => $params['role_key'],
 				'user_attribute_key' => $params['user_attribute_key'],
 			),
-		))) {
+		));
+		if (! $userAttributeRole) {
 			$userAttributeRole = $model->create(array(
 				'role_key' => $params['role_key'],
 				'user_attribute_key' => $params['user_attribute_key']

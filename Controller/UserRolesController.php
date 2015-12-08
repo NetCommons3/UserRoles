@@ -168,7 +168,7 @@ class UserRolesController extends UserRolesAppController {
  * @return void
  */
 	public function delete() {
-		if (! $this->request->isDelete() || $this->UserRole->verifyDeletable($this->data['UserRole'][0]['key'])) {
+		if (! $this->request->isDelete() || ! $this->UserRole->verifyDeletable($this->data['UserRole'][0]['key'])) {
 			$this->throwBadRequest();
 			return;
 		}

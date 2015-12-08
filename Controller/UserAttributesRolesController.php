@@ -21,16 +21,22 @@ class UserAttributesRolesController extends UserRolesAppController {
 
 /**
  * 「他人の会員情報を閲覧させない」定数
+ *
+ * @var const
  */
 	const OTHER_NOT_READABLE = 'other_not_readable';
 
 /**
  * 「他人の会員情報を閲覧させる」定数
+ *
+ * @var const
  */
 	const OTHER_READABLE = 'other_readable';
 
 /**
  * 「他人の会員情報を編集させる」定数
+ *
+ * @var const
  */
 	const OTHER_EDITABLE = 'other_editable';
 

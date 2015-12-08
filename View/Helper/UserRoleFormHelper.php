@@ -192,9 +192,7 @@ class UserRoleFormHelper extends AppHelper {
 		$html .= '<div class="form-group">';
 		$html .= '<div class="input-group input-group-sm user-attribute-roles-edit">';
 
-		if ($this->_View->request->data['UserRoleSetting']['is_usable_user_manager'] ||
-				$this->_View->request->data['UserRole']['is_system']) {
-
+		if ($this->_View->request->data['UserRole']['is_system']) {
 			$disabled = true;
 		} else {
 			$disabled = false;
@@ -247,9 +245,23 @@ class UserRoleFormHelper extends AppHelper {
 			);
 		}
 
-		if ($userAttribute['UserAttributeSetting']['data_type_key'] !== DataType::DATA_TYPE_LABEL &&
-				($this->_View->request->data['UserRoleSetting']['is_usable_user_manager'] ||
-					! $userAttribute['UserAttributeSetting']['only_administrator'])) {
+		//以下の場合、編集の選択肢は表示させない
+		// * ラベルタイプ
+		// * 会員管理が使用できない
+		if ($userAttribute['UserAttributeSetting']['data_type_key'] === DataType::DATA_TYPE_LABEL ||
+				! $this->_View->request->data['UserRoleSetting']['is_usable_user_manager']) {
+			return $options;
+		}
+
+		//以下の場合、編集の選択肢を表示する（前提：会員管理を使用できる）
+		// * 会員管理者のみ読み書きの項目でない
+		// * 会員管理者（システム管理者 || 会員管理者）
+		$adminOptions = array(
+			UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR, UserRole::USER_ROLE_KEY_ADMINISTRATOR
+		);
+		if (! $userAttribute['UserAttributeSetting']['only_administrator'] ||
+				in_array($this->_View->request->data['UserRoleSetting']['origin_role_key'], $adminOptions, true)) {
+
 			$options[UserAttributesRolesController::OTHER_EDITABLE] = __d('user_roles', 'Editable of others');
 		}
 

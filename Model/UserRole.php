@@ -32,14 +32,25 @@ class UserRole extends Role {
 	public $useTable = 'roles';
 
 /**
- * UserRole keys
+ * システム管理者権限の定数
  *
  * @var const
  */
-	const
-		USER_ROLE_KEY_SYSTEM_ADMINISTRATOR = 'system_administrator',
-		USER_ROLE_KEY_ADMINISTRATOR = 'administrator',
-		USER_ROLE_KEY_COMMON_USER = 'common_user';
+	const USER_ROLE_KEY_SYSTEM_ADMINISTRATOR = 'system_administrator';
+
+/**
+ * 会員管理者権限の定数
+ *
+ * @var const
+ */
+	const USER_ROLE_KEY_ADMINISTRATOR = 'administrator';
+
+/**
+ * 会員一般権限の定数
+ *
+ * @var const
+ */
+	const USER_ROLE_KEY_COMMON_USER = 'common_user';
 
 /**
  * use behaviors

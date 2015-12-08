@@ -172,45 +172,4 @@ class UserRoleBehavior extends ModelBehavior {
 		return true;
 	}
 
-/**
- * Save default UserAttributesRole
- *
- * @param Model $model Model using this behavior
- * @param array $data User role data
- * @return bool True on success
- * @throws InternalErrorException
- */
-	public function saveUserAttributesRole(Model $model, $data) {
-		$model->loadModels([
-			'UserAttribute' => 'UserAttributes.UserAttribute',
-			'UserAttributeSetting' => 'UserAttributes.UserAttributeSetting',
-			'UserAttributesRole' => 'UserRoles.UserAttributesRole'
-		]);
-
-		$userAttributes = $model->UserAttribute->find('all', array(
-			'recursive' => 0,
-			'conditions' => array(
-				'language_id' => Current::read('Language.id')
-			),
-		));
-
-		foreach ($userAttributes as $userAttribute) {
-			$params = array(
-				'role_key' => $data['UserRoleSetting']['role_key'],
-				'origin_role_key' => $data['UserRoleSetting']['origin_role_key'],
-				'user_attribute_key' => $userAttribute['UserAttribute']['key'],
-				'only_administrator' => (bool)$userAttribute['UserAttributeSetting']['only_administrator'],
-				'is_system' => (bool)$userAttribute['UserAttributeSetting']['is_system'],
-				'is_usable_user_manager' => (bool)$data['UserRoleSetting']['is_usable_user_manager']
-			);
-
-			$userAttributeRole = $model->UserAttributesRole->defaultUserAttributeRolePermissions($params);
-			if (! $model->UserAttributesRole->save($userAttributeRole, array('validate' => false))) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-			}
-		}
-
-		return true;
-	}
-
 }

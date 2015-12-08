@@ -155,7 +155,7 @@ class UserRoleSetting extends UserRolesAppModel {
 	public function saveUsableUserManager($data) {
 		$this->loadModels([
 			'UserRole' => 'UserRoles.UserRole',
-			'UserAttributes' => 'UserAttributes.UserAttribute',
+			'UserAttributesRole' => 'UserRoles.UserAttributesRole',
 		]);
 
 		//トランザクションBegin
@@ -167,10 +167,18 @@ class UserRoleSetting extends UserRolesAppModel {
 				$this->savePluginsRole($data['UserRoleSetting']['role_key'], 'user_manager');
 			} else {
 				$this->deletePluginsRole($data['UserRoleSetting']['role_key'], 'user_manager');
-			}
 
-			//UserAttributesRoleデータの登録
-			$this->saveUserAttributesRole($data);
+				$result = $this->UserAttributesRole->updateAll(
+					array($this->UserAttributesRole->alias . '.other_editable' => 0),
+					array(
+						$this->UserAttributesRole->alias . '.other_editable ' => true,
+						$this->UserAttributesRole->alias . '.role_key' => $data['UserRoleSetting']['role_key'],
+					)
+				);
+				if (! $result) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
+			}
 
 			//トランザクションCommit
 			$this->commit();
