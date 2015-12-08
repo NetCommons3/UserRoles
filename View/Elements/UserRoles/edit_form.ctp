@@ -1,6 +1,6 @@
 <?php
 /**
- * UserAttribute edit form template
+ * 会員権限の編集Element
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>

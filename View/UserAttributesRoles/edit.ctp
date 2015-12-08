@@ -1,6 +1,6 @@
 <?php
 /**
- * UserAttributesRoles edit template
+ * 権限管理の個人情報設定タブのテンプレート
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
@@ -12,54 +12,50 @@
 echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 ?>
 
-
 <?php echo $this->element('UserRoles.subtitle'); ?>
-
 <?php echo $this->element('UserRoles.tabs'); ?>
 
-<?php echo $this->Form->create('UserRoleSetting', array(
-		'novalidate' => true,
-		'url' => '/user_roles/user_attributes_roles/user_manager/'
-	)); ?>
-
 <div class="form-group form-inline">
-	<?php echo $this->Form->hidden('UserRoleSetting.role_key'); ?>
-	<?php echo $this->Form->hidden('UserRoleSetting.origin_role_key'); ?>
+	<?php
+		echo $this->NetCommonsForm->create('UserRoleSetting', array(
+			'url' => $this->NetCommonsHtml->url(array('action' => 'user_manager'))
+		));
 
-	<?php echo $this->Form->label('UserRoleSetting.is_usable_user_manager',
+		echo $this->NetCommonsForm->hidden('UserRoleSetting.role_key');
+		echo $this->NetCommonsForm->hidden('UserRoleSetting.origin_role_key');
+
+		echo $this->NetCommonsForm->label('UserRoleSetting.is_usable_user_manager',
 			h($userManagerPluginName),
 			array('class' => 'user-roles-label')
-		); ?>
+		);
+		echo $this->UserRoleForm->radioUserRole('UserRoleSetting.is_usable_room_manager', null, array(
+			'verifySystem' => true,
+			'onclick' => 'submit()',
+			'ng-disabled' => 'sending',
+		));
 
-	<?php echo $this->UserRoleForm->radioUserRole('UserRoleSetting.is_usable_user_manager',
-			$this->UserRoleForm->isUsableOptions,
-			array(
-				'onclick' => 'submit()',
-				'ng-disabled' => '(sending || ' . (int)$this->data['UserRole']['is_system'] . ')',
-				'ng-click' => 'sending = true'
-			)
-		); ?>
+		echo $this->NetCommonsForm->end();
+	?>
 </div>
-
-<?php echo $this->Form->end(); ?>
 
 <hr>
 
-<?php echo $this->Form->create('UserAttributesRoles', array(
-		'novalidate' => true,
-		'url' => '/user_roles/user_attributes_roles/edit/' . h($this->data['UserRoleSetting']['role_key'])
+<?php echo $this->NetCommonsForm->create('UserAttributesRoles', array(
+		'url' => $this->NetCommonsHtml->url(array('action' => 'edit', 'key' => $this->data['UserRoleSetting']['role_key']))
 	)); ?>
 
-<?php echo $this->UserAttributeLayout->renderRow('UserAttributesRoles/render_edit_row'); ?>
+	<?php echo $this->UserAttributeLayout->renderRow('UserAttributesRoles/render_edit_row'); ?>
 
-<div class="text-center">
-	<?php echo $this->Button->cancelAndSave(
-			__d('net_commons', 'Cancel'),
-			__d('net_commons', 'OK'),
-			$this->NetCommonsHtml->url(array('action' => 'index')),
-			array(),
-			array('disabled' => $this->data['UserRoleSetting']['is_usable_user_manager'])
-		); ?>
-</div>
+	<div class="text-center">
+		<?php echo $this->Button->cancelAndSave(
+				__d('net_commons', 'Cancel'),
+				__d('net_commons', 'OK'),
+				$this->NetCommonsHtml->url(array('controller' => 'user_roles', 'action' => 'index')),
+				array(),
+				array(
+					'ng-disabled' => '(sending || ' . ($this->data['UserRole']['is_system'] ? 'true' : 'false') . ')'
+				)
+			); ?>
+	</div>
 
-<?php echo $this->Form->end();
+<?php echo $this->NetCommonsForm->end();

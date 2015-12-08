@@ -160,8 +160,8 @@ class UserRoleBehavior extends ModelBehavior {
 		]);
 
 		$conditions = array(
-			'role_key' => $roleKey,
-			'plugin_key' => $pluginKey
+			$model->PluginsRole->alias . '.role_key' => $roleKey,
+			$model->PluginsRole->alias . '.plugin_key' => $pluginKey
 		);
 
 		//PluginsRoleの削除処理

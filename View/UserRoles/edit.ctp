@@ -9,7 +9,6 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-echo $this->NetCommonsHtml->script('/user_roles/js/user_roles.js');
 echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 ?>
 

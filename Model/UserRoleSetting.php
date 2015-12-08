@@ -102,7 +102,7 @@ class UserRoleSetting extends UserRolesAppModel {
 	}
 
 /**
- * Save UserRoleSetting
+ * UserRoleSettingの登録処理
  *
  * @param array $data received post data
  * @return bool True on success, false on validation errors
@@ -117,13 +117,14 @@ class UserRoleSetting extends UserRolesAppModel {
 		$this->begin();
 
 		//UserRoleSettingのバリデーション
-		if (! $this->validateUserRoleSetting($data)) {
+		$this->set($data);
+		if (! $this->validates()) {
 			return false;
 		}
 
 		try {
 			//UserRoleの登録処理
-			if (! $this->save($data, false)) {
+			if (! $this->save(null, false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 			//PluginsRoleのデータ登録処理
@@ -145,7 +146,7 @@ class UserRoleSetting extends UserRolesAppModel {
 	}
 
 /**
- * Save UsableUserManager
+ * 会員管理の使用有無の登録処理
  *
  * @param array $data received post data
  * @return bool True on success, false on validation errors
@@ -179,21 +180,6 @@ class UserRoleSetting extends UserRolesAppModel {
 			$this->rollback($ex);
 		}
 
-		return true;
-	}
-
-/**
- * Validate of UserRoleSetting
- *
- * @param array $data received post data
- * @return bool True on success, false on validation errors
- */
-	public function validateUserRoleSetting($data) {
-		$this->set($data);
-		$this->validates();
-		if ($this->validationErrors) {
-			return false;
-		}
 		return true;
 	}
 

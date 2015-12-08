@@ -26,7 +26,6 @@ class UserRoleSettingsController extends UserRolesAppController {
  */
 	public $uses = array(
 		'PluginManager.Plugin',
-		'PluginManager.PluginsRole',
 		'UserRoles.UserRole',
 		'UserRoles.UserRoleSetting',
 	);
@@ -45,7 +44,7 @@ class UserRoleSettingsController extends UserRolesAppController {
 			//登録処理
 			if ($this->UserRoleSetting->saveUserRoleSetting($this->request->data)) {
 				//正常の場合
-				$this->redirect('/user_roles/user_roles/index/');
+				$this->redirect('/user_roles/user_attributes_roles/edit/' . h($roleKey));
 				return;
 			}
 			$this->NetCommons->handleValidationError($this->UserRoleSetting->validationErrors);

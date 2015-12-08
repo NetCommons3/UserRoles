@@ -1,8 +1,6 @@
 <?php
 /**
- * Subtitle template
- *   - $active: Active tab key. Value is 'block_index or 'frame_settings' or 'role_permissions'.
- *   - $disabled: Disabled tab
+ * サブタイトル(権限名表示)Element
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>

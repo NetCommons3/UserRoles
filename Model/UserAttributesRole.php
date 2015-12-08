@@ -61,6 +61,34 @@ class UserAttributesRole extends UserRolesAppModel {
 					'required' => false,
 				),
 			),
+			'self_readable' => array(
+				'boolean' => array(
+					'rule' => array('boolean'),
+					'message' => __d('net_commons', 'Invalid request.'),
+					'required' => false,
+				),
+			),
+			'self_editable' => array(
+				'boolean' => array(
+					'rule' => array('boolean'),
+					'message' => __d('net_commons', 'Invalid request.'),
+					'required' => false,
+				),
+			),
+			'other_readable' => array(
+				'boolean' => array(
+					'rule' => array('boolean'),
+					'message' => __d('net_commons', 'Invalid request.'),
+					'required' => false,
+				),
+			),
+			'other_editable' => array(
+				'boolean' => array(
+					'rule' => array('boolean'),
+					'message' => __d('net_commons', 'Invalid request.'),
+					'required' => false,
+				),
+			),
 		));
 
 		return parent::beforeValidate($options);

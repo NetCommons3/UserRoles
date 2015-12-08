@@ -6,8 +6,15 @@
  * @license  http://www.netcommons.org/license.txt NetCommons License
  */
 
-ul.user-attribute-roles-edit {
-	padding-left: 0px;
+.user-attribute-roles-edit {
+	width: 100%;
+}
+.user-attribute-roles-edit label {
+	width: 40%;
+	text-align: left;
+}
+.user-attribute-roles-edit select.form-control {
+	width: 100%;
 }
 
 label.user-roles-label {

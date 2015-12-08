@@ -243,8 +243,6 @@ class UserRole extends Role {
  * @return bool True：削除可、False：削除不可
  */
 	public function verifyDeletable($roleKey) {
-//		return true;
-
 		$this->loadModels([
 			'User' => 'Users.User',
 		]);

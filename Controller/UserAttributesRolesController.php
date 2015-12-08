@@ -20,12 +20,28 @@ App::uses('UserRolesAppController', 'UserRoles.Controller');
 class UserAttributesRolesController extends UserRolesAppController {
 
 /**
- * constant UserAttributesRoles
+ * 「他人の会員情報を閲覧させない」定数
  */
-	const
-		OTHER_NOT_READABLE = 'other_not_readable',
-		OTHER_READABLE = 'other_readable',
-		OTHER_EDITABLE = 'other_editable';
+	const OTHER_NOT_READABLE = 'other_not_readable';
+
+/**
+ * 「他人の会員情報を閲覧させる」定数
+ */
+	const OTHER_READABLE = 'other_readable';
+
+/**
+ * 「他人の会員情報を編集させる」定数
+ */
+	const OTHER_EDITABLE = 'other_editable';
+
+/**
+ * use components
+ *
+ * @var array
+ */
+	public $components = array(
+		'UserAttributes.UserAttributeLayout',
+	);
 
 /**
  * use model
@@ -33,7 +49,7 @@ class UserAttributesRolesController extends UserRolesAppController {
  * @var array
  */
 	public $uses = array(
-		'PluginManager.PluginsRole',
+		'PluginManager.Plugin',
 		'UserRoles.UserAttributesRole',
 		'UserRoles.UserRole',
 		'UserRoles.UserRoleSetting',
@@ -56,31 +72,41 @@ class UserAttributesRolesController extends UserRolesAppController {
  */
 	public function edit($roleKey = null) {
 		if ($this->request->isPost()) {
+			if (! Hash::get($this->request->data, 'UserAttributesRole')) {
+				$this->throwBadRequest();
+				return;
+			}
+
 			//不要パラメータ除去
-			$data = $this->data;
-			unset($data['save']);
-			$this->request->data = $data;
+			unset($this->request->data['save']);
 
 			//リクエストの整形
-			foreach (array_keys($data['UserAttributesRole']) as $id) {
-				$data['UserAttributesRole'][$id]['UserAttributesRole']['other_readable'] = false;
-				$data['UserAttributesRole'][$id]['UserAttributesRole']['other_editable'] = false;
+			$ids = array_keys($this->request->data['UserAttributesRole']);
+			foreach ($ids as $id) {
+				$otherRole = $this->request->data['UserAttributesRole'][$id]['UserAttributesRole']['other_user_attribute_role'];
+				if (! in_array($otherRole, [self::OTHER_EDITABLE, self::OTHER_READABLE, self::OTHER_NOT_READABLE], true)) {
+					$this->throwBadRequest();
+					return;
+				}
 
-				if ($data['UserAttributesRole'][$id]['UserAttributesRole']['other_user_attribute_role'] === self::OTHER_EDITABLE) {
-					$data['UserAttributesRole'][$id]['UserAttributesRole']['other_readable'] = true;
-					$data['UserAttributesRole'][$id]['UserAttributesRole']['other_editable'] = true;
-				} elseif ($data['UserAttributesRole'][$id]['UserAttributesRole']['other_user_attribute_role'] === self::OTHER_READABLE) {
-					$data['UserAttributesRole'][$id]['UserAttributesRole']['other_readable'] = true;
+				$this->request->data['UserAttributesRole'][$id]['UserAttributesRole']['other_readable'] = false;
+				$this->request->data['UserAttributesRole'][$id]['UserAttributesRole']['other_editable'] = false;
+
+				if ($otherRole === self::OTHER_EDITABLE) {
+					$this->request->data['UserAttributesRole'][$id]['UserAttributesRole']['other_readable'] = true;
+					$this->request->data['UserAttributesRole'][$id]['UserAttributesRole']['other_editable'] = true;
+				} elseif ($otherRole === self::OTHER_READABLE) {
+					$this->request->data['UserAttributesRole'][$id]['UserAttributesRole']['other_readable'] = true;
 				}
 			}
 
 			//登録処理
-			$this->UserAttributesRole->saveUserAttributesRoles($data);
-			if ($this->NetCommons->handleValidationError($this->UserAttributesRole->validationErrors)) {
+			if ($this->UserAttributesRole->saveUserAttributesRoles($this->request->data)) {
 				//正常の場合
 				$this->redirect('/user_roles/user_roles/index/');
 				return;
 			}
+			$this->NetCommons->handleValidationError($this->UserAttributesRole->validationErrors);
 
 		} else {
 			//既存データ取得

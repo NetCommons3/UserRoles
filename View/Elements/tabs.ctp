@@ -1,8 +1,6 @@
 <?php
 /**
- * Setting tabs template
- *   - $active: Active tab key. Value is 'block_index or 'frame_settings' or 'role_permissions'.
- *   - $disabled: Disabled tab
+ * タブElement
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
