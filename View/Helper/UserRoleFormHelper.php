@@ -234,14 +234,24 @@ class UserRoleFormHelper extends AppHelper {
 			'{n}.UserAttributesRole[user_attribute_key=' . $userAttributeKey . ']'
 		);
 
+		//会員管理者とするオプション
+		$adminOptions = array(
+			UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR, UserRole::USER_ROLE_KEY_ADMINISTRATOR
+		);
+
 		if ($userAttributeRole[0]['user_attribute_key'] === 'handlename') {
 			$options = array(
+				UserAttributesRolesController::OTHER_READABLE => __d('user_roles', 'Readable of others'),
+			);
+		} elseif (! $userAttribute['UserAttributeSetting']['only_administrator'] ||
+				in_array($this->_View->request->data['UserRoleSetting']['origin_role_key'], $adminOptions, true)) {
+			$options = array(
+				UserAttributesRolesController::OTHER_NOT_READABLE => __d('user_roles', 'Not readable of others'),
 				UserAttributesRolesController::OTHER_READABLE => __d('user_roles', 'Readable of others'),
 			);
 		} else {
 			$options = array(
 				UserAttributesRolesController::OTHER_NOT_READABLE => __d('user_roles', 'Not readable of others'),
-				UserAttributesRolesController::OTHER_READABLE => __d('user_roles', 'Readable of others'),
 			);
 		}
 
@@ -256,9 +266,6 @@ class UserRoleFormHelper extends AppHelper {
 		//以下の場合、編集の選択肢を表示する（前提：会員管理を使用できる）
 		// * 会員管理者のみ読み書きの項目でない
 		// * 会員管理者（システム管理者 || 会員管理者）
-		$adminOptions = array(
-			UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR, UserRole::USER_ROLE_KEY_ADMINISTRATOR
-		);
 		if (! $userAttribute['UserAttributeSetting']['only_administrator'] ||
 				in_array($this->_View->request->data['UserRoleSetting']['origin_role_key'], $adminOptions, true)) {
 
