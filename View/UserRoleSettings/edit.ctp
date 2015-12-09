@@ -43,7 +43,9 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 			</div>
 
 			<div class="col-xs-12 col-sm-6 col-md-8">
-				<?php echo $this->UserRoleForm->radioUserRole('UserRoleSetting.use_private_room'); ?>
+				<?php echo $this->UserRoleForm->radioUserRole('UserRoleSetting.use_private_room', null, array(
+					'verifySystem' => true
+				)); ?>
 			</div>
 		</div>
 
