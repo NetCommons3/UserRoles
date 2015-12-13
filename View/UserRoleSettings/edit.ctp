@@ -43,21 +43,7 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 			</div>
 
 			<div class="col-xs-12 col-sm-6 col-md-8">
-				<?php echo $this->UserRoleForm->radioUserRole('UserRoleSetting.use_private_room', null, array(
-					'verifySystem' => true
-				)); ?>
-			</div>
-		</div>
-
-		<div class="row form-group">
-			<div class="col-xs-12 col-sm-6 col-md-4">
-				<?php echo $this->NetCommonsForm->label('UserRoleSetting.private_room_upload_max_size',
-						__d('user_roles', 'The total size of Private Room')
-					); ?>
-			</div>
-
-			<div class="col-xs-12 col-sm-4 col-md-3">
-				<?php echo $this->UserRoleForm->selectMaxSize('UserRoleSetting.private_room_upload_max_size'); ?>
+				<?php echo $this->UserRoleForm->radioUserRole('UserRoleSetting.use_private_room'); ?>
 			</div>
 		</div>
 	</div>

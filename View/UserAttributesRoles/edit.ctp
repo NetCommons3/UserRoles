@@ -54,7 +54,7 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 				$this->NetCommonsHtml->url(array('controller' => 'user_roles', 'action' => 'index')),
 				array(),
 				array(
-					'ng-disabled' => '(sending || ' . ($this->data['UserRole']['is_system'] ? 'true' : 'false') . ')'
+					'ng-disabled' => '(sending || ' . ($this->data['UserRoleSetting']['is_usable_user_manager'] ? 'true' : 'false') . ')'
 				)
 			); ?>
 	</div>

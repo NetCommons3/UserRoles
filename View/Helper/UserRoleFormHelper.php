@@ -192,7 +192,13 @@ class UserRoleFormHelper extends AppHelper {
 		$html .= '<div class="form-group">';
 		$html .= '<div class="input-group input-group-sm user-attribute-roles-edit">';
 
-		if ($this->_View->request->data['UserRole']['is_system']) {
+		$label = h($userAttribute['UserAttribute']['name']);
+		if ($userAttribute['UserAttributeSetting']['required']) {
+			$label .= $this->_View->element('NetCommons.required', array('size' => 'h5'));
+		}
+		$html .= $this->Form->label($fieldName, $label, array('class' => 'input-group-addon user-attribute-roles-edit'));
+
+		if ($this->_View->request->data['UserRoleSetting']['is_usable_user_manager']) {
 			$disabled = true;
 		} else {
 			$disabled = false;
@@ -200,12 +206,6 @@ class UserRoleFormHelper extends AppHelper {
 			$html .= $this->Form->hidden('UserAttributesRole.' . $id . '.UserAttributesRole.role_key');
 			$html .= $this->Form->hidden('UserAttributesRole.' . $id . '.UserAttributesRole.user_attribute_key');
 		}
-
-		$label = h($userAttribute['UserAttribute']['name']);
-		if ($userAttribute['UserAttributeSetting']['required']) {
-			$label .= $this->_View->element('NetCommons.required', array('size' => 'h5'));
-		}
-		$html .= $this->Form->label($fieldName, $label, array('class' => 'input-group-addon user-attribute-roles-edit'));
 
 		$attributes = array(
 			'type' => 'select',
@@ -234,17 +234,18 @@ class UserRoleFormHelper extends AppHelper {
 			'{n}.UserAttributesRole[user_attribute_key=' . $userAttributeKey . ']'
 		);
 
-		//会員管理者とするオプション
-		$adminOptions = array(
-			UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR, UserRole::USER_ROLE_KEY_ADMINISTRATOR
-		);
-
 		if ($userAttributeRole[0]['user_attribute_key'] === 'handlename') {
+			//ハンドルの場合、「閲覧させない」を除外する
 			$options = array(
 				UserAttributesRolesController::OTHER_READABLE => __d('user_roles', 'Readable of others'),
 			);
+		} elseif ($userAttributeRole[0]['user_attribute_key'] === 'password') {
+			//パスワードの場合、「閲覧させる」を除外する
+			$options = array(
+				UserAttributesRolesController::OTHER_NOT_READABLE => __d('user_roles', 'Not readable of others'),
+			);
 		} elseif (! $userAttribute['UserAttributeSetting']['only_administrator'] ||
-				in_array($this->_View->request->data['UserRoleSetting']['origin_role_key'], $adminOptions, true)) {
+				$this->_View->request->data['UserRoleSetting']['is_usable_user_manager']) {
 			$options = array(
 				UserAttributesRolesController::OTHER_NOT_READABLE => __d('user_roles', 'Not readable of others'),
 				UserAttributesRolesController::OTHER_READABLE => __d('user_roles', 'Readable of others'),
@@ -263,14 +264,8 @@ class UserRoleFormHelper extends AppHelper {
 			return $options;
 		}
 
-		//以下の場合、編集の選択肢を表示する（前提：会員管理を使用できる）
-		// * 会員管理者のみ読み書きの項目でない
-		// * 会員管理者（システム管理者 || 会員管理者）
-		if (! $userAttribute['UserAttributeSetting']['only_administrator'] ||
-				in_array($this->_View->request->data['UserRoleSetting']['origin_role_key'], $adminOptions, true)) {
-
-			$options[UserAttributesRolesController::OTHER_EDITABLE] = __d('user_roles', 'Editable of others');
-		}
+		//編集の選択肢を表示する
+		$options[UserAttributesRolesController::OTHER_EDITABLE] = __d('user_roles', 'Editable of others');
 
 		return $options;
 	}
