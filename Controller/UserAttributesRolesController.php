@@ -132,7 +132,7 @@ class UserAttributesRolesController extends UserRolesAppController {
 		$this->request->data = Hash::merge($userRole, $this->request->data);
 
 		//プラグイン名取得
-		$plugin = $this->Plugin->getPlugins(Plugin::PLUGIN_TYPE_FOR_CONTROL_PANEL, 'user_manager');
+		$plugin = $this->Plugin->getPlugins(Plugin::PLUGIN_TYPE_FOR_SITE_MANAGER, 'user_manager');
 		$this->set('userManagerPluginName', Hash::get($plugin, '0.Plugin.name', __d('user_roles', 'User manager')));
 
 		$this->set('roleKey', $roleKey);
