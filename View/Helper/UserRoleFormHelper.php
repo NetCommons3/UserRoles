@@ -239,12 +239,12 @@ class UserRoleFormHelper extends AppHelper {
 			$options = array(
 				UserAttributesRolesController::OTHER_READABLE => __d('user_roles', 'Readable of others'),
 			);
-		} elseif ($userAttributeRole[0]['user_attribute_key'] === 'password') {
+		} elseif ($userAttribute['UserAttributeSetting']['data_type_key'] === DataType::DATA_TYPE_PASSWORD) {
 			//パスワードの場合、「閲覧させる」を除外する
 			$options = array(
 				UserAttributesRolesController::OTHER_NOT_READABLE => __d('user_roles', 'Not readable of others'),
 			);
-		} elseif (! $userAttribute['UserAttributeSetting']['only_administrator'] ||
+		} elseif (! $userAttribute['UserAttributeSetting']['only_administrator_readable'] ||
 				$this->_View->request->data['UserRoleSetting']['is_usable_user_manager']) {
 			$options = array(
 				UserAttributesRolesController::OTHER_NOT_READABLE => __d('user_roles', 'Not readable of others'),
