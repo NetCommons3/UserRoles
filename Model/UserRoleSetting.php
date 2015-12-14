@@ -69,34 +69,29 @@ class UserRoleSetting extends UserRolesAppModel {
 /**
  * UserRoleSettingデータ取得
  *
+ * @param int|array $pluginType プラグインタイプ
  * @param string $roleKey 権限キー
  * @return array UserRoleSettingデータ配列
  */
-	public function getUserRoleSetting($roleKey) {
+	public function getUserRoleSetting($pluginType, $roleKey) {
 		$this->loadModels([
 			'PluginsRole' => 'PluginManager.PluginsRole',
 		]);
 
+		//UserRoleSettingデータ取得
 		$userRoleSetting = $this->find('first', array(
 			'recursive' => -1,
 			'conditions' => array(
 				'role_key' => $roleKey,
 			)
 		));
-		$userRoleSetting['UserRoleSetting']['is_usable_room_manager'] = (bool)$this->PluginsRole->find('count', array(
-			'recursive' => -1,
-			'conditions' => array(
-				'role_key' => $roleKey,
-				'plugin_key' => 'rooms',
-			)
-		));
-		$userRoleSetting['UserRoleSetting']['is_usable_user_manager'] = (bool)$this->PluginsRole->find('count', array(
-			'recursive' => -1,
-			'conditions' => array(
-				'role_key' => $roleKey,
-				'plugin_key' => 'user_manager',
-			)
-		));
+
+		//PluginsRoleデータ取得
+		$userRoleSetting['PluginsRole'] = $this->PluginsRole->getPlugins($pluginType, $roleKey);
+
+		//会員管理の使用有無のフラグセット
+		$isUsableUserManager = Hash::extract($userRoleSetting['PluginsRole'], '{n}.PluginsRole[plugin_key=user_manager].id');
+		$userRoleSetting['UserRoleSetting']['is_usable_user_manager'] = (bool)Hash::get($isUsableUserManager, '0', false);
 
 		return $userRoleSetting;
 	}
@@ -127,56 +122,13 @@ class UserRoleSetting extends UserRolesAppModel {
 			if (! $this->save(null, false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
+
 			//PluginsRoleのデータ登録処理
-			if ($data['UserRoleSetting']['is_usable_room_manager']) {
-				$this->savePluginsRole($data['UserRoleSetting']['role_key'], 'rooms');
-			} else {
-				$this->deletePluginsRole($data['UserRoleSetting']['role_key'], 'rooms');
-			}
-
-			//トランザクションCommit
-			$this->commit();
-
-		} catch (Exception $ex) {
-			//トランザクションRollback
-			$this->rollback($ex);
-		}
-
-		return true;
-	}
-
-/**
- * 会員管理の使用有無の登録処理
- *
- * @param array $data received post data
- * @return bool True on success, false on validation errors
- * @throws InternalErrorException
- */
-	public function saveUsableUserManager($data) {
-		$this->loadModels([
-			'UserRole' => 'UserRoles.UserRole',
-			'UserAttributesRole' => 'UserRoles.UserAttributesRole',
-		]);
-
-		//トランザクションBegin
-		$this->begin();
-
-		try {
-			//PluginsRoleのデータ登録処理
-			if ($data['UserRoleSetting']['is_usable_user_manager']) {
-				$this->savePluginsRole($data['UserRoleSetting']['role_key'], 'user_manager');
-			} else {
-				$this->deletePluginsRole($data['UserRoleSetting']['role_key'], 'user_manager');
-
-				$result = $this->UserAttributesRole->updateAll(
-					array($this->UserAttributesRole->alias . '.other_editable' => 0),
-					array(
-						$this->UserAttributesRole->alias . '.other_editable ' => true,
-						$this->UserAttributesRole->alias . '.role_key' => $data['UserRoleSetting']['role_key'],
-					)
-				);
-				if (! $result) {
-					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			foreach ($data['PluginsRole'] as $pluginRole) {
+				if (Hash::get($pluginRole, 'PluginsRole.is_usable_plugin', false)) {
+					$this->savePluginsRole($pluginRole['PluginsRole']['role_key'], $pluginRole['PluginsRole']['plugin_key']);
+				} else {
+					$this->deletePluginsRole($pluginRole['PluginsRole']['role_key'], $pluginRole['PluginsRole']['plugin_key']);
 				}
 			}
 

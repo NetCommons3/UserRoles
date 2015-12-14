@@ -135,7 +135,7 @@ class UserRoleFormHelper extends AppHelper {
 		$verifySystem = Hash::get($attributes, 'verifySystem', false);
 		$attributes = Hash::remove($attributes, 'verifySystem');
 
-		if ($verifySystem && $this->_View->data['UserRole']['is_system']) {
+		if ($verifySystem && $this->_View->data['UserRoleSetting']['origin_role_key'] === UserRole::USER_ROLE_KEY_COMMON_USER) {
 			$html .= $this->NetCommonsForm->hidden($fieldName);
 			$html .= $this->NetCommonsForm->radio(null, $options,
 					Hash::merge($this->radioAttributes, array('disabled' => true, 'hiddenField' => false), $attributes));

@@ -116,7 +116,7 @@ class UserAttributesRolesController extends UserRolesAppController {
 
 		} else {
 			//既存データ取得
-			$this->request->data = $this->UserRoleSetting->getUserRoleSetting($roleKey);
+			$this->request->data = $this->UserRoleSetting->getUserRoleSetting(Plugin::PLUGIN_TYPE_FOR_SITE_MANAGER, $roleKey);
 			$this->request->data['UserAttributesRole'] = $this->UserAttributesRole->getUserAttributesRole($roleKey);
 			$this->request->data['UserAttribute'] = $this->viewVars['userAttributes'];
 		}
@@ -137,23 +137,6 @@ class UserAttributesRolesController extends UserRolesAppController {
 
 		$this->set('roleKey', $roleKey);
 		$this->set('subtitle', $this->request->data['UserRole']['name']);
-	}
-
-/**
- * user_manager
- *
- * @return void
- */
-	public function user_manager() {
-		if (! $this->request->isPut()) {
-			$this->throwBadRequest();
-			return;
-		}
-
-		$this->UserRoleSetting->saveUsableUserManager($this->data);
-		$this->NetCommons->setFlashNotification(__d('net_commons', 'Successfully saved.'), array('class' => 'success'));
-
-		$this->redirect('/user_roles/user_attributes_roles/edit/' . h($this->data['UserRoleSetting']['role_key']));
 	}
 
 }

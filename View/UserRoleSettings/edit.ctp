@@ -23,17 +23,24 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 		<?php echo $this->NetCommonsForm->hidden('UserRoleSetting.role_key'); ?>
 		<?php echo $this->NetCommonsForm->hidden('UserRoleSetting.origin_role_key'); ?>
 
-		<div class="row form-group">
-			<div class="col-xs-12 col-sm-6 col-md-4">
-				<?php echo $this->NetCommonsForm->label('UserRoleSetting.is_usable_room_manager', h($roomsPluginName)); ?>
-			</div>
+		<?php foreach ($this->data['PluginsRole'] as $i => $pluginsRole) : ?>
+			<div class="row form-group">
+				<div class="col-xs-12 col-sm-6 col-md-4">
+					<?php echo $this->NetCommonsForm->label('PluginsRole.' . $i . '.PluginsRole.is_usable_plugin', $pluginsRole['Plugin']['name']); ?>
+				</div>
 
-			<div class="col-xs-12 col-sm-6 col-md-8">
-				<?php echo $this->UserRoleForm->radioUserRole('UserRoleSetting.is_usable_room_manager', null, array(
-					'verifySystem' => true
-				)); ?>
+				<div class="col-xs-12 col-sm-6 col-md-8">
+					<?php echo $this->UserRoleForm->radioUserRole('PluginsRole.' . $i . '.PluginsRole.is_usable_plugin', null, array(
+						'verifySystem' => true,
+						'value' => (bool)$pluginsRole['PluginsRole']['id']
+					)); ?>
+
+					<?php echo $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.id'); ?>
+					<?php echo $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.role_key', array('value' => $roleKey)); ?>
+					<?php echo $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.plugin_key', array('value' => $pluginsRole['Plugin']['key'])); ?>
+				</div>
 			</div>
-		</div>
+		<?php endforeach; ?>
 
 		<div class="row form-group">
 			<div class="col-xs-12 col-sm-6 col-md-4">

@@ -50,7 +50,7 @@ class UserRoleSettingsController extends UserRolesAppController {
 			$this->NetCommons->handleValidationError($this->UserRoleSetting->validationErrors);
 
 		} else {
-			$this->request->data = $this->UserRoleSetting->getUserRoleSetting($roleKey);
+			$this->request->data = $this->UserRoleSetting->getUserRoleSetting(Plugin::PLUGIN_TYPE_FOR_SITE_MANAGER, $roleKey);
 		}
 
 		//既存データ取得
@@ -62,10 +62,6 @@ class UserRoleSettingsController extends UserRolesAppController {
 			)
 		));
 		$this->request->data = Hash::merge($userRole, $this->request->data);
-
-		//プラグイン名取得
-		$plugin = $this->Plugin->getPlugins(Plugin::PLUGIN_TYPE_FOR_SITE_MANAGER, 'rooms');
-		$this->set('roomsPluginName', Hash::get($plugin, '0.Plugin.name', __d('user_roles', 'Room manager')));
 
 		$this->set('roleKey', $roleKey);
 		$this->set('subtitle', $this->request->data['UserRole']['name']);
