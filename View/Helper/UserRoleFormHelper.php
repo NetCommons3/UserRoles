@@ -207,13 +207,16 @@ class UserRoleFormHelper extends AppHelper {
 			$html .= $this->Form->hidden('UserAttributesRole.' . $id . '.UserAttributesRole.user_attribute_key');
 		}
 
+		$options = $this->__optionsUserAttributeRole($userAttribute);
+		if (count($options) <= 1) {
+			$disabled = true;
+		}
 		$attributes = array(
 			'type' => 'select',
 			'class' => 'form-control',
 			'empty' => false,
 			'disabled' => $disabled,
 		);
-		$options = $this->__optionsUserAttributeRole($userAttribute);
 		$html .= $this->Form->select($fieldName, $options, $attributes);
 
 		$html .= '</div>';
