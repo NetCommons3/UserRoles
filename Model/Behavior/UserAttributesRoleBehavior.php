@@ -55,17 +55,10 @@ class UserAttributesRoleBehavior extends ModelBehavior {
 
 		$setting = array();
 		if ($params['is_usable_user_manager']) {
-//			if ($params['is_system']) {
-//				$setting = array(
-//					'self_readable' => true, 'self_editable' => false,
-//					'other_readable' => true, 'other_editable' => false,
-//				);
-//			} else {
-				$setting = array(
-					'self_readable' => true, 'self_editable' => true,
-					'other_readable' => true, 'other_editable' => true,
-				);
-//			}
+			$setting = array(
+				'self_readable' => true, 'self_editable' => true,
+				'other_readable' => true, 'other_editable' => true,
+			);
 		} elseif ($params['only_administrator_readable'] || $params['only_administrator_editable']) {
 			$setting = array(
 				'self_readable' => (bool)Hash::get($params, 'only_administrator_readable', false),
