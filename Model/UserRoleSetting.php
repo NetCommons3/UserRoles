@@ -67,7 +67,37 @@ class UserRoleSetting extends UserRolesAppModel {
 	}
 
 /**
- * Save UserRoleSetting
+ * UserRoleSettingデータ取得
+ *
+ * @param int|array $pluginType プラグインタイプ
+ * @param string $roleKey 権限キー
+ * @return array UserRoleSettingデータ配列
+ */
+	public function getUserRoleSetting($pluginType, $roleKey) {
+		$this->loadModels([
+			'PluginsRole' => 'PluginManager.PluginsRole',
+		]);
+
+		//UserRoleSettingデータ取得
+		$userRoleSetting = $this->find('first', array(
+			'recursive' => -1,
+			'conditions' => array(
+				'role_key' => $roleKey,
+			)
+		));
+
+		//PluginsRoleデータ取得
+		$userRoleSetting['PluginsRole'] = $this->PluginsRole->getPlugins($pluginType, $roleKey);
+
+		//会員管理の使用有無のフラグセット
+		$isUsableUserManager = Hash::extract($userRoleSetting['PluginsRole'], '{n}.PluginsRole[plugin_key=user_manager].id');
+		$userRoleSetting['UserRoleSetting']['is_usable_user_manager'] = (bool)Hash::get($isUsableUserManager, '0', false);
+
+		return $userRoleSetting;
+	}
+
+/**
+ * UserRoleSettingの登録処理
  *
  * @param array $data received post data
  * @return bool True on success, false on validation errors
@@ -82,20 +112,24 @@ class UserRoleSetting extends UserRolesAppModel {
 		$this->begin();
 
 		//UserRoleSettingのバリデーション
-		if (! $this->validateUserRoleSetting($data)) {
+		$this->set($data);
+		if (! $this->validates()) {
 			return false;
 		}
 
 		try {
 			//UserRoleの登録処理
-			if (! $this->save($data, false)) {
+			if (! $this->save(null, false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
+
 			//PluginsRoleのデータ登録処理
-			if ($data['UserRoleSetting']['is_usable_room_manager']) {
-				$this->savePluginsRole($data['UserRoleSetting']['role_key'], 'rooms');
-			} else {
-				$this->deletePluginsRole($data['UserRoleSetting']['role_key'], 'rooms');
+			foreach ($data['PluginsRole'] as $pluginRole) {
+				if (Hash::get($pluginRole, 'PluginsRole.is_usable_plugin', false)) {
+					$this->savePluginsRole($pluginRole['PluginsRole']['role_key'], $pluginRole['PluginsRole']['plugin_key']);
+				} else {
+					$this->deletePluginsRole($pluginRole['PluginsRole']['role_key'], $pluginRole['PluginsRole']['plugin_key']);
+				}
 			}
 
 			//トランザクションCommit
@@ -106,59 +140,6 @@ class UserRoleSetting extends UserRolesAppModel {
 			$this->rollback($ex);
 		}
 
-		return true;
-	}
-
-/**
- * Save UsableUserManager
- *
- * @param array $data received post data
- * @return bool True on success, false on validation errors
- * @throws InternalErrorException
- */
-	public function saveUsableUserManager($data) {
-		$this->loadModels([
-			'UserRole' => 'UserRoles.UserRole',
-			'UserAttributes' => 'UserAttributes.UserAttribute',
-		]);
-
-		//トランザクションBegin
-		$this->begin();
-
-		try {
-			//PluginsRoleのデータ登録処理
-			if ($data['UserRoleSetting']['is_usable_user_manager']) {
-				$this->savePluginsRole($data['UserRoleSetting']['role_key'], 'user_manager');
-			} else {
-				$this->deletePluginsRole($data['UserRoleSetting']['role_key'], 'user_manager');
-			}
-
-			//UserAttributesRoleデータの登録
-			$this->saveUserAttributesRole($data);
-
-			//トランザクションCommit
-			$this->commit();
-
-		} catch (Exception $ex) {
-			//トランザクションRollback
-			$this->rollback($ex);
-		}
-
-		return true;
-	}
-
-/**
- * Validate of UserRoleSetting
- *
- * @param array $data received post data
- * @return bool True on success, false on validation errors
- */
-	public function validateUserRoleSetting($data) {
-		$this->set($data);
-		$this->validates();
-		if ($this->validationErrors) {
-			return false;
-		}
 		return true;
 	}
 

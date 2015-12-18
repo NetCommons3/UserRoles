@@ -24,7 +24,11 @@ class UserAttributesRoleBehavior extends ModelBehavior {
  *
  * @param Model $model Model using this behavior
  * @param array $params received data
- *		array('role_key' => '', 'default_role_key' => '', 'user_attribute_key' => '', 'only_administrator' => false, 'is_systemized' => false)
+ *		array(
+ *			'role_key' => '', 'default_role_key' => '', 'user_attribute_key' => '',
+ *			'only_administrator_readable' => false, 'only_administrator_editable' => false,
+ *			'is_system' => false
+ *		)
  * @return bool True on success, false on validation errors
  */
 	public function defaultUserAttributeRolePermissions(Model $model, $params) {
@@ -35,13 +39,14 @@ class UserAttributesRoleBehavior extends ModelBehavior {
 
 		$default = $this->__getDefaultUserAttributeRolePermission($model, $params);
 
-		if (! $userAttributeRole = $model->find('first', array(
+		$userAttributeRole = $model->find('first', array(
 			'recursive' => -1,
 			'conditions' => array(
 				'role_key' => $params['role_key'],
 				'user_attribute_key' => $params['user_attribute_key'],
 			),
-		))) {
+		));
+		if (! $userAttributeRole) {
 			$userAttributeRole = $model->create(array(
 				'role_key' => $params['role_key'],
 				'user_attribute_key' => $params['user_attribute_key']
@@ -50,20 +55,14 @@ class UserAttributesRoleBehavior extends ModelBehavior {
 
 		$setting = array();
 		if ($params['is_usable_user_manager']) {
-			if ($params['is_systemized']) {
-				$setting = array(
-					'self_readable' => true, 'self_editable' => false,
-					'other_readable' => true, 'other_editable' => false,
-				);
-			} else {
-				$setting = array(
-					'self_readable' => true, 'self_editable' => true,
-					'other_readable' => true, 'other_editable' => true,
-				);
-			}
-		} elseif ($params['only_administrator']) {
 			$setting = array(
-				'self_readable' => false, 'self_editable' => false,
+				'self_readable' => true, 'self_editable' => true,
+				'other_readable' => true, 'other_editable' => true,
+			);
+		} elseif ($params['only_administrator_readable'] || $params['only_administrator_editable']) {
+			$setting = array(
+				'self_readable' => (bool)Hash::get($params, 'only_administrator_readable', false),
+				'self_editable' => (bool)Hash::get($params, 'only_administrator_editable', false),
 				'other_readable' => false, 'other_editable' => false,
 			);
 		}
@@ -79,7 +78,11 @@ class UserAttributesRoleBehavior extends ModelBehavior {
  *
  * @param Model $model Model using this behavior
  * @param array $params received data
- *		array('role_key' => '', 'default_role_key' => '', 'user_attribute_key' => '', 'only_administrator' => false, 'is_systemized' => false)
+ *		array(
+ *			'role_key' => '', 'default_role_key' => '', 'user_attribute_key' => '',
+ *			'only_administrator_readable' => false, 'only_administrator_editable' => false,
+ *			'is_system' => false
+ *		)
  * @return mixed default user attribute role permission
  */
 	private function __getDefaultUserAttributeRolePermission(Model $model, $params) {
@@ -94,11 +97,6 @@ class UserAttributesRoleBehavior extends ModelBehavior {
 		if (! $default) {
 			switch ($params['origin_role_key']) {
 				case UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR:
-					$default[$model->alias] = array(
-						'self_readable' => true, 'self_editable' => true,
-						'other_readable' => true, 'other_editable' => true,
-					);
-					break;
 				case UserRole::USER_ROLE_KEY_ADMINISTRATOR:
 					$default[$model->alias] = array(
 						'self_readable' => true, 'self_editable' => true,

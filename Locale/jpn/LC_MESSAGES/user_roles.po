@@ -87,3 +87,7 @@ msgstr "プライベートルーム"
 msgid "The total size of Private Room"
 msgstr "プライベートルームの容量"
 
+#: UserRoles/View/UserRoleSettings/edit.ctp:85
+msgid "Fail to delete the selected authority.\nPlease confirm whether the authority is used."
+msgstr "指定の権限を削除できませんでした。\nこの権限が使用されていないか確認してください。"
+

@@ -27,6 +27,7 @@ class UserRoleFormHelper extends AppHelper {
 	public $helpers = array(
 		'Form',
 		'NetCommons.NetCommonsForm',
+		'NetCommons.NetCommonsHtml',
 	);
 
 /**
@@ -92,138 +93,184 @@ class UserRoleFormHelper extends AppHelper {
 	}
 
 /**
- * Outputs base user roles select
+ * コピー元の権限のSELECTボックス出力
  *
- * @param string $fieldName Name attribute of the SELECT
- * @param array $attributes The HTML attributes of the select element.
- * @return string Formatted SELECT element
- * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
+ * @param string $fieldName フィールド名(Modelname.fieldname形式)
+ * @param array $attributes タグ属性
+ * @return string Formatted HTMLタグ
  */
 	public function selectOriginUserRoles($fieldName, $attributes = array()) {
-		$userRoles = $this->UserRole->find('list', array(
-			'recursive' => -1,
-			'fields' => array('key', 'name'),
-			'conditions' => array(
-				'type' => UserRole::ROLE_TYPE_USER,
-				'language_id' => Current::read('Language.id')
-			),
-			'order' => array('id' => 'asc')
-		));
-		unset($userRoles[UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR]);
-
 		$html = '';
+		$displayDescription = Hash::get($attributes, 'description', false);
+		Hash::remove($attributes, 'description');
 
 		$attributes = Hash::merge(array(
 			'type' => 'select',
-			'class' => 'form-control',
-			'options' => $userRoles
+			'div' => false,
+			'options' => $this->_View->viewVars['userRoles']
 		), $attributes);
-		$html .= $this->Form->input($fieldName, $attributes);
+		$html .= $this->NetCommonsForm->input($fieldName, $attributes);
+
+		if ($displayDescription) {
+			$html .= $this->NetCommonsHtml->div(array('user-roles-origin-role-desc', 'bg-warning', 'text-danger'),
+					__d('user_roles', 'Role description'));
+		}
+		return $html;
+	}
+
+/**
+ * ユーザ毎のプラグインの利用(ルーム管理、会員管理)RADIOボタンの出力
+ *
+ * @param string $fieldName フィールド名(Modelname.fieldname形式)
+ * @param array $options ラジオボタンのOPTION
+ * @param array $attributes タグ属性
+ * @return string HTMLタグ
+ */
+	public function radioUserRole($fieldName, $options = null, $attributes = array()) {
+		$html = '';
+		if (! isset($options)) {
+			$options = $this->isUsableOptions;
+		}
+
+		$verifySystem = Hash::get($attributes, 'verifySystem', false);
+		$attributes = Hash::remove($attributes, 'verifySystem');
+
+		if ($verifySystem && $this->_View->data['UserRoleSetting']['origin_role_key'] === UserRole::USER_ROLE_KEY_COMMON_USER) {
+			$html .= $this->NetCommonsForm->hidden($fieldName);
+			$html .= $this->NetCommonsForm->radio(null, $options,
+					Hash::merge($this->radioAttributes, array('disabled' => true, 'hiddenField' => false), $attributes));
+		} else {
+			$html .= $this->NetCommonsForm->radio($fieldName, $options,
+					Hash::merge($this->radioAttributes, $attributes));
+		}
 
 		return $html;
 	}
 
 /**
- * Outputs radio
+ * アップロード容量SELECTボックスの出力
  *
- * @param string $fieldName Name attribute of the RADIO
- * @param array $options The HTML options of the radio element.
- * @param array $attributes The HTML attributes of the radio element.
- * @return string Formatted RADIO element
- * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
- */
-	public function radioUserRole($fieldName, $options, $attributes = array()) {
-		$attributes = Hash::merge($this->radioAttributes, $attributes);
-
-		return $this->Form->radio($fieldName, $options, $attributes);
-	}
-
-/**
- * Outputs upload max size select
- *
- * @param string $fieldName Name attribute of the SELECT
- * @param array $attributes The HTML attributes of the select element.
- * @return string Formatted SELECT element
- * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
+ * @param string $fieldName フィールド名(Modelname.fieldname形式)
+ * @param array $attributes タグ属性
+ * @return string HTMLタグ
  */
 	public function selectMaxSize($fieldName, $attributes = array()) {
-		$maxSizes = array_combine($this->optionsMaxSize, $this->optionsMaxSize);
-		$maxSizes = array_map('CakeNumber::toReadableSize', $maxSizes);
+		$maxSizes = array_map('CakeNumber::toReadableSize', array_combine($this->optionsMaxSize, $this->optionsMaxSize));
 
-		$attributes = Hash::merge(array(
+		return $this->Form->select($fieldName, $maxSizes, Hash::merge(array(
 			'type' => 'select',
 			'class' => 'form-control',
-			'empty' => false
-		), $attributes);
-
-		return $this->Form->select($fieldName, $maxSizes, $attributes);
+			'empty' => false,
+		), $attributes));
 	}
 
 /**
- * Outputs UserAttributeRole select
+ * 権限管理の個人情報設定SELECTボックス出力
  *
- * @param string $userAttributeKey user_attributes.key
- * @param array $attributes The HTML attributes of the select element.
- * @return string Formatted SELECT element
- * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
+ * @param array $userAttribute UserAttributeデータ
+ * @return string HTMLタグ
  */
-	public function selectUserAttributeRole($userAttributeKey, $attributes = array()) {
-		if (! $userAttributeRole = Hash::extract(
+	public function selectUserAttributeRole($userAttribute) {
+		$userAttributeKey = $userAttribute['UserAttribute']['key'];
+		$userAttributeRole = Hash::extract(
 			$this->_View->request->data['UserAttributesRole'],
 			'{n}.UserAttributesRole[user_attribute_key=' . $userAttributeKey . ']'
-		)) {
-			return;
-		}
-		if (! $userAttribute = Hash::extract(
-			$this->_View->request->data['UserAttribute'],
-			'{n}.{n}.{n}.UserAttributeSetting[user_attribute_key=' . $userAttributeKey . ']'
-		)) {
-			return;
-		}
+		);
 
 		$id = $userAttributeRole[0]['id'];
 		$fieldName = 'UserAttributesRole.' . $id . '.UserAttributesRole.other_user_attribute_role';
 
 		if ($userAttributeRole[0]['other_editable']) {
-			$this->_View->request->data['UserAttributesRole'][$id]['other_user_attribute_role'] = UserAttributesRolesController::OTHER_EDITABLE;
+			$this->_View->request->data = Hash::insert($this->_View->request->data, $fieldName, UserAttributesRolesController::OTHER_EDITABLE);
 		} elseif ($userAttributeRole[0]['other_readable']) {
-			$this->_View->request->data['UserAttributesRole'][$id]['other_user_attribute_role'] = UserAttributesRolesController::OTHER_READABLE;
+			$this->_View->request->data = Hash::insert($this->_View->request->data, $fieldName, UserAttributesRolesController::OTHER_READABLE);
 		} else {
-			$this->_View->request->data['UserAttributesRole'][$id]['other_user_attribute_role'] = UserAttributesRolesController::OTHER_NOT_READABLE;
+			$this->_View->request->data = Hash::insert($this->_View->request->data, $fieldName, UserAttributesRolesController::OTHER_NOT_READABLE);
 		}
 
-		if ($this->_View->request->data['UserRoleSetting']['is_usable_user_manager'] ||
-				$userAttribute[0]['only_administrator'] ||
-				$this->_View->request->data['UserRole']['is_systemized']) {
+		$html = '';
+		$html .= '<div class="form-group">';
+		$html .= '<div class="input-group input-group-sm user-attribute-roles-edit">';
 
+		$label = h($userAttribute['UserAttribute']['name']);
+		if ($userAttribute['UserAttributeSetting']['required']) {
+			$label .= $this->_View->element('NetCommons.required', array('size' => 'h5'));
+		}
+		$html .= $this->Form->label($fieldName, $label, array('class' => 'input-group-addon user-attribute-roles-edit'));
+
+		if ($this->_View->request->data['UserRoleSetting']['is_usable_user_manager']) {
 			$disabled = true;
 		} else {
 			$disabled = false;
-		}
-
-		$options = array(
-			UserAttributesRolesController::OTHER_NOT_READABLE => __d('user_roles', 'Not readable of others'),
-			UserAttributesRolesController::OTHER_READABLE => __d('user_roles', 'Readable of others'),
-			UserAttributesRolesController::OTHER_EDITABLE => __d('user_roles', 'Editable of others'),
-		);
-
-		$attributes = Hash::merge(array(
-			'type' => 'select',
-			'value' => $this->_View->request->data['UserAttributesRole'][$id]['other_user_attribute_role'],
-			'class' => 'form-control',
-			'empty' => false,
-			'disabled' => $disabled,
-		), $attributes);
-
-		$html = $this->Form->select($fieldName, $options, $attributes);
-
-		if (! $disabled) {
 			$html .= $this->Form->hidden('UserAttributesRole.' . $id . '.UserAttributesRole.id');
 			$html .= $this->Form->hidden('UserAttributesRole.' . $id . '.UserAttributesRole.role_key');
 			$html .= $this->Form->hidden('UserAttributesRole.' . $id . '.UserAttributesRole.user_attribute_key');
 		}
 
+		$options = $this->__optionsUserAttributeRole($userAttribute);
+		if (count($options) <= 1) {
+			$disabled = true;
+		}
+		$attributes = array(
+			'type' => 'select',
+			'class' => 'form-control',
+			'empty' => false,
+			'disabled' => $disabled,
+		);
+		$html .= $this->Form->select($fieldName, $options, $attributes);
+
+		$html .= '</div>';
+		$html .= '</div>';
 		return $html;
+	}
+
+/**
+ * 権限管理の個人情報設定のOptions
+ *
+ * @param array $userAttribute UserAttributeデータ
+ * @return string HTMLタグ
+ */
+	private function __optionsUserAttributeRole($userAttribute) {
+		$userAttributeKey = $userAttribute['UserAttribute']['key'];
+		$userAttributeRole = Hash::extract(
+			$this->_View->request->data['UserAttributesRole'],
+			'{n}.UserAttributesRole[user_attribute_key=' . $userAttributeKey . ']'
+		);
+
+		if ($userAttributeRole[0]['user_attribute_key'] === 'handlename') {
+			//ハンドルの場合、「閲覧させない」を除外する
+			$options = array(
+				UserAttributesRolesController::OTHER_READABLE => __d('user_roles', 'Readable of others'),
+			);
+		} elseif ($userAttribute['UserAttributeSetting']['data_type_key'] === DataType::DATA_TYPE_PASSWORD) {
+			//パスワードの場合、「閲覧させる」を除外する
+			$options = array(
+				UserAttributesRolesController::OTHER_NOT_READABLE => __d('user_roles', 'Not readable of others'),
+			);
+		} elseif (! $userAttribute['UserAttributeSetting']['only_administrator_readable'] ||
+				$this->_View->request->data['UserRoleSetting']['is_usable_user_manager']) {
+			$options = array(
+				UserAttributesRolesController::OTHER_NOT_READABLE => __d('user_roles', 'Not readable of others'),
+				UserAttributesRolesController::OTHER_READABLE => __d('user_roles', 'Readable of others'),
+			);
+		} else {
+			$options = array(
+				UserAttributesRolesController::OTHER_NOT_READABLE => __d('user_roles', 'Not readable of others'),
+			);
+		}
+
+		//以下の場合、編集の選択肢は表示させない
+		// * ラベルタイプ
+		// * 会員管理が使用できない
+		if ($userAttribute['UserAttributeSetting']['data_type_key'] === DataType::DATA_TYPE_LABEL ||
+				! $this->_View->request->data['UserRoleSetting']['is_usable_user_manager']) {
+			return $options;
+		}
+
+		//編集の選択肢を表示する
+		$options[UserAttributesRolesController::OTHER_EDITABLE] = __d('user_roles', 'Editable of others');
+
+		return $options;
 	}
 
 }

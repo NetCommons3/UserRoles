@@ -1,6 +1,6 @@
 <?php
 /**
- * UserRoles edit template
+ * 権限管理の会員権限の追加・編集テンプレート
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
@@ -9,34 +9,20 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-echo $this->NetCommonsHtml->script('/user_roles/js/user_roles.js');
 echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 ?>
 
 <?php echo $this->element('UserRoles.subtitle'); ?>
-
 <?php echo $this->element('UserRoles.tabs'); ?>
 
 <div class="panel panel-default">
-	<?php echo $this->Form->create(null, array('novalidate' => true)); ?>
+	<?php echo $this->NetCommonsForm->create('UserRole'); ?>
 
 	<div class="panel-body">
 		<?php echo $this->SwitchLanguage->tablist('user-roles-'); ?>
 
 		<div class="tab-content">
-			<?php foreach ($this->data['UserRole'] as $index => $userRole) : ?>
-				<?php $languageId = $userRole['language_id']; ?>
-
-				<?php if (isset($languages[$languageId])) : ?>
-					<div id="user-roles-<?php echo $languageId; ?>"
-							class="tab-pane<?php echo ($activeLangId === (string)$languageId ? ' active' : ''); ?>">
-
-						<?php echo $this->element('UserRoles/edit_form_for_user_role', array('index' => $index)); ?>
-					</div>
-				<?php endif; ?>
-			<?php endforeach; ?>
-
-			<?php echo $this->element('UserRoles/edit_form_for_user_role_setting'); ?>
+			<?php echo $this->element('UserRoles/edit_form'); ?>
 		</div>
 	</div>
 
@@ -48,9 +34,9 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 			); ?>
 	</div>
 
-	<?php echo $this->Form->end(); ?>
+	<?php echo $this->NetCommonsForm->end(); ?>
 </div>
 
-<?php if ($this->request->params['action'] === 'edit' && ! $isSystemized) : ?>
+<?php if ($this->request->params['action'] === 'edit' && $isDeletable) : ?>
 	<?php echo $this->element('UserRoles/delete_form'); ?>
 <?php endif;
