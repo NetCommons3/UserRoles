@@ -89,7 +89,13 @@ class UserAttributesRolesController extends UserRolesAppController {
 			//リクエストの整形
 			$ids = array_keys($this->request->data['UserAttributesRole']);
 			foreach ($ids as $id) {
-				$otherRole = $this->request->data['UserAttributesRole'][$id]['UserAttributesRole']['other_user_attribute_role'];
+				$otherRole = Hash::get($this->request->data,
+						'UserAttributesRole.' . $id . '.UserAttributesRole.other_user_attribute_role', false);
+				if ($otherRole === false) {
+					$this->request->data = Hash::remove($this->request->data, 'UserAttributesRole.' . $id);
+					continue;
+				}
+
 				if (! in_array($otherRole, [self::OTHER_EDITABLE, self::OTHER_READABLE, self::OTHER_NOT_READABLE], true)) {
 					$this->throwBadRequest();
 					return;
