@@ -142,6 +142,10 @@ class UserRoleBehavior extends ModelBehavior {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 
+		if ($pluginKey === 'user_manager') {
+			$this->__updateOnlyAdministorator($model, $roleKey, true);
+		}
+
 		return true;
 	}
 
@@ -166,6 +170,67 @@ class UserRoleBehavior extends ModelBehavior {
 
 		//PluginsRoleの削除処理
 		if (! $model->PluginsRole->deleteAll($conditions, false)) {
+			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+		}
+
+		if ($pluginKey === 'user_manager') {
+			$this->__updateOnlyAdministorator($model, $roleKey, false);
+		}
+
+		return true;
+	}
+
+/**
+ * 管理者のみの項目に対する更新
+ *
+ * @param Model $model Model using this behavior
+ * @param string $roleKey ロールキー
+ * @param bool $enabled 有効かどうか
+ * @return bool True on success
+ * @throws InternalErrorException
+ */
+	private function __updateOnlyAdministorator(Model $model, $roleKey, $enabled) {
+		$model->loadModels([
+			'UserAttributeSetting' => 'UserAttributes.UserAttributeSetting',
+			'UserAttributesRole' => 'UserRoles.UserAttributesRole',
+		]);
+		$userAttrSettings = $model->UserAttributeSetting->find('all', array(
+			'recursive' => -1,
+			'conditions' => array(
+				//'role_key' => $roleKey,
+				'OR' => array(
+					'only_administrator_readable' => true,
+					'only_administrator_editable' => true,
+				),
+			)
+		));
+		if (! $userAttrSettings) {
+			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+		}
+
+		$data['UserAttributesRole'] = array();
+
+		foreach ($userAttrSettings as $i => $userAttr) {
+			$data['UserAttributesRole'][$i] = $model->UserAttributesRole->find('first', array(
+				'recursive' => -1,
+				'conditions' => array(
+					'role_key' => $roleKey,
+					'user_attribute_key' => $userAttr['UserAttributeSetting']['user_attribute_key']
+				),
+			));
+			if (! $enabled) {
+				$data['UserAttributesRole'][$i]['UserAttributesRole']['self_readable'] = $enabled;
+				$data['UserAttributesRole'][$i]['UserAttributesRole']['self_editable'] = $enabled;
+				$data['UserAttributesRole'][$i]['UserAttributesRole']['other_readable'] = $enabled;
+				$data['UserAttributesRole'][$i]['UserAttributesRole']['other_editable'] = $enabled;
+			} else {
+				$data['UserAttributesRole'][$i]['UserAttributesRole']['self_readable'] = Hash::get($userAttr, 'UserAttributeSetting.only_administrator_readable');
+				$data['UserAttributesRole'][$i]['UserAttributesRole']['self_editable'] = Hash::get($userAttr, 'UserAttributeSetting.only_administrator_editable');
+				$data['UserAttributesRole'][$i]['UserAttributesRole']['other_readable'] = Hash::get($userAttr, 'UserAttributeSetting.only_administrator_readable');
+				$data['UserAttributesRole'][$i]['UserAttributesRole']['other_editable'] = Hash::get($userAttr, 'UserAttributeSetting.only_administrator_editable');
+			}
+		}
+		if (! $model->UserAttributesRole->saveUserAttributesRoles($data)) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 

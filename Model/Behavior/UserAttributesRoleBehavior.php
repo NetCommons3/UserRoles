@@ -53,22 +53,22 @@ class UserAttributesRoleBehavior extends ModelBehavior {
 			));
 		}
 
-		$setting = array();
-		if ($params['is_usable_user_manager']) {
-			$setting = array(
-				'self_readable' => true, 'self_editable' => true,
-				'other_readable' => true, 'other_editable' => true,
-			);
-		} elseif ($params['only_administrator_readable'] || $params['only_administrator_editable']) {
-			$setting = array(
-				'self_readable' => (bool)Hash::get($params, 'only_administrator_readable', false),
-				'self_editable' => (bool)Hash::get($params, 'only_administrator_editable', false),
-				'other_readable' => false, 'other_editable' => false,
-			);
-		}
+		//$setting = array();
+		//if ($params['is_usable_user_manager']) {
+		//	$setting = array(
+		//		'self_readable' => true, 'self_editable' => true,
+		//		'other_readable' => true, 'other_editable' => true,
+		//	);
+		//} elseif ($params['only_administrator_readable'] || $params['only_administrator_editable']) {
+		//	$setting = array(
+		//		'self_readable' => (bool)Hash::get($params, 'only_administrator_readable', false),
+		//		'self_editable' => (bool)Hash::get($params, 'only_administrator_editable', false),
+		//		'other_readable' => false, 'other_editable' => false,
+		//	);
+		//}
 
 		$userAttributeRole['UserAttributesRole'] =
-				Hash::merge($userAttributeRole['UserAttributesRole'], $default['UserAttributesRole'], $setting);
+				Hash::merge($userAttributeRole['UserAttributesRole'], $default['UserAttributesRole']);
 
 		return $userAttributeRole;
 	}
@@ -94,27 +94,40 @@ class UserAttributesRoleBehavior extends ModelBehavior {
 				'user_attribute_key' => $params['user_attribute_key'],
 			),
 		));
-		if (! $default) {
-			switch ($params['origin_role_key']) {
-				case UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR:
-				case UserRole::USER_ROLE_KEY_ADMINISTRATOR:
-					$default[$model->alias] = array(
-						'self_readable' => true, 'self_editable' => true,
-						'other_readable' => true, 'other_editable' => true,
-					);
-					break;
-				case UserRole::USER_ROLE_KEY_COMMON_USER:
-					$default[$model->alias] = array(
-						'self_readable' => true, 'self_editable' => true,
-						'other_readable' => false, 'other_editable' => false,
-					);
-					break;
-				default:
-					$default[$model->alias] = array(
-						'self_readable' => false, 'self_editable' => false,
-						'other_readable' => false, 'other_editable' => false,
-					);
-			}
+		//if (! $default) {
+		//	switch ($params['origin_role_key']) {
+		//		case UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR:
+		//		case UserRole::USER_ROLE_KEY_ADMINISTRATOR:
+		//			$default[$model->alias] = array(
+		//				'self_readable' => true, 'self_editable' => true,
+		//				'other_readable' => true, 'other_editable' => true,
+		//			);
+		//			break;
+		//		case UserRole::USER_ROLE_KEY_COMMON_USER:
+		//			$default[$model->alias] = array(
+		//				'self_readable' => true, 'self_editable' => true,
+		//				'other_readable' => false, 'other_editable' => false,
+		//			);
+		//			break;
+		//		default:
+		//			$default[$model->alias] = array(
+		//				'self_readable' => false, 'self_editable' => false,
+		//				'other_readable' => false, 'other_editable' => false,
+		//			);
+		//	}
+		//}
+
+		if ($params['is_usable_user_manager']) {
+			$default[$model->alias] = array(
+				'self_readable' => true, 'self_editable' => true,
+				'other_readable' => true, 'other_editable' => true,
+			);
+		} elseif ($params['only_administrator_readable'] || $params['only_administrator_editable']) {
+			$default[$model->alias] = array(
+				'self_readable' => (bool)Hash::get($params, 'only_administrator_readable', false),
+				'self_editable' => (bool)Hash::get($params, 'only_administrator_editable', false),
+				'other_readable' => false, 'other_editable' => false,
+			);
 		}
 
 		return $default;
