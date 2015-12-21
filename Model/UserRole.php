@@ -174,7 +174,7 @@ class UserRole extends Role {
 			//UserRoleの登録処理
 			$userRoles = array();
 			foreach ($data['UserRole'] as $i => $userRole) {
-				$userRole['key'] = $roleKey;
+				$userRole['UserRole']['key'] = $roleKey;
 				if (! $userRoles[$i] = $this->save($userRole, false, false)) {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}
