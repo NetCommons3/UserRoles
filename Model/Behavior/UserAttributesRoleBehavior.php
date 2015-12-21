@@ -128,6 +128,11 @@ class UserAttributesRoleBehavior extends ModelBehavior {
 				'self_editable' => (bool)Hash::get($params, 'only_administrator_editable', false),
 				'other_readable' => false, 'other_editable' => false,
 			);
+		} else {
+			$default[$model->alias] = array(
+				'self_readable' => true, 'self_editable' => true,
+				'other_readable' => false, 'other_editable' => false,
+			);
 		}
 
 		return $default;
