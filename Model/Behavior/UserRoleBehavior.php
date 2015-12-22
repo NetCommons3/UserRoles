@@ -218,17 +218,22 @@ class UserRoleBehavior extends ModelBehavior {
 					'user_attribute_key' => $userAttr['UserAttributeSetting']['user_attribute_key']
 				),
 			));
-			if (! $enabled) {
-				$data['UserAttributesRole'][$i]['UserAttributesRole']['self_readable'] = $enabled;
-				$data['UserAttributesRole'][$i]['UserAttributesRole']['self_editable'] = $enabled;
-				$data['UserAttributesRole'][$i]['UserAttributesRole']['other_readable'] = $enabled;
-				$data['UserAttributesRole'][$i]['UserAttributesRole']['other_editable'] = $enabled;
+
+			//TODO後で修正予定
+			if (Hash::get($userAttr, 'UserAttributeSetting.only_administrator_readable')) {
+				$readable = $enabled;
 			} else {
-				$data['UserAttributesRole'][$i]['UserAttributesRole']['self_readable'] = Hash::get($userAttr, 'UserAttributeSetting.only_administrator_readable');
-				$data['UserAttributesRole'][$i]['UserAttributesRole']['self_editable'] = Hash::get($userAttr, 'UserAttributeSetting.only_administrator_editable');
-				$data['UserAttributesRole'][$i]['UserAttributesRole']['other_readable'] = Hash::get($userAttr, 'UserAttributeSetting.only_administrator_readable');
-				$data['UserAttributesRole'][$i]['UserAttributesRole']['other_editable'] = Hash::get($userAttr, 'UserAttributeSetting.only_administrator_editable');
+				$readable = true;
 			}
+			if (Hash::get($userAttr, 'UserAttributeSetting.only_administrator_editable')) {
+				$editable = $enabled;
+			} else {
+				$editable = true;
+			}
+			$data['UserAttributesRole'][$i]['UserAttributesRole']['self_readable'] = $readable;
+			$data['UserAttributesRole'][$i]['UserAttributesRole']['self_editable'] = $editable;
+			$data['UserAttributesRole'][$i]['UserAttributesRole']['other_readable'] = $readable;
+			$data['UserAttributesRole'][$i]['UserAttributesRole']['other_editable'] = $editable;
 		}
 		if (! $model->UserAttributesRole->saveUserAttributesRoles($data)) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
