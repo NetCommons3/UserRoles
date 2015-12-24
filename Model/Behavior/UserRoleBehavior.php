@@ -10,6 +10,7 @@
  */
 
 App::uses('ModelBehavior', 'Model');
+App::uses('UserAttribute', 'UserAttributes.Model');
 
 /**
  * DefaultUserRole Behavior
@@ -18,6 +19,15 @@ App::uses('ModelBehavior', 'Model');
  * @package NetCommons\UserRoles\Model\Behavior
  */
 class UserRoleBehavior extends ModelBehavior {
+
+/**
+ * デフォルト閲覧とするフィールド
+ *
+ * @var array
+ */
+	public $readableDefault = array(
+		UserAttribute::HANDLENAME_FIELD, UserAttribute::AVATAR_FIELD,
+	);
 
 /**
  * Save default UserRoleSetting
@@ -185,56 +195,49 @@ class UserRoleBehavior extends ModelBehavior {
  *
  * @param Model $model Model using this behavior
  * @param string $roleKey ロールキー
- * @param bool $enabled 有効かどうか
+ * @param bool $enableUserManager 有効かどうか
  * @return bool True on success
  * @throws InternalErrorException
  */
-	private function __updateOnlyAdministorator(Model $model, $roleKey, $enabled) {
+	private function __updateOnlyAdministorator(Model $model, $roleKey, $enableUserManager) {
 		$model->loadModels([
 			'UserAttributeSetting' => 'UserAttributes.UserAttributeSetting',
 			'UserAttributesRole' => 'UserRoles.UserAttributesRole',
 		]);
 		$userAttrSettings = $model->UserAttributeSetting->find('all', array(
 			'recursive' => -1,
-			'conditions' => array(
-				//'role_key' => $roleKey,
-				'OR' => array(
-					'only_administrator_readable' => true,
-					'only_administrator_editable' => true,
-				),
-			)
 		));
-		if (! $userAttrSettings) {
-			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-		}
 
 		$data['UserAttributesRole'] = array();
-
 		foreach ($userAttrSettings as $i => $userAttr) {
-			$data['UserAttributesRole'][$i] = $model->UserAttributesRole->find('first', array(
-				'recursive' => -1,
-				'conditions' => array(
-					'role_key' => $roleKey,
-					'user_attribute_key' => $userAttr['UserAttributeSetting']['user_attribute_key']
-				),
-			));
+			$data['UserAttributesRole'][$i]['UserAttributesRole']['self_readable'] = true;
+			$data['UserAttributesRole'][$i]['UserAttributesRole']['self_editable'] = true;
 
-			//TODO後で修正予定
-			if (Hash::get($userAttr, 'UserAttributeSetting.only_administrator_readable')) {
-				$readable = $enabled;
+			if ($userAttr['UserAttributeSetting']['user_attribute_key'] === UserAttribute::PASSWORD_FIELD) {
+				$data['UserAttributesRole'][$i]['UserAttributesRole']['self_readable'] = false;
+				$data['UserAttributesRole'][$i]['UserAttributesRole']['other_readable'] = false;
+			} elseif ($enableUserManager) {
+				$data['UserAttributesRole'][$i]['UserAttributesRole']['other_readable'] = true;
+			} elseif (Hash::get($userAttr, 'UserAttributeSetting.only_administrator_readable')) {
+				$data['UserAttributesRole'][$i]['UserAttributesRole']['self_readable'] = false;
+				$data['UserAttributesRole'][$i]['UserAttributesRole']['other_readable'] = false;
 			} else {
-				$readable = true;
+				$data['UserAttributesRole'][$i]['UserAttributesRole']['self_readable'] = true;
+				$data['UserAttributesRole'][$i]['UserAttributesRole']['other_readable'] =
+								in_array($userAttr['UserAttributeSetting']['user_attribute_key'], $this->readableDefault, true);
 			}
-			if (Hash::get($userAttr, 'UserAttributeSetting.only_administrator_editable')) {
-				$editable = $enabled;
-			} else {
-				$editable = true;
+
+			if ($userAttr['UserAttributeSetting']['data_type_key'] === DataType::DATA_TYPE_LABEL) {
+				$data['UserAttributesRole'][$i]['UserAttributesRole']['self_editable'] = false;
+				$data['UserAttributesRole'][$i]['UserAttributesRole']['other_editable'] = false;
+			} elseif ($enableUserManager) {
+				$data['UserAttributesRole'][$i]['UserAttributesRole']['other_editable'] = true;
+			} elseif (Hash::get($userAttr, 'UserAttributeSetting.only_administrator_editable')) {
+				$data['UserAttributesRole'][$i]['UserAttributesRole']['self_readable'] = false;
+				$data['UserAttributesRole'][$i]['UserAttributesRole']['other_editable'] = false;
 			}
-			$data['UserAttributesRole'][$i]['UserAttributesRole']['self_readable'] = $readable;
-			$data['UserAttributesRole'][$i]['UserAttributesRole']['self_editable'] = $editable;
-			$data['UserAttributesRole'][$i]['UserAttributesRole']['other_readable'] = $readable;
-			$data['UserAttributesRole'][$i]['UserAttributesRole']['other_editable'] = $editable;
 		}
+
 		if (! $model->UserAttributesRole->saveUserAttributesRoles($data)) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
