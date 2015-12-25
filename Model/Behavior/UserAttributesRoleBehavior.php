@@ -20,122 +20,56 @@ App::uses('ModelBehavior', 'Model');
 class UserAttributesRoleBehavior extends ModelBehavior {
 
 /**
+ * デフォルト閲覧とするフィールド
+ *
+ * @var array
+ */
+	public $readableDefault = array(
+		UserAttribute::HANDLENAME_FIELD, UserAttribute::AVATAR_FIELD,
+	);
+
+/**
  * UserAttributesRoleのデフォルト値
  *
  * @param Model $model Model using this behavior
- * @param array $params received data
- *		array(
- *			'role_key' => '', 'default_role_key' => '', 'user_attribute_key' => '',
- *			'only_administrator_readable' => false, 'only_administrator_editable' => false,
- *			'is_system' => false
- *		)
- * @return bool True on success, false on validation errors
+ * @param array|string $userAttrSetting 配列：ユーザ属性設定データ、文字列：ユーザ属性キー
+ * @param bool $enableUserManager 有効かどうか
+ * @return array ユーザ属性ロールデータ
  */
-	public function defaultUserAttributeRolePermissions(Model $model, $params) {
+	public function defaultUserAttributeRole(Model $model, $userAttrSetting, $enableUserManager) {
 		$model->loadModels([
-			'PluginsRole' => 'PluginManager.PluginsRole',
-			'UserRole' => 'UserRoles.UserRole'
+			'UserAttributeSetting' => 'UserAttributes.UserAttributeSetting',
 		]);
+		$userAttrSetting = $model->UserAttributeSetting->create($userAttrSetting);
 
-		$default = $this->__getDefaultUserAttributeRolePermission($model, $params);
+		$userAttributeRole = array();
+		$userAttributeRole['UserAttributesRole']['self_readable'] = true;
+		$userAttributeRole['UserAttributesRole']['self_editable'] = true;
 
-		$userAttributeRole = $model->find('first', array(
-			'recursive' => -1,
-			'conditions' => array(
-				'role_key' => $params['role_key'],
-				'user_attribute_key' => $params['user_attribute_key'],
-			),
-		));
-		if (! $userAttributeRole) {
-			$userAttributeRole = $model->create(array(
-				'role_key' => $params['role_key'],
-				'user_attribute_key' => $params['user_attribute_key']
-			));
+		if ($userAttrSetting['UserAttributeSetting']['user_attribute_key'] === UserAttribute::PASSWORD_FIELD) {
+			$userAttributeRole['UserAttributesRole']['self_readable'] = false;
+			$userAttributeRole['UserAttributesRole']['other_readable'] = false;
+		} elseif ($enableUserManager) {
+			$userAttributeRole['UserAttributesRole']['other_readable'] = true;
+		} elseif (Hash::get($userAttrSetting, 'UserAttributeSetting.only_administrator_readable')) {
+			$userAttributeRole['UserAttributesRole']['self_readable'] = false;
+			$userAttributeRole['UserAttributesRole']['other_readable'] = false;
+		} else {
+			$userAttributeRole['UserAttributesRole']['self_readable'] = true;
+			$userAttributeRole['UserAttributesRole']['other_readable'] =
+							in_array($userAttrSetting['UserAttributeSetting']['user_attribute_key'], $this->readableDefault, true);
 		}
 
-		//$setting = array();
-		//if ($params['is_usable_user_manager']) {
-		//	$setting = array(
-		//		'self_readable' => true, 'self_editable' => true,
-		//		'other_readable' => true, 'other_editable' => true,
-		//	);
-		//} elseif ($params['only_administrator_readable'] || $params['only_administrator_editable']) {
-		//	$setting = array(
-		//		'self_readable' => (bool)Hash::get($params, 'only_administrator_readable', false),
-		//		'self_editable' => (bool)Hash::get($params, 'only_administrator_editable', false),
-		//		'other_readable' => false, 'other_editable' => false,
-		//	);
-		//}
-
-		$userAttributeRole['UserAttributesRole'] =
-				Hash::merge($userAttributeRole['UserAttributesRole'], $default['UserAttributesRole']);
+		$userAttributeRole['UserAttributesRole']['other_editable'] = false;
+		if ($userAttrSetting['UserAttributeSetting']['data_type_key'] === DataType::DATA_TYPE_LABEL) {
+			$userAttributeRole['UserAttributesRole']['self_editable'] = false;
+		} elseif ($enableUserManager) {
+			$userAttributeRole['UserAttributesRole']['other_editable'] = true;
+		} elseif (Hash::get($userAttrSetting, 'UserAttributeSetting.only_administrator_editable')) {
+			$userAttributeRole['UserAttributesRole']['self_editable'] = false;
+		}
 
 		return $userAttributeRole;
-	}
-
-/**
- * UserAttributesRoleのデフォルト値を取得
- *
- * @param Model $model Model using this behavior
- * @param array $params received data
- *		array(
- *			'role_key' => '', 'default_role_key' => '', 'user_attribute_key' => '',
- *			'only_administrator_readable' => false, 'only_administrator_editable' => false,
- *			'is_system' => false
- *		)
- * @return mixed default user attribute role permission
- */
-	private function __getDefaultUserAttributeRolePermission(Model $model, $params) {
-		$default = $model->find('first', array(
-			'recursive' => -1,
-			'fields' => array('self_readable', 'self_editable', 'other_readable', 'other_editable'),
-			'conditions' => array(
-				'role_key' => $params['origin_role_key'],
-				'user_attribute_key' => $params['user_attribute_key'],
-			),
-		));
-		//if (! $default) {
-		//	switch ($params['origin_role_key']) {
-		//		case UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR:
-		//		case UserRole::USER_ROLE_KEY_ADMINISTRATOR:
-		//			$default[$model->alias] = array(
-		//				'self_readable' => true, 'self_editable' => true,
-		//				'other_readable' => true, 'other_editable' => true,
-		//			);
-		//			break;
-		//		case UserRole::USER_ROLE_KEY_COMMON_USER:
-		//			$default[$model->alias] = array(
-		//				'self_readable' => true, 'self_editable' => true,
-		//				'other_readable' => false, 'other_editable' => false,
-		//			);
-		//			break;
-		//		default:
-		//			$default[$model->alias] = array(
-		//				'self_readable' => false, 'self_editable' => false,
-		//				'other_readable' => false, 'other_editable' => false,
-		//			);
-		//	}
-		//}
-
-		if ($params['is_usable_user_manager']) {
-			$default[$model->alias] = array(
-				'self_readable' => true, 'self_editable' => true,
-				'other_readable' => true, 'other_editable' => true,
-			);
-		} elseif ($params['only_administrator_readable'] || $params['only_administrator_editable']) {
-			$default[$model->alias] = array(
-				'self_readable' => (bool)Hash::get($params, 'only_administrator_readable', false),
-				'self_editable' => (bool)Hash::get($params, 'only_administrator_editable', false),
-				'other_readable' => false, 'other_editable' => false,
-			);
-		} else {
-			$default[$model->alias] = array(
-				'self_readable' => true, 'self_editable' => true,
-				'other_readable' => false, 'other_editable' => false,
-			);
-		}
-
-		return $default;
 	}
 
 }

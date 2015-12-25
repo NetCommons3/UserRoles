@@ -11,6 +11,7 @@
 
 App::uses('ModelBehavior', 'Model');
 App::uses('UserAttribute', 'UserAttributes.Model');
+App::uses('DataType', 'DataTypes.Model');
 
 /**
  * DefaultUserRole Behavior
@@ -19,15 +20,6 @@ App::uses('UserAttribute', 'UserAttributes.Model');
  * @package NetCommons\UserRoles\Model\Behavior
  */
 class UserRoleBehavior extends ModelBehavior {
-
-/**
- * デフォルト閲覧とするフィールド
- *
- * @var array
- */
-	public $readableDefault = array(
-		UserAttribute::HANDLENAME_FIELD, UserAttribute::AVATAR_FIELD,
-	);
 
 /**
  * Save default UserRoleSetting
@@ -207,35 +199,21 @@ class UserRoleBehavior extends ModelBehavior {
 		$userAttrSettings = $model->UserAttributeSetting->find('all', array(
 			'recursive' => -1,
 		));
+		$UserAttributesRoles = $model->UserAttributesRole->find('all', array(
+			'recursive' => -1,
+			'fields' => array('id', 'role_key', 'user_attribute_key'),
+			'conditions' => array('role_key' => $roleKey)
+		));
 
 		$data['UserAttributesRole'] = array();
-		foreach ($userAttrSettings as $i => $userAttr) {
-			$data['UserAttributesRole'][$i]['UserAttributesRole']['self_readable'] = true;
-			$data['UserAttributesRole'][$i]['UserAttributesRole']['self_editable'] = true;
+		foreach ($userAttrSettings as $i => $userAttrSetting) {
+			$userAttrRole = Hash::extract($UserAttributesRoles,
+					'{n}.UserAttributesRole[user_attribute_key=' . $userAttrSetting['UserAttributeSetting']['user_attribute_key'] . ']');
 
-			if ($userAttr['UserAttributeSetting']['user_attribute_key'] === UserAttribute::PASSWORD_FIELD) {
-				$data['UserAttributesRole'][$i]['UserAttributesRole']['self_readable'] = false;
-				$data['UserAttributesRole'][$i]['UserAttributesRole']['other_readable'] = false;
-			} elseif ($enableUserManager) {
-				$data['UserAttributesRole'][$i]['UserAttributesRole']['other_readable'] = true;
-			} elseif (Hash::get($userAttr, 'UserAttributeSetting.only_administrator_readable')) {
-				$data['UserAttributesRole'][$i]['UserAttributesRole']['self_readable'] = false;
-				$data['UserAttributesRole'][$i]['UserAttributesRole']['other_readable'] = false;
-			} else {
-				$data['UserAttributesRole'][$i]['UserAttributesRole']['self_readable'] = true;
-				$data['UserAttributesRole'][$i]['UserAttributesRole']['other_readable'] =
-								in_array($userAttr['UserAttributeSetting']['user_attribute_key'], $this->readableDefault, true);
-			}
-
-			if ($userAttr['UserAttributeSetting']['data_type_key'] === DataType::DATA_TYPE_LABEL) {
-				$data['UserAttributesRole'][$i]['UserAttributesRole']['self_editable'] = false;
-				$data['UserAttributesRole'][$i]['UserAttributesRole']['other_editable'] = false;
-			} elseif ($enableUserManager) {
-				$data['UserAttributesRole'][$i]['UserAttributesRole']['other_editable'] = true;
-			} elseif (Hash::get($userAttr, 'UserAttributeSetting.only_administrator_editable')) {
-				$data['UserAttributesRole'][$i]['UserAttributesRole']['self_readable'] = false;
-				$data['UserAttributesRole'][$i]['UserAttributesRole']['other_editable'] = false;
-			}
+			$data['UserAttributesRole'][$i] = Hash::merge(
+				$model->UserAttributesRole->create(Hash::get($userAttrRole, '0')),
+				$model->UserAttributesRole->defaultUserAttributeRole($userAttrSetting, $enableUserManager)
+			);
 		}
 
 		if (! $model->UserAttributesRole->saveUserAttributesRoles($data)) {
