@@ -10,6 +10,8 @@
  */
 
 App::uses('ModelBehavior', 'Model');
+App::uses('UserAttribute', 'UserAttributes.Model');
+App::uses('DataType', 'DataTypes.Model');
 
 /**
  * DefaultUserRole Behavior
@@ -142,6 +144,10 @@ class UserRoleBehavior extends ModelBehavior {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 
+		if ($pluginKey === 'user_manager') {
+			$this->__updateOnlyAdministorator($model, $roleKey, true);
+		}
+
 		return true;
 	}
 
@@ -166,6 +172,51 @@ class UserRoleBehavior extends ModelBehavior {
 
 		//PluginsRoleの削除処理
 		if (! $model->PluginsRole->deleteAll($conditions, false)) {
+			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+		}
+
+		if ($pluginKey === 'user_manager') {
+			$this->__updateOnlyAdministorator($model, $roleKey, false);
+		}
+
+		return true;
+	}
+
+/**
+ * 管理者のみの項目に対する更新
+ *
+ * @param Model $model Model using this behavior
+ * @param string $roleKey ロールキー
+ * @param bool $enableUserManager 有効かどうか
+ * @return bool True on success
+ * @throws InternalErrorException
+ */
+	private function __updateOnlyAdministorator(Model $model, $roleKey, $enableUserManager) {
+		$model->loadModels([
+			'UserAttributeSetting' => 'UserAttributes.UserAttributeSetting',
+			'UserAttributesRole' => 'UserRoles.UserAttributesRole',
+		]);
+		$userAttrSettings = $model->UserAttributeSetting->find('all', array(
+			'recursive' => -1,
+		));
+		$UserAttributesRoles = $model->UserAttributesRole->find('all', array(
+			'recursive' => -1,
+			'fields' => array('id', 'role_key', 'user_attribute_key'),
+			'conditions' => array('role_key' => $roleKey)
+		));
+
+		$data['UserAttributesRole'] = array();
+		foreach ($userAttrSettings as $i => $userAttrSetting) {
+			$userAttrRole = Hash::extract($UserAttributesRoles,
+					'{n}.UserAttributesRole[user_attribute_key=' . $userAttrSetting['UserAttributeSetting']['user_attribute_key'] . ']');
+
+			$data['UserAttributesRole'][$i] = Hash::merge(
+				$model->UserAttributesRole->create(Hash::get($userAttrRole, '0')),
+				$model->UserAttributesRole->defaultUserAttributeRole($userAttrSetting, $enableUserManager)
+			);
+		}
+
+		if (! $model->UserAttributesRole->saveUserAttributesRoles($data)) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 
