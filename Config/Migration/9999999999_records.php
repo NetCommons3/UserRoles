@@ -15,14 +15,14 @@ App::uses('NetCommonsMigration', 'NetCommons.Config/Migration');
  *
  * @package NetCommons\UserRoles\Config\Migration
  */
-class UserAttributesRoleRecords extends NetCommonsMigration {
+class Records extends NetCommonsMigration {
 
 /**
  * Migration description
  *
  * @var string
  */
-	public $description = 'user_attributes_roles_records';
+	public $description = 'records';
 
 /**
  * Actions to be performed
@@ -40,6 +40,11 @@ class UserAttributesRoleRecords extends NetCommonsMigration {
  * @var array $migration
  */
 	public $records = array(
+		'UserRoleSetting' => array(
+			array('role_key' => 'system_administrator', 'origin_role_key' => 'system_administrator', 'use_private_room' => '1', ),
+			array('role_key' => 'administrator', 'origin_role_key' => 'administrator', 'use_private_room' => '1', ),
+			array('role_key' => 'common_user', 'origin_role_key' => 'common_user', 'use_private_room' => '1', ),
+		),
 		'UserAttributesRole' => array(
 			array('role_key' => 'system_administrator', 'user_attribute_key' => 'avatar', 'self_readable' => '1', 'self_editable' => '1', 'other_readable' => '1', 'other_editable' => '1', ),
 			array('role_key' => 'system_administrator', 'user_attribute_key' => 'username', 'self_readable' => '1', 'self_editable' => '1', 'other_readable' => '1', 'other_editable' => '1', ),
