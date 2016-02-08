@@ -56,7 +56,7 @@ class UserAttributesRoleFixture extends CakeTestFixture {
 			'other_editable' => '1',
 		),
 		array(
-			'id' => 1,
+			'id' => '2',
 			'role_key' => 'administrator',
 			'user_attribute_key' => 'user_attribute_key',
 			'self_readable' => '1',
@@ -65,7 +65,7 @@ class UserAttributesRoleFixture extends CakeTestFixture {
 			'other_editable' => '1',
 		),
 		array(
-			'id' => 1,
+			'id' => '3',
 			'role_key' => 'common_user',
 			'user_attribute_key' => 'user_attribute_key',
 			'self_readable' => '1',
