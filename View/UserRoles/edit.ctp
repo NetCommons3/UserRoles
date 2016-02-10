@@ -10,13 +10,19 @@
  */
 
 echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
+
+if ($this->params['action'] === 'edit') {
+	$type = 'put';
+} else {
+	$type = 'post';
+}
 ?>
 
 <?php echo $this->element('UserRoles.subtitle'); ?>
 <?php echo $this->element('UserRoles.tabs'); ?>
 
 <div class="panel panel-default">
-	<?php echo $this->NetCommonsForm->create('UserRole'); ?>
+	<?php echo $this->NetCommonsForm->create('UserRole', array('type' => $type)); ?>
 
 	<div class="panel-body">
 		<?php echo $this->SwitchLanguage->tablist('user-roles-'); ?>

@@ -50,7 +50,6 @@ class UserRolesControllerBeforeFilterTest extends NetCommonsControllerTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-
 		//ログイン
 		TestAuthGeneral::login($this);
 	}
@@ -63,7 +62,6 @@ class UserRolesControllerBeforeFilterTest extends NetCommonsControllerTestCase {
 	public function tearDown() {
 		//ログアウト
 		TestAuthGeneral::logout($this);
-
 		parent::tearDown();
 	}
 

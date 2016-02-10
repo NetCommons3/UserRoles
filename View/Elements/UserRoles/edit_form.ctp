@@ -17,7 +17,7 @@
 			continue;
 		}
 
-		if ($activeLangId === (string)$languageId) {
+		if ($activeLangId === $languageId) {
 			$activeCss = ' active';
 		} else {
 			$activeCss = '';

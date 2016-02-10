@@ -46,6 +46,7 @@ class UserRoleSettingFixture extends CakeTestFixture {
 		array('id' => '1', 'role_key' => 'system_administrator', 'origin_role_key' => 'system_administrator', 'use_private_room' => '1', ),
 		array('id' => '2', 'role_key' => 'administrator', 'origin_role_key' => 'administrator', 'use_private_room' => '1', ),
 		array('id' => '3', 'role_key' => 'common_user', 'origin_role_key' => 'common_user', 'use_private_room' => '1', ),
+		array('id' => '4', 'role_key' => 'test_user', 'origin_role_key' => 'common_user', 'use_private_room' => '1', ),
 	);
 
 }
