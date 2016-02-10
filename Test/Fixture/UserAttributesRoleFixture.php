@@ -47,17 +47,31 @@ class UserAttributesRoleFixture extends CakeTestFixture {
  */
 	public $records = array(
 		array(
-			'id' => 1,
-			'role_key' => 'Lorem ipsum dolor sit amet',
-			'user_attribute_key' => 'Lorem ipsum dolor sit amet',
-			'self_readable' => 1,
-			'self_editable' => 1,
-			'other_readable' => 1,
-			'other_editable' => 1,
-			'created_user' => 1,
-			'created' => '2015-07-28 07:35:24',
-			'modified_user' => 1,
-			'modified' => '2015-07-28 07:35:24'
+			'id' => '1',
+			'role_key' => 'system_administrator',
+			'user_attribute_key' => 'user_attribute_key',
+			'self_readable' => '1',
+			'self_editable' => '1',
+			'other_readable' => '1',
+			'other_editable' => '1',
+		),
+		array(
+			'id' => '2',
+			'role_key' => 'administrator',
+			'user_attribute_key' => 'user_attribute_key',
+			'self_readable' => '1',
+			'self_editable' => '1',
+			'other_readable' => '1',
+			'other_editable' => '1',
+		),
+		array(
+			'id' => '3',
+			'role_key' => 'common_user',
+			'user_attribute_key' => 'user_attribute_key',
+			'self_readable' => '1',
+			'self_editable' => '1',
+			'other_readable' => '0',
+			'other_editable' => '0',
 		),
 	);
 

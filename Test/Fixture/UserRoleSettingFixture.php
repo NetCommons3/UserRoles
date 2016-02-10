@@ -43,16 +43,9 @@ class UserRoleSettingFixture extends CakeTestFixture {
  * @var array
  */
 	public $records = array(
-		array(
-			'id' => 1,
-			'role_key' => 'Lorem ipsum dolor sit amet',
-			'origin_role_key' => 'Lorem ipsum dolor sit amet',
-			'use_private_room' => 1,
-			'created_user' => 1,
-			'created' => '2015-07-28 07:35:12',
-			'modified_user' => 1,
-			'modified' => '2015-07-28 07:35:12'
-		),
+		array('id' => '1', 'role_key' => 'system_administrator', 'origin_role_key' => 'system_administrator', 'use_private_room' => '1', ),
+		array('id' => '2', 'role_key' => 'administrator', 'origin_role_key' => 'administrator', 'use_private_room' => '1', ),
+		array('id' => '3', 'role_key' => 'common_user', 'origin_role_key' => 'common_user', 'use_private_room' => '1', ),
 	);
 
 }

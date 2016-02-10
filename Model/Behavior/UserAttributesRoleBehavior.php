@@ -10,6 +10,8 @@
  */
 
 App::uses('ModelBehavior', 'Model');
+App::uses('UserAttribute', 'UserAttributes.Model');
+App::uses('DataType', 'DataTypes.Model');
 
 /**
  * UserAttributesRole Behavior
@@ -30,6 +32,16 @@ class UserAttributesRoleBehavior extends ModelBehavior {
 
 /**
  * UserAttributesRoleのデフォルト値
+ *
+ * * パスワード＝自分／他人とも読み取り不可
+ * * ラベル項目＝自分／他人とも書き込み不可
+ * * 会員管理が使用可＝上記以外、自分・他人とも自分／他人の読み・書き可
+ * * 会員管理が使用不可
+ * ** 管理者以外、読み取り不可項目とする＝自分／他人の読み・書き不可。※読めないのに書けるはあり得ないため。
+ * ** 管理者以外、書き込み不可項目とする＝自分／他人の書き込み不可。
+ * ** 上記以外
+ * *** ハンドル・アバター＝自分は、読み・書き可。他人は、読み取り可／書き込み不可。
+ * *** それ以外＝自分は、読み・書き可。他人は、読み・書き不可。
  *
  * @param Model $model Model using this behavior
  * @param array|string $userAttrSetting 配列：ユーザ属性設定データ、文字列：ユーザ属性キー
@@ -54,6 +66,7 @@ class UserAttributesRoleBehavior extends ModelBehavior {
 		} elseif (Hash::get($userAttrSetting, 'UserAttributeSetting.only_administrator_readable')) {
 			$userAttributeRole['UserAttributesRole']['self_readable'] = false;
 			$userAttributeRole['UserAttributesRole']['other_readable'] = false;
+			$userAttrSetting['UserAttributeSetting']['only_administrator_editable'] = true;
 		} else {
 			$userAttributeRole['UserAttributesRole']['self_readable'] = true;
 			$userAttributeRole['UserAttributesRole']['other_readable'] =
