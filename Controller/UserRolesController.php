@@ -10,7 +10,6 @@
  */
 
 App::uses('UserRolesAppController', 'UserRoles.Controller');
-//App::uses('UserRole', 'UserRoles.Model');
 
 /**
  * UserRoles Controller
@@ -108,7 +107,7 @@ class UserRolesController extends UserRolesAppController {
 
 				$userRole = $this->UserRole->create(array(
 					'id' => null,
-					'language_id' => $langId,
+					'language_id' => (string)$langId,
 					'type' => UserRole::ROLE_TYPE_USER,
 				));
 				$this->request->data['UserRole'][$index] = $userRole['UserRole'];
@@ -129,7 +128,12 @@ class UserRolesController extends UserRolesAppController {
  * @return void
  */
 	public function edit($roleKey = null) {
-		if ($this->request->isPost()) {
+		if ($roleKey === UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR) {
+			$this->throwBadRequest();
+			return;
+		}
+
+		if ($this->request->isPut()) {
 			//不要パラメータ除去
 			unset($this->request->data['save'], $this->request->data['active_lang_id']);
 
@@ -143,22 +147,25 @@ class UserRolesController extends UserRolesAppController {
 
 		} else {
 			//既存データ取得
-			$userRole = $this->UserRole->find('all', array(
+			$result = $this->UserRole->find('all', array(
 				'recursive' => -1,
 				'conditions' => array('key' => $roleKey)
 			));
-			$this->request->data['UserRole'] = Hash::extract($userRole, '{n}.UserRole');
+			if (! $result) {
+				$this->throwBadRequest();
+				return;
+			}
+			$this->request->data['UserRole'] = Hash::extract($result, '{n}.UserRole');
 
-			$data = $this->UserRoleSetting->find('first', array(
+			$result = $this->UserRoleSetting->find('first', array(
 				'recursive' => -1,
 				'conditions' => array('role_key' => $roleKey),
 			));
-			$this->request->data = Hash::merge($this->request->data, $data);
+			$this->request->data = Hash::merge($this->request->data, $result);
 		}
 		$this->set('roleKey', $roleKey);
 
-		$userRole = Hash::extract($this->request->data['UserRole'], '{n}[language_id=' . Current::read('Language.id') . ']');
-		$this->set('subtitle', Hash::get($userRole, '0.name', ''));
+		$this->set('subtitle', Hash::get($this->viewVars['userRoles'], $roleKey, ''));
 		$this->set('isDeletable', $this->UserRole->verifyDeletable($roleKey));
 	}
 
