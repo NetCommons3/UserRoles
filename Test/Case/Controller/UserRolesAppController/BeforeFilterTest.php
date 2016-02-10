@@ -1,6 +1,6 @@
 <?php
 /**
- * beforeFilter()のテスト
+ * UserRolesAppController::beforeFilter()のテスト
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
@@ -13,7 +13,7 @@ App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
 App::uses('UserRole', 'UserRoles.Model');
 
 /**
- * beforeFilter()のテスト
+ * UserRolesAppController::beforeFilter()のテスト
  *
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\UserRoles\Test\Case\Controller\UserRolesAppController
