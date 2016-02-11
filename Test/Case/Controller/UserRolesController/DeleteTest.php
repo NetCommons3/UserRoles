@@ -44,21 +44,77 @@ class UserRolesControllerDeleteTest extends NetCommonsControllerTestCase {
 	protected $_controller = 'user_roles';
 
 /**
+ * setUp method
+ *
+ * @return void
+ */
+	public function setUp() {
+		parent::setUp();
+		//ログイン
+		TestAuthGeneral::login($this);
+	}
+
+/**
+ * tearDown method
+ *
+ * @return void
+ */
+	public function tearDown() {
+		//ログアウト
+		TestAuthGeneral::logout($this);
+		parent::tearDown();
+	}
+
+/**
+ * delete()アクションのGETパラメータテスト
+ *
+ * @return void
+ */
+	public function testGet() {
+		//テスト実行
+		$this->_testGetAction(array('action' => 'delete'), null, 'BadRequestException', 'view');
+	}
+
+/**
+ * delete()アクションのGETパラメータテスト(JSON形式)
+ *
+ * @return void
+ */
+	public function testGetJson() {
+		//テスト実行
+		$this->_testGetAction(array('action' => 'delete'), null, 'BadRequestException', 'json');
+	}
+
+/**
  * delete()アクションのテスト
  *
  * @return void
  */
 	public function testDelete() {
-		TestAuthGeneral::login($this);
+		$this->_mockForReturnTrue('UserRoles.UserRole', 'deleteUserRole');
 
 		//テスト実行
-		$this->_testGetAction(array('action' => 'delete'), array('method' => 'assertNotEmpty'), null, 'view');
+		$this->_testPostAction('delete', array('UserRole' => array(array('key' => 'common_user'))), array('action' => 'delete'), null, 'view');
 
 		//チェック
-		//TODO:assert追加
-		debug($this->view);
+		$header = $this->controller->response->header();
+		$this->assertTextContains('/user_roles/user_roles/index', $header['Location']);
+	}
 
-		TestAuthGeneral::logout($this);
+/**
+ * delete()アクションのValidationエラーテスト
+ *
+ * @return void
+ */
+	public function testDeleteOnValidationError() {
+		$this->_mockForReturnFalse('UserRoles.UserRole', 'deleteUserRole');
+
+		//テスト実行
+		$this->_testPostAction('delete', array('UserRole' => array(array('key' => 'common_user'))), array('action' => 'delete'), null, 'view');
+
+		//チェック
+		$header = $this->controller->response->header();
+		$this->assertTextContains('/user_roles/user_roles/edit/common_user', $header['Location']);
 	}
 
 }
