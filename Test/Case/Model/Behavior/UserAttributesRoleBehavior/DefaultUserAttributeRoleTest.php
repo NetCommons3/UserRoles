@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('NetCommonsCakeTestCase', 'NetCommons.TestSuite');
+App::uses('NetCommonsModelTestCase', 'NetCommons.TestSuite');
 App::uses('UserAttribute', 'UserAttributes.Model');
 App::uses('DataType', 'DataTypes.Model');
 
@@ -19,7 +19,7 @@ App::uses('DataType', 'DataTypes.Model');
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\UserRoles\Test\Case\Model\Behavior\UserAttributesRoleBehavior
  */
-class UserAttributesRoleBehaviorDefaultUserAttributeRoleTest extends NetCommonsCakeTestCase {
+class UserAttributesRoleBehaviorDefaultUserAttributeRoleTest extends NetCommonsModelTestCase {
 
 /**
  * Fixtures
