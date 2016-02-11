@@ -115,14 +115,22 @@ class UserRole extends Role {
 					'rule' => array('numeric'),
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
+				'inList' => array(
+					'rule' => array('inList', array(parent::ROLE_TYPE_USER)),
+					'message' => __d('net_commons', 'Invalid request.'),
+				),
 			),
 			'name' => array(
 				'notBlank' => array(
 					'rule' => array('notBlank'),
 					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('user_roles', 'User role name')),
 					'required' => true
-					//'last' => false, // Stop validation after this rule
-					//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				),
+			),
+			'is_system' => array(
+				'boolean' => array(
+					'rule' => array('boolean'),
+					'message' => __d('net_commons', 'Invalid request.'),
 				),
 			),
 
