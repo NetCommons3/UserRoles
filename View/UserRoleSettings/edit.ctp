@@ -59,7 +59,7 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 		<?php echo $this->Button->cancelAndSave(
 				__d('net_commons', 'Cancel'),
 				__d('net_commons', 'OK'),
-				$this->NetCommonsHtml->url(array('action' => 'index'))
+				$this->NetCommonsHtml->url(array('controller' => 'user_roles', 'action' => 'index'))
 			); ?>
 	</div>
 
