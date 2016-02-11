@@ -162,18 +162,12 @@ class UserRole extends Role {
  * @throws InternalErrorException
  */
 	public function saveUserRole($data) {
-		$this->loadModels([
-			'UserRoleSetting' => 'UserRoles.UserRoleSetting',
-			'UserAttributesRole' => 'UserRoles.UserAttributesRole',
-			'PluginsRole' => 'PluginManager.PluginsRole',
-		]);
-
 		//トランザクションBegin
 		$this->begin();
 
 		//UserRoleのバリデーション
-		//※$data['UserRole'][0]['key']という形からvalidateMany()を通すことで
-		//　$data['UserRole'][0]['UserRole']['key']となる
+		//　※$data['UserRole'][0]['key']という形からvalidateMany()を通すことで
+		//　　$data['UserRole'][0]['UserRole']['key']となる
 		$roleKey = $data['UserRole'][0]['key'];
 		if (! $this->validateMany($data['UserRole'])) {
 			return false;
