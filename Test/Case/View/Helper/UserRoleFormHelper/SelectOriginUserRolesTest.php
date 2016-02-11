@@ -49,7 +49,6 @@ class UserRoleFormHelperSelectOriginUserRolesTest extends NetCommonsHelperTestCa
 			'recursive' => -1,
 			'fields' => array('key', 'name'),
 			'conditions' => array(
-				'type' => UserRole::ROLE_TYPE_USER,
 				'language_id' => Current::read('Language.id')
 			),
 			'order' => array('id' => 'asc')

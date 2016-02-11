@@ -130,7 +130,6 @@ class UserAttributesRolesController extends UserRolesAppController {
 		$userRole = $this->UserRole->find('first', array(
 			'recursive' => -1,
 			'conditions' => array(
-				'type' => UserRole::ROLE_TYPE_USER,
 				'key' => $roleKey,
 				'language_id' => Current::read('Language.id')
 			)
