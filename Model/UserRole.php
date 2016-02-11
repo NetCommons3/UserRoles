@@ -158,11 +158,10 @@ class UserRole extends Role {
  * 会員権限の登録
  *
  * @param array $data received post data
- * @param bool $created True is created, false is updated
  * @return bool True on success, false on validation errors
  * @throws InternalErrorException
  */
-	public function saveUserRole($data, $created) {
+	public function saveUserRole($data) {
 		$this->loadModels([
 			'UserRoleSetting' => 'UserRoles.UserRoleSetting',
 			'UserAttributesRole' => 'UserRoles.UserAttributesRole',
@@ -173,21 +172,26 @@ class UserRole extends Role {
 		$this->begin();
 
 		//UserRoleのバリデーション
+		//※$data['UserRole'][0]['key']という形からvalidateMany()を通すことで
+		//　$data['UserRole'][0]['UserRole']['key']となる
 		$roleKey = $data['UserRole'][0]['key'];
 		if (! $this->validateMany($data['UserRole'])) {
 			return false;
 		}
+		$created = !(bool)$roleKey;
 
 		try {
 			//UserRoleの登録処理
 			$userRoles = array();
 			foreach ($data['UserRole'] as $i => $userRole) {
 				$userRole['UserRole']['key'] = $roleKey;
-				if (! $userRoles[$i] = $this->save($userRole, false, false)) {
+				$userRoles[$i] = $this->save($userRole, false, false);
+				if (! $userRoles[$i]) {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}
 				$roleKey = $userRoles[$i]['UserRole']['key'];
 			}
+
 			if ($created) {
 				$data['UserRoleSetting']['role_key'] = $roleKey;
 

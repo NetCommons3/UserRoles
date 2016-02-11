@@ -41,28 +41,28 @@ class UserRole4testFixture extends RoleFixture {
 	public $records = array(
 		//会員の権限
 		array(
-			'id' => '1', 'language_id' => '2', 'key' => 'system_administrator', 'type' => '1', 'name' => 'System administrator', 'is_system' => '1',
+			'id' => '1', 'language_id' => '2', 'key' => 'system_administrator', 'type' => '1', 'name' => 'System administrator', 'is_system' => true,
 		),
 		array(
-			'id' => '2', 'language_id' => '1', 'key' => 'system_administrator', 'type' => '1', 'name' => 'System administrator', 'is_system' => '1',
+			'id' => '2', 'language_id' => '1', 'key' => 'system_administrator', 'type' => '1', 'name' => 'System administrator', 'is_system' => true,
 		),
 		array(
-			'id' => '3', 'language_id' => '2',	'key' => 'administrator', 'type' => '1', 'name' => 'Site administrator', 'is_system' => '1',
+			'id' => '3', 'language_id' => '2',	'key' => 'administrator', 'type' => '1', 'name' => 'Site administrator', 'is_system' => true,
 		),
 		array(
-			'id' => '4', 'language_id' => '1',	'key' => 'administrator', 'type' => '1', 'name' => 'Site administrator', 'is_system' => '1',
+			'id' => '4', 'language_id' => '1',	'key' => 'administrator', 'type' => '1', 'name' => 'Site administrator', 'is_system' => true,
 		),
 		array(
-			'id' => '5', 'language_id' => '2', 'key' => 'common_user', 'type' => '1', 'name' => 'Common user', 'is_system' => '1',
+			'id' => '5', 'language_id' => '2', 'key' => 'common_user', 'type' => '1', 'name' => 'Common user', 'is_system' => true,
 		),
 		array(
-			'id' => '6', 'language_id' => '1', 'key' => 'common_user', 'type' => '1', 'name' => 'Common user', 'is_system' => '1',
+			'id' => '6', 'language_id' => '1', 'key' => 'common_user', 'type' => '1', 'name' => 'Common user', 'is_system' => true,
 		),
 		array(
-			'id' => '7', 'language_id' => '2', 'key' => 'test_user', 'type' => '1', 'name' => 'Test user', 'is_system' => '0',
+			'id' => '7', 'language_id' => '2', 'key' => 'test_user', 'type' => '1', 'name' => 'Test user', 'is_system' => false,
 		),
 		array(
-			'id' => '8', 'language_id' => '1', 'key' => 'test_user', 'type' => '1', 'name' => 'Test user', 'is_system' => '0',
+			'id' => '8', 'language_id' => '1', 'key' => 'test_user', 'type' => '1', 'name' => 'Test user', 'is_system' => false,
 		),
 	);
 

@@ -90,7 +90,7 @@ class UserRolesController extends UserRolesAppController {
 			unset($this->request->data['save'], $this->request->data['active_lang_id']);
 
 			//登録処理
-			$userRoles = $this->UserRole->saveUserRole($this->request->data, true);
+			$userRoles = $this->UserRole->saveUserRole($this->request->data);
 			if ($userRoles) {
 				//正常の場合
 				$userRoleKey = Hash::extract($userRoles, '{n}.UserRole[language_id=' . Current::read('Language.id') . '].key');
@@ -138,7 +138,7 @@ class UserRolesController extends UserRolesAppController {
 			unset($this->request->data['save'], $this->request->data['active_lang_id']);
 
 			//登録処理
-			if ($this->UserRole->saveUserRole($this->request->data, false)) {
+			if ($this->UserRole->saveUserRole($this->request->data)) {
 				//正常の場合
 				$this->redirect('/user_roles/user_roles/index/');
 				return;
