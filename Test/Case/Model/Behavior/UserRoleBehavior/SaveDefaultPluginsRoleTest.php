@@ -103,7 +103,6 @@ class UserRoleBehaviorSaveDefaultPluginsRoleTest extends NetCommonsModelTestCase
  * @return array データ
  */
 	public function dataProvider() {
-		//TODO:テストパタンを書く
 		$result = array();
 		$result[0]['data'] = array('UserRoleSetting' => array(
 			'origin_role_key' => 'administrator',
