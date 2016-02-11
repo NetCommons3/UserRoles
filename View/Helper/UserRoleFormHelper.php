@@ -148,23 +148,6 @@ class UserRoleFormHelper extends AppHelper {
 	}
 
 /**
- * アップロード容量SELECTボックスの出力
- *
- * @param string $fieldName フィールド名(Modelname.fieldname形式)
- * @param array $attributes タグ属性
- * @return string HTMLタグ
- */
-	public function selectMaxSize($fieldName, $attributes = array()) {
-		$maxSizes = array_map('CakeNumber::toReadableSize', array_combine($this->optionsMaxSize, $this->optionsMaxSize));
-
-		return $this->Form->select($fieldName, $maxSizes, Hash::merge(array(
-			'type' => 'select',
-			'class' => 'form-control',
-			'empty' => false,
-		), $attributes));
-	}
-
-/**
  * 権限管理の個人情報設定SELECTボックス出力
  *
  * @param array $userAttribute UserAttributeデータ
