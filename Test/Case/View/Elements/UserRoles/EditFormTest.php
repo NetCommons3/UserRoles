@@ -97,6 +97,9 @@ class UserRolesViewElementsUserRolesEditFormTest extends NetCommonsControllerTes
 		$this->assertInput('input', 'data[UserRole][1][type]', '1', $this->view);
 		$this->assertInput('input', 'data[UserRole][1][name]', null, $this->view);
 		$this->assertInput('select', 'data[UserRoleSetting][origin_role_key]', null, $this->view);
+
+		$pattern = '/' . preg_quote('data[UserRole][2][id]', '/') . '/';
+		$this->assertNotRegExp($pattern, $this->view);
 	}
 
 }

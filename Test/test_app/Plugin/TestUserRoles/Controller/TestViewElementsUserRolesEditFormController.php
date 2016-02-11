@@ -101,6 +101,9 @@ class TestViewElementsUserRolesEditFormController extends AppController {
 				),
 				1 => array(
 					'id' => null, 'language_id' => '2', 'key' => null, 'type' => '1', 'name' => '',
+				),
+				2 => array(
+					'id' => null, 'language_id' => '3', 'key' => null, 'type' => '1', 'name' => '',
 				)
 			),
 			'UserRoleSetting' => array(
