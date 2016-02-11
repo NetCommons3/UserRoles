@@ -226,11 +226,11 @@ class UserRole extends Role {
 
 		//トランザクションBegin
 		$this->begin();
-		if (! $this->verifyDeletable($data['key'])) {
-			return false;
-		}
 
 		try {
+			if (! $this->verifyDeletable($data['key'])) {
+				return false;
+			}
 			//削除処理
 			if (! $this->deleteAll(array($this->alias . '.key' => $data['key']), false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
@@ -258,6 +258,7 @@ class UserRole extends Role {
  *
  * @param array $roleKey received post data
  * @return bool True：削除可、False：削除不可
+ * @throws BadRequestException
  */
 	public function verifyDeletable($roleKey) {
 		$this->loadModels([
@@ -268,6 +269,10 @@ class UserRole extends Role {
 			'recursive' => -1,
 			'conditions' => array('key' => $roleKey),
 		));
+		if (! $userRole) {
+			//リクエストのエラーなのでBadRequestにする
+			throw new BadRequestException(__d('net_commons', 'Bad Request'));
+		}
 
 		//システムフラグがONになっているものは、削除不可
 		if (Hash::get($userRole, $this->alias . '.is_system')) {
