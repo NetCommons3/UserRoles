@@ -229,7 +229,7 @@ class UserRolesControllerEditTest extends NetCommonsControllerTestCase {
  *
  * @return void
  */
-	public function testAddPostValidateError() {
+	public function testEditPostValidateError() {
 		//テスト実行
 		$data = $this->__data();
 		$data = Hash::remove($data, 'UserRole.{n}.name');
