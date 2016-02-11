@@ -276,7 +276,7 @@ class UserRole extends Role {
 			return false;
 		}
 		if ($count > 0) {
-			$this->validationErrors['key'][] = __d('user_roles', 'Fail to delete the selected authority.' . chr(10) . 'Please confirm whether the authority is used.');
+			$this->validationErrors['key'][] = __d('user_roles', 'Can not be deleted because it has this authority is used.');
 			return false;
 		}
 

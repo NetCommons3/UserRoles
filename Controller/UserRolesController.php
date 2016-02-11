@@ -175,12 +175,15 @@ class UserRolesController extends UserRolesAppController {
  * @return void
  */
 	public function delete() {
-		if (! $this->request->isDelete() || ! $this->UserRole->verifyDeletable($this->data['UserRole'][0]['key'])) {
+		if (! $this->request->isDelete()) {
 			$this->throwBadRequest();
 			return;
 		}
 		if (! $this->UserRole->deleteUserRole($this->data['UserRole'][0])) {
-			$this->NetCommons->handleValidationError($this->UserRole->validationErrors);
+			$message = Hash::get($this->UserRole->validationErrors, 'key.0');
+			$this->NetCommons->handleValidationError($this->UserRole->validationErrors, $message);
+			$this->redirect('/user_roles/user_roles/edit/' . $this->data['UserRole'][0]['key']);
+			return;
 		}
 		$this->redirect('/user_roles/user_roles/index/');
 	}

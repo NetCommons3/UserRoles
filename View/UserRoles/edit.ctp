@@ -43,6 +43,8 @@ if ($this->params['action'] === 'edit') {
 	<?php echo $this->NetCommonsForm->end(); ?>
 </div>
 
-<?php if ($this->request->params['action'] === 'edit' && $isDeletable) : ?>
-	<?php echo $this->element('UserRoles/delete_form'); ?>
+<?php if ($this->request->params['action'] === 'edit') : ?>
+	<?php if (! Hash::get($this->request->data, 'UserRole.0.is_system')) : ?>
+		<?php echo $this->element('UserRoles/delete_form'); ?>
+	<?php endif; ?>
 <?php endif;
