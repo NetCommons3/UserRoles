@@ -43,6 +43,7 @@ class TestViewElementsTabsController extends AppController {
 /**
  * tabs
  *
+ * @param string $controller コントローラ名(user_roles or user_role_settings or user_attributes_roles)
  * @return void
  */
 	public function edit($controller) {

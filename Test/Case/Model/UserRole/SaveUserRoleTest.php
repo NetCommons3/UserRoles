@@ -220,7 +220,6 @@ class UserRoleSaveUserRoleTest extends NetCommonsModelTestCase {
 		$data['UserRole'][0] = (new UserRole4testFixture())->records[6];
 		$data['UserRole'][1] = (new UserRole4testFixture())->records[7];
 
-		//TODO:テストパタンを書く
 		return array(
 			array($data, 'UserRoles.UserRole', 'save'),
 		);
@@ -260,7 +259,6 @@ class UserRoleSaveUserRoleTest extends NetCommonsModelTestCase {
 		$data['UserRole'][0] = (new UserRole4testFixture())->records[6];
 		$data['UserRole'][1] = (new UserRole4testFixture())->records[7];
 
-		//TODO:テストパタンを書く
 		return array(
 			array($data, 'UserRoles.UserRole', 'validateMany'),
 		);

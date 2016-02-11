@@ -39,8 +39,8 @@
 							sprintf(__d('net_commons', 'Deleting the %s. Are you sure to proceed?'), __d('user_roles', 'User role')),
 							array('addClass' => 'pull-right')
 						); ?>
-				<?php endif; ?>
-			<?php echo $this->NetCommonsForm->end(); ?>
+				<?php echo $this->NetCommonsForm->end(); ?>
+			<?php endif; ?>
 		</accordion-group>
 	</accordion>
 </div>

@@ -12,7 +12,7 @@
 
 View/Elements/tabs
 
-<?php echo $this->element('UserRoles.tabs'); ?>
+<?php echo $this->element('UserRoles.tabs');
 
 
 
