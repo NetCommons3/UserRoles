@@ -55,22 +55,6 @@ class UserRoleFormHelper extends AppHelper {
 	);
 
 /**
- * Radio attributes
- *
- * @var array
- */
-	public $optionsMaxSize = array(
-		5242880,
-		10485760,
-		20971520,
-		52428800,
-		104857600,
-		209715200,
-		524288000,
-		1073741824
-	);
-
-/**
  * Default Constructor
  *
  * @param View $View The View this helper is being attached to.
@@ -78,8 +62,6 @@ class UserRoleFormHelper extends AppHelper {
  */
 	public function __construct(View $View, $settings = array()) {
 		parent::__construct($View, $settings);
-		$this->UserRole = ClassRegistry::init('UserRoles.UserRole');
-		$this->Role = ClassRegistry::init('Roles.Role');
 
 		$this->isUsableOptions = array(
 			'1' => __d('user_roles', 'Use'),
