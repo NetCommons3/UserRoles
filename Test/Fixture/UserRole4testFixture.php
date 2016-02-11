@@ -64,6 +64,12 @@ class UserRole4testFixture extends RoleFixture {
 		array(
 			'id' => '8', 'language_id' => '1', 'key' => 'test_user', 'type' => '1', 'name' => 'Test user', 'is_system' => false,
 		),
+		array(
+			'id' => '9', 'language_id' => '2', 'key' => 'test_user_2', 'type' => '1', 'name' => 'Test user 2', 'is_system' => false,
+		),
+		array(
+			'id' => '10', 'language_id' => '1', 'key' => 'test_user_2', 'type' => '1', 'name' => 'Test user 2', 'is_system' => false,
+		),
 	);
 
 }
