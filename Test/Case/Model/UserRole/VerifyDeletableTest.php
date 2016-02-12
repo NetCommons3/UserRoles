@@ -59,7 +59,7 @@ class UserRoleVerifyDeletableTest extends NetCommonsModelTestCase {
  */
 	public function testDeletable() {
 		//データ生成
-		$roleKey = 'test_user_2';
+		$roleKey = 'test_user';
 
 		//テスト実施
 		$model = $this->_modelName;
@@ -83,7 +83,7 @@ class UserRoleVerifyDeletableTest extends NetCommonsModelTestCase {
 			// * システム権限
 			array('role_key' => 'common_user'),
 			// * システム権限
-			array('role_key' => 'test_user'),
+			array('role_key' => 'test_user_2'),
 		);
 	}
 
@@ -133,7 +133,7 @@ class UserRoleVerifyDeletableTest extends NetCommonsModelTestCase {
 
 		//テストデータ
 		$this->_mockForReturnFalse($model, 'Users.User', 'find');
-		$roleKey = 'test_user';
+		$roleKey = 'test_user_2';
 
 		//テスト実施
 		$this->$model->$methodName($roleKey);

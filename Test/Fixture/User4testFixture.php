@@ -41,11 +41,11 @@ class User4testFixture extends UserFixture {
 	protected $_records = array(
 		array(
 			'id' => 7,
-			'username' => 'test_user',
-			'password' => 'test_user',
+			'username' => 'test_user_2',
+			'password' => 'test_user_2',
 			'key' => 'test_user',
 			'handlename' => 'Test User',
-			'role_key' => 'test_user',
+			'role_key' => 'test_user_2',
 			'status' => 1,
 			'is_status_public' => 1,
 		),
