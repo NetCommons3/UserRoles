@@ -37,22 +37,6 @@ class UserRoleSettingsController extends UserRolesAppController {
  * @return void
  */
 	public function edit($roleKey = null) {
-		if ($this->request->isPut()) {
-			//不要パラメータ除去
-			unset($this->request->data['save']);
-
-			//登録処理
-			if ($this->UserRoleSetting->saveUserRoleSetting($this->request->data)) {
-				//正常の場合
-				$this->redirect('/user_roles/user_attributes_roles/edit/' . h($roleKey));
-				return;
-			}
-			$this->NetCommons->handleValidationError($this->UserRoleSetting->validationErrors);
-
-		} else {
-			$this->request->data = $this->UserRoleSetting->getUserRoleSetting(Plugin::PLUGIN_TYPE_FOR_SITE_MANAGER, $roleKey);
-		}
-
 		//既存データ取得
 		$userRole = $this->UserRole->find('first', array(
 			'recursive' => -1,
@@ -61,9 +45,31 @@ class UserRoleSettingsController extends UserRolesAppController {
 				'language_id' => Current::read('Language.id')
 			)
 		));
-		$this->request->data = Hash::merge($userRole, $this->request->data);
+		if (! $userRole) {
+			$this->throwBadRequest();
+			return;
+		}
 
-		$this->set('roleKey', $roleKey);
-		$this->set('subtitle', $this->request->data['UserRole']['name']);
+		if ($this->request->isPut()) {
+			//不要パラメータ除去
+			unset($this->request->data['save']);
+
+			//登録処理
+			if ($this->UserRoleSetting->saveUserRoleSetting($this->request->data)) {
+				//正常の場合
+				$this->redirect('/user_roles/user_attributes_roles/edit/' . h($roleKey));
+			} else {
+				$this->NetCommons->handleValidationError($this->UserRoleSetting->validationErrors);
+				$this->redirect('/user_roles/user_role_settings/edit/' . h($roleKey));
+			}
+
+		} else {
+			$this->request->data = $this->UserRoleSetting->getUserRoleSetting(
+				Plugin::PLUGIN_TYPE_FOR_SITE_MANAGER, $roleKey
+			);
+			$this->request->data = Hash::merge($userRole, $this->request->data);
+			$this->set('roleKey', $roleKey);
+			$this->set('subtitle', $this->request->data['UserRole']['name']);
+		}
 	}
 }

@@ -44,16 +44,24 @@ class Plugin4testFixture extends PluginFixture {
 			'key' => 'user_manager',
 			'name' => 'User Manager',
 			'weight' => '1',
-			'type' => '1',
+			'type' => '2',
 			'default_action' => 'user_manager/index',
 		),
 		array(
 			'language_id' => '2',
-			'key' => 'user_attributes',
+			'key' => 'user_roles',
 			'name' => 'User Roles',
 			'weight' => '2',
-			'type' => '1',
+			'type' => '2',
 			'default_action' => 'user_roles/index',
+		),
+		array(
+			'language_id' => '2',
+			'key' => 'test_user_roles',
+			'name' => 'Test user roles plugin',
+			'weight' => '3',
+			'type' => '2',
+			'default_action' => 'test_plugin/index',
 		),
 	);
 
