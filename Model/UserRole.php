@@ -259,6 +259,7 @@ class UserRole extends Role {
  * @param array $roleKey received post data
  * @return bool True：削除可、False：削除不可
  * @throws BadRequestException
+ * @throws InternalErrorException
  */
 	public function verifyDeletable($roleKey) {
 		$this->loadModels([
@@ -284,7 +285,7 @@ class UserRole extends Role {
 			'conditions' => array('role_key' => $roleKey),
 		));
 		if ($count === false) {
-			return false;
+			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 		if ($count > 0) {
 			$this->validationErrors['key'][] = __d('user_roles', 'Can not be deleted because it has this authority is used.');
