@@ -46,19 +46,20 @@ class UserRolesController extends UserRolesAppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 
-		if (in_array($this->params['action'], ['add', 'edit'], true)) {
-			$userRoles = $this->UserRole->find('list', array(
-				'recursive' => -1,
-				'fields' => array('key', 'name'),
-				'conditions' => array(
-					'language_id' => Current::read('Language.id')
-				),
-				'order' => array('id' => 'asc')
-			));
-			unset($userRoles[UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR]);
-
-			$this->set('userRoles', $userRoles);
+		if (! in_array($this->params['action'], ['add', 'edit'], true)) {
+			return;
 		}
+		$userRoles = $this->UserRole->find('list', array(
+			'recursive' => -1,
+			'fields' => array('key', 'name'),
+			'conditions' => array(
+				'language_id' => Current::read('Language.id')
+			),
+			'order' => array('id' => 'asc')
+		));
+		unset($userRoles[UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR]);
+
+		$this->set('userRoles', $userRoles);
 	}
 
 /**
