@@ -31,50 +31,6 @@ class UserRoleFormHelper extends AppHelper {
 	);
 
 /**
- * Option is_usable
- *
- * @var array
- */
-	public $isUsableOptions;
-
-/**
- * Option is_allow
- *
- * @var array
- */
-	public $isPermittedOptions;
-
-/**
- * Radio attributes
- *
- * @var array
- */
-	public $radioAttributes = array(
-		'legend' => false,
-		'separator' => '<span class="radio-separator"> </span>',
-	);
-
-/**
- * Default Constructor
- *
- * @param View $View The View this helper is being attached to.
- * @param array $settings Configuration settings for the helper.
- */
-	public function __construct(View $View, $settings = array()) {
-		parent::__construct($View, $settings);
-
-		$this->isUsableOptions = array(
-			'1' => __d('user_roles', 'Use'),
-			'0' => __d('user_roles', 'Not use'),
-		);
-
-		$this->isPermittedOptions = array(
-			'1' => __d('user_roles', 'Permitted'),
-			'0' => __d('user_roles', 'Not permitted'),
-		);
-	}
-
-/**
  * コピー元の権限のSELECTボックス出力
  *
  * @param string $fieldName フィールド名(Modelname.fieldname形式)
@@ -101,29 +57,32 @@ class UserRoleFormHelper extends AppHelper {
 	}
 
 /**
- * ユーザ毎のプラグインの利用(ルーム管理、会員管理)RADIOボタンの出力
+ * ユーザ毎のプラグインの利用(サイト管理系プラグイン)RADIOボタンの出力
  *
  * @param string $fieldName フィールド名(Modelname.fieldname形式)
- * @param array $options ラジオボタンのOPTION
+ * @param bool $isPlugin プラグインかどうか
  * @param array $attributes タグ属性
  * @return string HTMLタグ
  */
-	public function radioUserRole($fieldName, $options = null, $attributes = array()) {
+	public function radioUserRole($fieldName, $isPlugin, $attributes = array()) {
 		$html = '';
-		if (! isset($options)) {
-			$options = $this->isUsableOptions;
-		}
 
-		$verifySystem = Hash::get($attributes, 'verifySystem', false);
-		$attributes = Hash::remove($attributes, 'verifySystem');
+		$options = array(
+			'1' => __d('user_roles', 'Use'),
+			'0' => __d('user_roles', 'Not use'),
+		);
+		$radioAttributes = array(
+			'legend' => false,
+			'separator' => '<span class="radio-separator"> </span>',
+		);
 
-		if ($verifySystem && $this->_View->data['UserRoleSetting']['origin_role_key'] === UserRole::USER_ROLE_KEY_COMMON_USER) {
+		if ($isPlugin && $this->_View->data['UserRoleSetting']['origin_role_key'] === UserRole::USER_ROLE_KEY_COMMON_USER) {
 			$html .= $this->NetCommonsForm->hidden($fieldName);
 			$html .= $this->NetCommonsForm->radio(null, $options,
-					Hash::merge($this->radioAttributes, array('disabled' => true, 'hiddenField' => false), $attributes));
+					Hash::merge($radioAttributes, array('disabled' => true, 'hiddenField' => false), $attributes));
 		} else {
 			$html .= $this->NetCommonsForm->radio($fieldName, $options,
-					Hash::merge($this->radioAttributes, $attributes));
+					Hash::merge($radioAttributes, $attributes));
 		}
 
 		return $html;
