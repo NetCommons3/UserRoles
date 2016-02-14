@@ -50,7 +50,7 @@ class UserRoleSettingsController extends UserRolesAppController {
 			return;
 		}
 
-		if ($this->request->isPut()) {
+		if ($this->request->is('put')) {
 			//不要パラメータ除去
 			unset($this->request->data['save']);
 
