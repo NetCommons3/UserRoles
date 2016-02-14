@@ -171,7 +171,6 @@ class UserRoleFormHelperSelectUserAttributeRoleTest extends NetCommonsHelperTest
 
 		//テスト実施
 		$result = $this->UserRoleForm->selectUserAttributeRole($userAttribute);
-		debug($result);
 
 		//チェック
 		$id = '3';
