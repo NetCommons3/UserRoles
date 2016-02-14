@@ -77,7 +77,7 @@ class UserAttributesRolesController extends UserRolesAppController {
  * @return void
  */
 	public function edit($roleKey = null) {
-		if ($this->request->isPost()) {
+		if ($this->request->isPut()) {
 			if (! Hash::get($this->request->data, 'UserAttributesRole')) {
 				$this->throwBadRequest();
 				return;
@@ -96,7 +96,7 @@ class UserAttributesRolesController extends UserRolesAppController {
 					continue;
 				}
 
-				if (! in_array($otherRole, [self::OTHER_EDITABLE, self::OTHER_READABLE, self::OTHER_NOT_READABLE], true)) {
+				if (! in_array($otherRole, [self::OTHER_READABLE, self::OTHER_NOT_READABLE], true)) {
 					$this->throwBadRequest();
 					return;
 				}
@@ -104,10 +104,7 @@ class UserAttributesRolesController extends UserRolesAppController {
 				$this->request->data['UserAttributesRole'][$id]['UserAttributesRole']['other_readable'] = false;
 				$this->request->data['UserAttributesRole'][$id]['UserAttributesRole']['other_editable'] = false;
 
-				if ($otherRole === self::OTHER_EDITABLE) {
-					$this->request->data['UserAttributesRole'][$id]['UserAttributesRole']['other_readable'] = true;
-					$this->request->data['UserAttributesRole'][$id]['UserAttributesRole']['other_editable'] = true;
-				} elseif ($otherRole === self::OTHER_READABLE) {
+				if ($otherRole === self::OTHER_READABLE) {
 					$this->request->data['UserAttributesRole'][$id]['UserAttributesRole']['other_readable'] = true;
 				}
 			}
@@ -116,32 +113,28 @@ class UserAttributesRolesController extends UserRolesAppController {
 			if ($this->UserAttributesRole->saveUserAttributesRoles($this->request->data)) {
 				//正常の場合
 				$this->redirect('/user_roles/user_roles/index/');
-				return;
+			} else {
+				$this->NetCommons->handleValidationError($this->UserAttributesRole->validationErrors);
+				$this->redirect('/user_roles/user_attributes_roles/edit/' . h($roleKey));
 			}
-			$this->NetCommons->handleValidationError($this->UserAttributesRole->validationErrors);
 
 		} else {
 			//既存データ取得
 			$this->request->data = $this->UserRoleSetting->getUserRoleSetting(Plugin::PLUGIN_TYPE_FOR_SITE_MANAGER, $roleKey);
 			$this->request->data['UserAttributesRole'] = $this->UserAttributesRole->getUserAttributesRole($roleKey);
 			$this->request->data['UserAttribute'] = $this->viewVars['userAttributes'];
+			$userRole = $this->UserRole->find('first', array(
+				'recursive' => -1,
+				'conditions' => array(
+					'key' => $roleKey,
+					'language_id' => Current::read('Language.id')
+				)
+			));
+			$this->request->data = Hash::merge($userRole, $this->request->data);
+
+			$this->set('roleKey', $roleKey);
+			$this->set('subtitle', $this->request->data['UserRole']['name']);
 		}
-
-		$userRole = $this->UserRole->find('first', array(
-			'recursive' => -1,
-			'conditions' => array(
-				'key' => $roleKey,
-				'language_id' => Current::read('Language.id')
-			)
-		));
-		$this->request->data = Hash::merge($userRole, $this->request->data);
-
-		//プラグイン名取得
-		$plugin = $this->Plugin->getPlugins(Plugin::PLUGIN_TYPE_FOR_SITE_MANAGER, 'user_manager');
-		$this->set('userManagerPluginName', Hash::get($plugin, '0.Plugin.name', __d('user_roles', 'User manager')));
-
-		$this->set('roleKey', $roleKey);
-		$this->set('subtitle', $this->request->data['UserRole']['name']);
 	}
 
 }
