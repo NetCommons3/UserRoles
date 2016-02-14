@@ -30,8 +30,7 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 				</div>
 
 				<div class="col-xs-12 col-sm-6 col-md-8">
-					<?php echo $this->UserRoleForm->radioUserRole('PluginsRole.' . $i . '.PluginsRole.is_usable_plugin', null, array(
-						'verifySystem' => true,
+					<?php echo $this->UserRoleForm->radioUserRole('PluginsRole.' . $i . '.PluginsRole.is_usable_plugin', true, array(
 						'value' => (bool)$pluginsRole['PluginsRole']['id']
 					)); ?>
 
@@ -50,7 +49,7 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 			</div>
 
 			<div class="col-xs-12 col-sm-6 col-md-8">
-				<?php echo $this->UserRoleForm->radioUserRole('UserRoleSetting.use_private_room'); ?>
+				<?php echo $this->UserRoleForm->radioUserRole('UserRoleSetting.use_private_room', false); ?>
 			</div>
 		</div>
 	</div>
@@ -59,7 +58,7 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 		<?php echo $this->Button->cancelAndSave(
 				__d('net_commons', 'Cancel'),
 				__d('net_commons', 'OK'),
-				$this->NetCommonsHtml->url(array('action' => 'index'))
+				$this->NetCommonsHtml->url(array('controller' => 'user_roles', 'action' => 'index'))
 			); ?>
 	</div>
 

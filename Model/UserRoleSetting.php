@@ -61,6 +61,12 @@ class UserRoleSetting extends UserRolesAppModel {
 					'required' => true,
 				),
 			),
+			'use_private_room' => array(
+				'boolean' => array(
+					'rule' => array('boolean'),
+					'message' => __d('net_commons', 'Invalid request.'),
+				),
+			),
 		));
 
 		return parent::beforeValidate($options);

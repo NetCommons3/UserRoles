@@ -31,6 +31,7 @@ class UserRolesAppController extends AppController {
 			'allow' => array()
 		),
 		'Security',
+		'UserRoles.UserRoleForm',
 	);
 
 /**

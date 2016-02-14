@@ -115,14 +115,22 @@ class UserRole extends Role {
 					'rule' => array('numeric'),
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
+				'inList' => array(
+					'rule' => array('inList', array(parent::ROLE_TYPE_USER)),
+					'message' => __d('net_commons', 'Invalid request.'),
+				),
 			),
 			'name' => array(
 				'notBlank' => array(
 					'rule' => array('notBlank'),
 					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('user_roles', 'User role name')),
 					'required' => true
-					//'last' => false, // Stop validation after this rule
-					//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				),
+			),
+			'is_system' => array(
+				'boolean' => array(
+					'rule' => array('boolean'),
+					'message' => __d('net_commons', 'Invalid request.'),
 				),
 			),
 
@@ -150,36 +158,34 @@ class UserRole extends Role {
  * 会員権限の登録
  *
  * @param array $data received post data
- * @param bool $created True is created, false is updated
  * @return bool True on success, false on validation errors
  * @throws InternalErrorException
  */
-	public function saveUserRole($data, $created) {
-		$this->loadModels([
-			'UserRoleSetting' => 'UserRoles.UserRoleSetting',
-			'UserAttributesRole' => 'UserRoles.UserAttributesRole',
-			'PluginsRole' => 'PluginManager.PluginsRole',
-		]);
-
+	public function saveUserRole($data) {
 		//トランザクションBegin
 		$this->begin();
 
 		//UserRoleのバリデーション
+		//　※$data['UserRole'][0]['key']という形からvalidateMany()を通すことで
+		//　　$data['UserRole'][0]['UserRole']['key']となる
 		$roleKey = $data['UserRole'][0]['key'];
 		if (! $this->validateMany($data['UserRole'])) {
 			return false;
 		}
+		$created = !(bool)$roleKey;
 
 		try {
 			//UserRoleの登録処理
 			$userRoles = array();
 			foreach ($data['UserRole'] as $i => $userRole) {
 				$userRole['UserRole']['key'] = $roleKey;
-				if (! $userRoles[$i] = $this->save($userRole, false, false)) {
+				$userRoles[$i] = $this->save($userRole, false, false);
+				if (! $userRoles[$i]) {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}
 				$roleKey = $userRoles[$i]['UserRole']['key'];
 			}
+
 			if ($created) {
 				$data['UserRoleSetting']['role_key'] = $roleKey;
 
@@ -220,11 +226,11 @@ class UserRole extends Role {
 
 		//トランザクションBegin
 		$this->begin();
-		if (! $this->verifyDeletable($data['key'])) {
-			return false;
-		}
 
 		try {
+			if (! $this->verifyDeletable($data['key'])) {
+				return false;
+			}
 			//削除処理
 			if (! $this->deleteAll(array($this->alias . '.key' => $data['key']), false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
@@ -252,6 +258,8 @@ class UserRole extends Role {
  *
  * @param array $roleKey received post data
  * @return bool True：削除可、False：削除不可
+ * @throws BadRequestException
+ * @throws InternalErrorException
  */
 	public function verifyDeletable($roleKey) {
 		$this->loadModels([
@@ -262,6 +270,10 @@ class UserRole extends Role {
 			'recursive' => -1,
 			'conditions' => array('key' => $roleKey),
 		));
+		if (! $userRole) {
+			//リクエストのエラーなのでBadRequestにする
+			throw new BadRequestException(__d('net_commons', 'Bad Request'));
+		}
 
 		//システムフラグがONになっているものは、削除不可
 		if (Hash::get($userRole, $this->alias . '.is_system')) {
@@ -273,10 +285,10 @@ class UserRole extends Role {
 			'conditions' => array('role_key' => $roleKey),
 		));
 		if ($count === false) {
-			return false;
+			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 		if ($count > 0) {
-			$this->validationErrors['key'][] = __d('user_roles', 'Fail to delete the selected authority.' . chr(10) . 'Please confirm whether the authority is used.');
+			$this->validationErrors['key'][] = __d('user_roles', 'Can not be deleted because it has this authority is used.');
 			return false;
 		}
 

@@ -16,6 +16,7 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 <?php echo $this->element('UserRoles.tabs'); ?>
 
 <?php echo $this->NetCommonsForm->create('UserAttributesRoles', array(
+		'type' => 'put',
 		'url' => $this->NetCommonsHtml->url(array('action' => 'edit', 'key' => $roleKey))
 	)); ?>
 

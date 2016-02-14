@@ -117,23 +117,6 @@ class UserAttributesRole extends UserRolesAppModel {
 	}
 
 /**
- * Validate of UserAttributesRoles
- *
- * @param array $data received post data
- * @return bool True on success, false on validation errors
- */
-	public function validateUserAttributesRoles($data) {
-		foreach ($data as $userAttributesRole) {
-			$this->set($userAttributesRole);
-			$this->validates();
-			if ($this->validationErrors) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-/**
  * Save UserAttributesRoles
  *
  * @param array $data received post data
@@ -149,7 +132,7 @@ class UserAttributesRole extends UserRolesAppModel {
 		$this->begin();
 
 		//UserAttributesRoleのバリデーション
-		if (! $this->validateUserAttributesRoles($data['UserAttributesRole'])) {
+		if (! $this->validateMany($data['UserAttributesRole'])) {
 			return false;
 		}
 

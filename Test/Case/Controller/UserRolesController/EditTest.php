@@ -112,9 +112,9 @@ class UserRolesControllerEditTest extends NetCommonsControllerTestCase {
 		$this->assertContains('/user_roles/user_attributes_roles/edit/' . $roleKey, $this->view);
 
 		if ($isSystem) {
-			$this->assertNotContains('/user_roles/user_roles/delete', $this->view);
+			$this->assertNotContains('dangerZone', $this->view);
 		} else {
-			$this->assertContains('/user_roles/user_roles/delete', $this->view);
+			$this->assertContains('dangerZone', $this->view);
 		}
 
 		$this->assertArrayHasKey('UserRole', $this->controller->data);
@@ -229,7 +229,7 @@ class UserRolesControllerEditTest extends NetCommonsControllerTestCase {
  *
  * @return void
  */
-	public function testAddPostValidateError() {
+	public function testEditPostValidateError() {
 		//テスト実行
 		$data = $this->__data();
 		$data = Hash::remove($data, 'UserRole.{n}.name');

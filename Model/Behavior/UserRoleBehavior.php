@@ -30,6 +30,10 @@ class UserRoleBehavior extends ModelBehavior {
  * @throws InternalErrorException
  */
 	public function saveDefaultUserRoleSetting(Model $model, $data) {
+		$model->loadModels([
+			'UserRoleSetting' => 'UserRoles.UserRoleSetting',
+		]);
+
 		//UserRoleSettingデフォルトのデータ取得
 		$userRoleSetting = $model->UserRoleSetting->find('first', array(
 			'recursive' => -1,
@@ -60,6 +64,10 @@ class UserRoleBehavior extends ModelBehavior {
  * @throws InternalErrorException
  */
 	public function saveDefaultUserAttributesRole(Model $model, $data) {
+		$model->loadModels([
+			'UserAttributesRole' => 'UserRoles.UserAttributesRole',
+		]);
+
 		//UserAttributesRoleデフォルトのデータ取得
 		$userAttributesRole = $model->UserAttributesRole->find('all', array(
 			'recursive' => -1,
@@ -90,6 +98,10 @@ class UserRoleBehavior extends ModelBehavior {
  * @throws InternalErrorException
  */
 	public function saveDefaultPluginsRole(Model $model, $data) {
+		$model->loadModels([
+			'PluginsRole' => 'PluginManager.PluginsRole',
+		]);
+
 		//PluginsRoleデフォルトのデータ取得
 		$pluginsRole = $model->PluginsRole->find('all', array(
 			'recursive' => -1,
