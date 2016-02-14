@@ -77,7 +77,7 @@ class UserAttributesRolesController extends UserRolesAppController {
  * @return void
  */
 	public function edit($roleKey = null) {
-		if ($this->request->isPut()) {
+		if ($this->request->is('put')) {
 			if (! Hash::get($this->request->data, 'UserAttributesRole')) {
 				$this->throwBadRequest();
 				return;
