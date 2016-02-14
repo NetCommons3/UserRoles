@@ -222,7 +222,7 @@ class UserRoleFormHelperSelectUserAttributeRoleTest extends NetCommonsHelperTest
  * @dataProvider dataProvider
  * @return void
  */
-	public function __assertOption($result, $value, $options, $selected) {
+	private function __assertOption($result, $value, $options, $selected) {
 		if (in_array($value, $options, true)) {
 			if ($selected === $value) {
 				$this->assertContains('<option value="' . $value . '" selected="selected">', $result);

@@ -94,6 +94,7 @@ class UserRoleBehaviorDeletePluginsRoleTest extends NetCommonsModelTestCase {
 
 		//テスト実施
 		$result = $this->TestModel->deletePluginsRole($roleKey, $pluginKey);
+		$this->assertTrue($result);
 
 		//チェック
 		$after = $this->TestModel->PluginsRole->find('count', array(
@@ -137,7 +138,7 @@ class UserRoleBehaviorDeletePluginsRoleTest extends NetCommonsModelTestCase {
 		$this->_mockForReturnFalse('TestModel', $mockModel, $mockMethod);
 
 		$this->setExpectedException('InternalErrorException');
-		$this->TestModel->deletePluginsRole($roleKey, $pluginKey);;
+		$this->TestModel->deletePluginsRole($roleKey, $pluginKey);
 	}
 
 }

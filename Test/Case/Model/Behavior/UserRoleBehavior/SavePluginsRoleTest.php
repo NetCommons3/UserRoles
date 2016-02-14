@@ -139,7 +139,7 @@ class UserRoleBehaviorSavePluginsRoleTest extends NetCommonsModelTestCase {
 		$this->_mockForReturnFalse('TestModel', $mockModel, $mockMethod);
 
 		$this->setExpectedException('InternalErrorException');
-		$this->TestModel->savePluginsRole($roleKey, $pluginKey);;
+		$this->TestModel->savePluginsRole($roleKey, $pluginKey);
 	}
 
 }
