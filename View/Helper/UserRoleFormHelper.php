@@ -11,6 +11,8 @@
 
 App::uses('AppHelper', 'View/Helper');
 App::uses('CakeNumber', 'Utility');
+App::uses('UserAttributesRolesController', 'UserRoles.Controller');
+App::uses('DataType', 'DataTypes.Model');
 
 /**
  * UserRolesForm Helper
@@ -191,7 +193,7 @@ class UserRoleFormHelper extends AppHelper {
 			return $options;
 		}
 
-		//編集の選択肢を表示する
+		//編集の選択肢を表示する(会員管理が使える場合のみ)
 		$options[UserAttributesRolesController::OTHER_EDITABLE] = __d('user_roles', 'Editable of others');
 
 		return $options;

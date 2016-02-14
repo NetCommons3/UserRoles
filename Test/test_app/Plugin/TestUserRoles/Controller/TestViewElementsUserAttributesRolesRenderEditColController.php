@@ -13,7 +13,6 @@ App::uses('AppController', 'Controller');
 App::uses('UserAttributeLayoutFixture', 'UserAttributes.Test/Fixture');
 App::uses('UserAttributeSetting4editFixture', 'UserAttributes.Test/Fixture');
 App::uses('UserAttribute4editFixture', 'UserAttributes.Test/Fixture');
-App::uses('UserAttributesRolesController', 'UserRoles.Controller');
 
 /**
  * View/Elements/UserAttributesRoles/render_edit_colテスト用Controller
