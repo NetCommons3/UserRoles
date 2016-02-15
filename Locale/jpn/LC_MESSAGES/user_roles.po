@@ -89,5 +89,5 @@ msgstr "プライベートルームの容量"
 
 #: UserRoles/View/UserRoleSettings/edit.ctp:85
 msgid "Can not be deleted because it has this authority is used."
-msgstr "この権限は使用されているため、削除できません。"
+msgstr "この権限は使用されているため、削除できません。使われているユーザの権限を変更してから削除して下さい。"
 
