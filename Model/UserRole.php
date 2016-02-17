@@ -108,16 +108,19 @@ class UserRole extends Role {
 				'numeric' => array(
 					'rule' => array('numeric'),
 					'message' => __d('net_commons', 'Invalid request.'),
+					'required' => true
 				),
 			),
 			'type' => array(
 				'numeric' => array(
 					'rule' => array('numeric'),
 					'message' => __d('net_commons', 'Invalid request.'),
+					'required' => true
 				),
 				'inList' => array(
 					'rule' => array('inList', array(parent::ROLE_TYPE_USER)),
 					'message' => __d('net_commons', 'Invalid request.'),
+					'required' => true
 				),
 			),
 			'name' => array(
