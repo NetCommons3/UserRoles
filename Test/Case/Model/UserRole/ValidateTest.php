@@ -67,7 +67,11 @@ class UserRoleValidateTest extends NetCommonsValidateTest {
 		$data['UserRole'] = (new UserRoleFixture())->records[0];
 
 		return array(
+			array('data' => $data, 'field' => 'language_id', 'value' => null,
+				'message' => __d('net_commons', 'Invalid request.')),
 			array('data' => $data, 'field' => 'language_id', 'value' => 'a',
+				'message' => __d('net_commons', 'Invalid request.')),
+			array('data' => $data, 'field' => 'type', 'value' => null,
 				'message' => __d('net_commons', 'Invalid request.')),
 			array('data' => $data, 'field' => 'type', 'value' => 'a',
 				'message' => __d('net_commons', 'Invalid request.')),
