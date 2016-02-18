@@ -10,4 +10,6 @@
  */
 ?>
 
+<?php echo $view; ?>
+
 Controller/Component/UserRoleFormComponent/index_request_action
