@@ -97,8 +97,10 @@ class UserRoleFormComponentStartupTest extends NetCommonsControllerTestCase {
 		));
 
 		//チェック
-		$pattern = '/' . preg_quote('Controller/Component/UserRoleFormComponent/index_request_action', '/') . '/';
+		$pattern = '/' . preg_quote('Controller/Component/UserRoleFormComponent/index', '/') . '/';
+		$this->assertRegExp($pattern, $this->view);
 
+		$pattern = '/' . preg_quote('Controller/Component/UserRoleFormComponent/index_request_action', '/') . '/';
 		$this->assertRegExp($pattern, $this->view);
 	}
 }

@@ -44,7 +44,8 @@ class TestUserRoleFormComponentController extends AppController {
  */
 	public function index_request_action() {
 		$this->autoRender = true;
-		$this->requestAction('/' . $this->params['plugin'] . '/' . $this->params['controller'] . '/index');
+		$view = $this->requestAction('/' . $this->params['plugin'] . '/' . $this->params['controller'] . '/index', array('return'));
+		$this->set('view', $view);
 	}
 
 }
