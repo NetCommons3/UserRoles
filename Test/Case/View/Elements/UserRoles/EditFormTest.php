@@ -54,9 +54,8 @@ class UserRolesViewElementsUserRolesEditFormTest extends NetCommonsControllerTes
  */
 	public function testEditForm() {
 		//テスト実行
-		$this->_testNcAction('/test_user_roles/test_view_elements_user_roles_edit_form/edit_form_by_edit', array(
-			'method' => 'get'
-		));
+		$this->_testGetAction('/test_user_roles/test_view_elements_user_roles_edit_form/edit_form_by_edit',
+				array('method' => 'assertNotEmpty'), null, 'view');
 
 		//チェック
 		$pattern = '/' . preg_quote('View/Elements/UserRoles/edit_form', '/') . '/';
@@ -80,9 +79,8 @@ class UserRolesViewElementsUserRolesEditFormTest extends NetCommonsControllerTes
  */
 	public function testAddForm() {
 		//テスト実行
-		$this->_testNcAction('/test_user_roles/test_view_elements_user_roles_edit_form/edit_form_by_add', array(
-			'method' => 'get'
-		));
+		$this->_testGetAction('/test_user_roles/test_view_elements_user_roles_edit_form/edit_form_by_add',
+				array('method' => 'assertNotEmpty'), null, 'view');
 
 		//チェック
 		$pattern = '/' . preg_quote('View/Elements/UserRoles/edit_form', '/') . '/';
