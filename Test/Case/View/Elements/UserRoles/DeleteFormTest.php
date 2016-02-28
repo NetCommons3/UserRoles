@@ -54,9 +54,8 @@ class UserRolesViewElementsUserRolesDeleteFormTest extends NetCommonsControllerT
  */
 	public function testDeleteForm() {
 		//テスト実行
-		$this->_testNcAction('/test_user_roles/test_view_elements_user_roles_delete_form/delete_form', array(
-			'method' => 'get'
-		));
+		$this->_testGetAction('/test_user_roles/test_view_elements_user_roles_delete_form/delete_form',
+				array('method' => 'assertNotEmpty'), null, 'view');
 
 		//チェック
 		$pattern = '/' . preg_quote('View/Elements/UserRoles/delete_form', '/') . '/';
@@ -67,6 +66,7 @@ class UserRolesViewElementsUserRolesDeleteFormTest extends NetCommonsControllerT
 		$this->assertInput('input', '_method', 'DELETE', $this->view);
 		$this->assertInput('input', 'data[UserRole][0][id]', '8', $this->view);
 		$this->assertInput('input', 'data[UserRole][0][key]', 'test_user', $this->view);
+		$this->assertInput('button', 'delete', null, $this->view);
 	}
 
 /**
@@ -76,9 +76,8 @@ class UserRolesViewElementsUserRolesDeleteFormTest extends NetCommonsControllerT
  */
 	public function testDeleteFormIsNotDeletable() {
 		//テスト実行
-		$this->_testNcAction('/test_user_roles/test_view_elements_user_roles_delete_form/delete_form_is_not_deletable', array(
-			'method' => 'get'
-		));
+		$this->_testGetAction('/test_user_roles/test_view_elements_user_roles_delete_form/delete_form_is_not_deletable',
+				array('method' => 'assertNotEmpty'), null, 'view');
 
 		//チェック
 		$pattern = '/' . preg_quote('View/Elements/UserRoles/delete_form', '/') . '/';

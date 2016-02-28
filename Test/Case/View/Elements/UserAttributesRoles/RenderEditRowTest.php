@@ -56,9 +56,8 @@ class UserRolesViewElementsUserAttributesRolesRenderEditRowTest extends NetCommo
  */
 	public function testRenderEditRow() {
 		//テスト実行
-		$this->_testNcAction('/test_user_roles/test_view_elements_user_attributes_roles_render_edit_row/render_edit_row', array(
-			'method' => 'get'
-		));
+		$this->_testGetAction('/test_user_roles/test_view_elements_user_attributes_roles_render_edit_row/render_edit_row',
+				array('method' => 'assertNotEmpty'), null, 'view');
 
 		//チェック
 		$pattern = '/' . preg_quote('View/Elements/UserAttributesRoles/render_edit_row', '/') . '/';

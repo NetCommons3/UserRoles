@@ -54,9 +54,8 @@ class UserRolesViewElementsSubtitleTest extends NetCommonsControllerTestCase {
  */
 	public function testSubtitle() {
 		//テスト実行
-		$this->_testNcAction('/test_user_roles/test_view_elements_subtitle/subtitle', array(
-			'method' => 'get'
-		));
+		$this->_testGetAction('/test_user_roles/test_view_elements_subtitle/subtitle',
+				array('method' => 'assertNotEmpty'), null, 'view');
 
 		//チェック
 		$pattern = '/' . preg_quote('View/Elements/subtitle', '/') . '/';
@@ -71,9 +70,8 @@ class UserRolesViewElementsSubtitleTest extends NetCommonsControllerTestCase {
  */
 	public function testNoSubtitle() {
 		//テスト実行
-		$this->_testNcAction('/test_user_roles/test_view_elements_subtitle/no_subtitle', array(
-			'method' => 'get'
-		));
+		$this->_testGetAction('/test_user_roles/test_view_elements_subtitle/no_subtitle',
+				array('method' => 'assertNotEmpty'), null, 'view');
 
 		//チェック
 		$pattern = '/' . preg_quote('View/Elements/subtitle', '/') . '/';

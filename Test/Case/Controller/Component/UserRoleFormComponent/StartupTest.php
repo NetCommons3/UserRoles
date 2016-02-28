@@ -68,9 +68,8 @@ class UserRoleFormComponentStartupTest extends NetCommonsControllerTestCase {
  */
 	public function testStartup() {
 		//テスト実行
-		$this->_testNcAction('/test_user_roles/test_user_role_form_component/index', array(
-			'method' => 'get'
-		));
+		$this->_testGetAction('/test_user_roles/test_user_role_form_component/index',
+				array('method' => 'assertNotEmpty'), null, 'view');
 
 		//チェック
 		$pattern = '/' . preg_quote('Controller/Component/UserRoleFormComponent/index', '/') . '/';
@@ -92,9 +91,8 @@ class UserRoleFormComponentStartupTest extends NetCommonsControllerTestCase {
  */
 	public function testStartupRequestAction() {
 		//テスト実行
-		$this->_testNcAction('/test_user_roles/test_user_role_form_component/index_request_action', array(
-			'method' => 'get'
-		));
+		$this->_testGetAction('/test_user_roles/test_user_role_form_component/index_request_action',
+				array('method' => 'assertNotEmpty'), null, 'view');
 
 		//チェック
 		$pattern = '/' . preg_quote('Controller/Component/UserRoleFormComponent/index', '/') . '/';

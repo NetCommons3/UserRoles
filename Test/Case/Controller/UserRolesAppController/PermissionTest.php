@@ -99,18 +99,10 @@ class UserRolesAppControllerPermissionTest extends NetCommonsControllerTestCase 
 		if (isset($role)) {
 			TestAuthGeneral::login($this, $role);
 		}
-		if ($exception) {
-			$this->setExpectedException($exception);
-		}
 
 		//テスト実行
-		$this->_testNcAction('/test_user_roles/test_user_roles_app_controller_permission/index', array(
-			'method' => 'get'
-		));
-
-		if (! $exception) {
-			$this->assertNotEmpty($this->view);
-		}
+		$this->_testGetAction('/test_user_roles/test_user_roles_app_controller_permission/index',
+				array('method' => 'assertNotEmpty'), $exception, 'view');
 	}
 
 }

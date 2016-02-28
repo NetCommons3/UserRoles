@@ -40,7 +40,7 @@ class User4testFixture extends UserFixture {
  */
 	protected $_records = array(
 		array(
-			'id' => 7,
+			'id' => 8,
 			'username' => 'test_user_2',
 			'password' => 'test_user_2',
 			'key' => 'test_user',

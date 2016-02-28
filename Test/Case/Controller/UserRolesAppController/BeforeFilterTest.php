@@ -69,9 +69,8 @@ class UserRolesAppControllerBeforeFilterTest extends NetCommonsControllerTestCas
 		TestAuthGeneral::login($this);
 
 		//テスト実行
-		$this->_testNcAction('/test_user_roles/test_user_roles_app_controller_index/index', array(
-			'method' => 'get'
-		));
+		$this->_testGetAction('/test_user_roles/test_user_roles_app_controller_index/index',
+				array('method' => 'assertNotEmpty'), null, 'view');
 
 		//チェック
 		$pattern = '/' . preg_quote('Controller/UserRolesAppController', '/') . '/';
@@ -84,12 +83,8 @@ class UserRolesAppControllerBeforeFilterTest extends NetCommonsControllerTestCas
  * @return void
  */
 	public function testBeforeFilterNoLogin() {
-		$this->setExpectedException('ForbiddenException');
-
 		//テスト実行
-		$this->_testNcAction('/test_user_roles/test_user_roles_app_controller_index/index', array(
-			'method' => 'get'
-		));
+		$this->_testGetAction('/test_user_roles/test_user_roles_app_controller_index/index', null, 'ForbiddenException', 'view');
 	}
 
 }

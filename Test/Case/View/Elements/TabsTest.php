@@ -54,9 +54,8 @@ class UserRolesViewElementsTabsTest extends NetCommonsControllerTestCase {
  */
 	public function testTabsAdd() {
 		//テスト実行
-		$this->_testNcAction('/test_user_roles/test_view_elements_tabs/add', array(
-			'method' => 'get'
-		));
+		$this->_testGetAction('/test_user_roles/test_view_elements_tabs/add',
+				array('method' => 'assertNotEmpty'), null, 'view');
 
 		//チェック
 		$pattern = '/' . preg_quote('View/Elements/tabs', '/') . '/';
@@ -102,9 +101,8 @@ class UserRolesViewElementsTabsTest extends NetCommonsControllerTestCase {
 		$this->generateNc('TestUserRoles.TestViewElementsTabs');
 
 		//テスト実行
-		$this->_testNcAction('/test_user_roles/test_view_elements_tabs/edit/' . $testController, array(
-			'method' => 'get'
-		));
+		$this->_testGetAction('/test_user_roles/test_view_elements_tabs/edit/' . $testController,
+				array('method' => 'assertNotEmpty'), null, 'view');
 
 		//チェック
 		$pattern = '/' . preg_quote('View/Elements/tabs', '/') . '/';
