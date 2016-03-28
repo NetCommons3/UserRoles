@@ -47,7 +47,7 @@ class User4testFixture extends UserFixture {
 			'handlename' => 'Test User',
 			'role_key' => 'test_user_2',
 			'status' => 1,
-			'is_status_public' => 1,
+			//'is_status_public' => 1,
 		),
 	);
 
