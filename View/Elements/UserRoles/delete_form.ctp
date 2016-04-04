@@ -11,14 +11,14 @@
 ?>
 
 <div class="nc-danger-zone" ng-init="dangerZone=false;">
-	<accordion close-others="false">
-		<accordion-group is-open="dangerZone" class="panel-danger">
-			<accordion-heading class="clearfix">
+	<uib-accordion close-others="false">
+		<uib-accordion-group is-open="dangerZone" class="panel-danger">
+			<uib-accordion-heading class="clearfix">
 				<span style="cursor: pointer">
 					<?php echo __d('net_commons', 'Danger Zone'); ?>
 				</span>
 				<span class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': dangerZone, 'glyphicon-chevron-right': ! dangerZone}"></span>
-			</accordion-heading>
+			</uib-accordion-heading>
 
 			<?php if (! $isDeletable) : ?>
 				<?php echo $this->NetCommonsForm->error('UserRole.key'); ?>
@@ -41,6 +41,6 @@
 						); ?>
 				<?php echo $this->NetCommonsForm->end(); ?>
 			<?php endif; ?>
-		</accordion-group>
-	</accordion>
+		</uib-accordion-group>
+	</uib-accordion>
 </div>
