@@ -39,5 +39,3 @@ if (! isset($roleKey)) {
 		</a>
 	</li>
 </ul>
-
-<br>
