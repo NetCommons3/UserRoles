@@ -13,13 +13,16 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 
 if ($this->params['action'] === 'edit') {
 	$type = 'put';
+	$description = __d('user_roles', 'Enter the title of the authority, enter the description of authority, and press &#039;OK&#039;.');
 } else {
 	$type = 'post';
+	$description = __d('user_roles', 'Enter the title of the authority, enter the description of authority, and specify the level of the authority, and press &#039;OK&#039;.');
 }
 ?>
 
 <?php echo $this->element('UserRoles.subtitle'); ?>
 <?php echo $this->Wizard->outputWizard(UserRolesAppController::WIZARD_USER_ROLES); ?>
+<?php echo $this->MessageFlash->description($description); ?>
 
 <div class="panel panel-default">
 	<?php echo $this->NetCommonsForm->create('UserRole', array('type' => $type)); ?>

@@ -101,6 +101,6 @@ class UserRolesAppController extends AppController {
 			$navbar = Hash::insert($this->helpers['NetCommons.Wizard']['navbar'], '{s}.url.key', $this->params['pass'][0]);
 			$this->helpers['NetCommons.Wizard']['navbar'] = $navbar;
 		}
-		$navbar[0]['url']['action'] = $this->params['action'];
+		$this->helpers['NetCommons.Wizard']['navbar'][self::WIZARD_USER_ROLES]['url']['action'] = $this->params['action'];
 	}
 }

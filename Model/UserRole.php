@@ -130,6 +130,13 @@ class UserRole extends Role {
 					'required' => true
 				),
 			),
+			'description' => array(
+				'notBlank' => array(
+					'rule' => array('notBlank'),
+					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('user_roles', 'User role description')),
+					'required' => true
+				),
+			),
 			'is_system' => array(
 				'boolean' => array(
 					'rule' => array('boolean'),

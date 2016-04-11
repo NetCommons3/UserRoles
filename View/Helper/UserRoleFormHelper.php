@@ -51,10 +51,6 @@ class UserRoleFormHelper extends AppHelper {
 		), $attributes);
 		$html .= $this->NetCommonsForm->input($fieldName, $attributes);
 
-		if ($displayDescription) {
-			$html .= $this->NetCommonsHtml->div(array('user-roles-origin-role-desc', 'bg-warning', 'text-danger'),
-					__d('user_roles', 'Role description'));
-		}
 		return $html;
 	}
 

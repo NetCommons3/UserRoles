@@ -130,40 +130,45 @@ class UserRolesController extends UserRolesAppController {
 		if ($roleKey === UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR) {
 			return $this->throwBadRequest();
 		}
+		//既存データ取得
+		$userRole = $this->UserRole->find('all', array(
+			'recursive' => -1,
+			'conditions' => array('key' => $roleKey)
+		));
+		if (! $userRole) {
+			return $this->throwBadRequest();
+		}
 
 		if ($this->request->is('put')) {
 			//不要パラメータ除去
 			unset($this->request->data['save'], $this->request->data['active_lang_id']);
 
 			//登録処理
-			$userRoles = $this->UserRole->saveUserRole($this->request->data);
-			if ($userRoles) {
+			$result = $this->UserRole->saveUserRole($this->request->data);
+			if ($result) {
 				//正常の場合
-				$userRoleKey = Hash::extract($userRoles, '{n}.UserRole[language_id=' . Current::read('Language.id') . '].key');
+				$userRoleKey = Hash::extract($result, '{n}.UserRole[language_id=' . Current::read('Language.id') . '].key');
 				return $this->redirect('/user_roles/user_role_settings/edit/' . Hash::get($userRoleKey, '0') . '/');
 			}
 			$this->NetCommons->handleValidationError($this->UserRole->validationErrors);
 
-		} else {
-			//既存データ取得
-			$result = $this->UserRole->find('all', array(
-				'recursive' => -1,
-				'conditions' => array('key' => $roleKey)
-			));
-			if (! $result) {
-				return $this->throwBadRequest();
-			}
-			$this->request->data['UserRole'] = Hash::extract($result, '{n}.UserRole');
+			$isSystem = Hash::extract($userRole, '{n}.UserRole[language_id=' . Current::read('Language.id') . '].is_system');
+			$this->request->data['UserRole'] = Hash::insert($this->request->data['UserRole'], '{n}.is_system', $isSystem);
 
-			$result = $this->UserRoleSetting->find('first', array(
-				'recursive' => -1,
-				'conditions' => array('role_key' => $roleKey),
-			));
-			$this->request->data = Hash::merge($this->request->data, $result);
+		} else {
+			$this->request->data['UserRole'] = Hash::extract($userRole, '{n}.UserRole');
 		}
+
+		$result = $this->UserRoleSetting->find('first', array(
+			'recursive' => -1,
+			'conditions' => array('role_key' => $roleKey),
+		));
+		$this->request->data = Hash::merge($this->request->data, $result);
+
 		$this->set('roleKey', $roleKey);
 
 		$this->set('subtitle', Hash::get($this->viewVars['userRoles'], $roleKey, ''));
+
 		$this->set('isDeletable', $this->UserRole->verifyDeletable($roleKey));
 	}
 

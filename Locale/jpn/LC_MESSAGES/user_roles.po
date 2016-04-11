@@ -34,6 +34,30 @@ msgstr "詳細設定"
 msgid "Information Policy"
 msgstr "個人情報設定"
 
+#
+# 一般設定
+#
+msgid "Enter the title of the authority, enter the description of authority, and specify the level of the authority, and press &#039;OK&#039;."
+msgstr "作成する権限の名称と説明及び作成する基となる権限を指定して、[決定]ボタンを押してください。"
+
+msgid "Enter the title of the authority, enter the description of authority, and press &#039;OK&#039;."
+msgstr "編集する権限の名称と説明を入力して、[決定]ボタンを押してください。"
+
+#: UserRoles/Model/UserRole.php:189
+#: UserRoles/View/UserRoles/index.ctp:24
+msgid "User role name"
+msgstr "権限名"
+
+msgid "User role description"
+msgstr "説明"
+
+#: UserRoles/View/Elements/UserRoles/edit_form_for_user_role_setting.ctp:15
+msgid "Origin roles"
+msgstr "以下の権限を基に新しい権限を作成する"
+
+#: UserRoles/View/Elements/UserRoles/edit_form_for_user_role_setting.ctp:21
+msgid "Role description"
+msgstr "新規に権限を作成するときは、適切に設定しないと個人情報の流出が起こる可能性があります。"
 
 
 
@@ -45,23 +69,9 @@ msgstr "会員管理"
 msgid "Room manager"
 msgstr "ルーム管理"
 
-#: UserRoles/Model/UserRole.php:189
-#: UserRoles/View/Elements/UserRoles/edit_form_for_user_role.ctp:24
-#: UserRoles/View/UserRoles/index.ctp:24
-msgid "User role name"
-msgstr "権限名"
-
 #: UserRoles/View/Elements/UserRoles/delete_form.ctp:25;35
 msgid "User role"
 msgstr "権限"
-
-#: UserRoles/View/Elements/UserRoles/edit_form_for_user_role_setting.ctp:15
-msgid "Origin roles"
-msgstr "コピー元の権限"
-
-#: UserRoles/View/Elements/UserRoles/edit_form_for_user_role_setting.ctp:21
-msgid "Role description"
-msgstr "新規に権限を作成するときは、適切に設定しないと個人情報の流出が起こる可能性があります。"
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:81
 msgid "Use"
