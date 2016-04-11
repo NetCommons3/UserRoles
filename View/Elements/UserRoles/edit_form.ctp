@@ -30,7 +30,8 @@
 
 		echo $this->NetCommonsForm->input('UserRole.' . $index . '.name', array(
 			'type' => 'text',
-			'label' => __d('user_roles', 'User role name') . $this->element('NetCommons.required'),
+			'label' => $this->SwitchLanguage->inputLabel(__d('user_roles', 'User role name'), $languageId),
+			'required' => true,
 		));
 
 		echo '</div>';

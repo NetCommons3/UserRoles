@@ -79,8 +79,7 @@ class UserAttributesRolesController extends UserRolesAppController {
 	public function edit($roleKey = null) {
 		if ($this->request->is('put')) {
 			if (! Hash::get($this->request->data, 'UserAttributesRole')) {
-				$this->throwBadRequest();
-				return;
+				return $this->throwBadRequest();
 			}
 
 			//不要パラメータ除去
@@ -97,8 +96,7 @@ class UserAttributesRolesController extends UserRolesAppController {
 				}
 
 				if (! in_array($otherRole, [self::OTHER_READABLE, self::OTHER_NOT_READABLE], true)) {
-					$this->throwBadRequest();
-					return;
+					return $this->throwBadRequest();
 				}
 
 				$this->request->data['UserAttributesRole'][$id]['UserAttributesRole']['other_readable'] = false;

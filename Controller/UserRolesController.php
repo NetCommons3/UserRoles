@@ -94,8 +94,7 @@ class UserRolesController extends UserRolesAppController {
 			if ($userRoles) {
 				//正常の場合
 				$userRoleKey = Hash::extract($userRoles, '{n}.UserRole[language_id=' . Current::read('Language.id') . '].key');
-				$this->redirect('/user_roles/user_role_settings/edit/' . Hash::get($userRoleKey, '0') . '/');
-				return;
+				return $this->redirect('/user_roles/user_role_settings/edit/' . Hash::get($userRoleKey, '0') . '/');
 			}
 			$this->NetCommons->handleValidationError($this->UserRole->validationErrors);
 
@@ -129,8 +128,7 @@ class UserRolesController extends UserRolesAppController {
  */
 	public function edit($roleKey = null) {
 		if ($roleKey === UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR) {
-			$this->throwBadRequest();
-			return;
+			return $this->throwBadRequest();
 		}
 
 		if ($this->request->is('put')) {
@@ -138,10 +136,11 @@ class UserRolesController extends UserRolesAppController {
 			unset($this->request->data['save'], $this->request->data['active_lang_id']);
 
 			//登録処理
-			if ($this->UserRole->saveUserRole($this->request->data)) {
+			$userRoles = $this->UserRole->saveUserRole($this->request->data);
+			if ($userRoles) {
 				//正常の場合
-				$this->redirect('/user_roles/user_roles/index/');
-				return;
+				$userRoleKey = Hash::extract($userRoles, '{n}.UserRole[language_id=' . Current::read('Language.id') . '].key');
+				return $this->redirect('/user_roles/user_role_settings/edit/' . Hash::get($userRoleKey, '0') . '/');
 			}
 			$this->NetCommons->handleValidationError($this->UserRole->validationErrors);
 
@@ -152,8 +151,7 @@ class UserRolesController extends UserRolesAppController {
 				'conditions' => array('key' => $roleKey)
 			));
 			if (! $result) {
-				$this->throwBadRequest();
-				return;
+				return $this->throwBadRequest();
 			}
 			$this->request->data['UserRole'] = Hash::extract($result, '{n}.UserRole');
 
@@ -176,15 +174,14 @@ class UserRolesController extends UserRolesAppController {
  */
 	public function delete() {
 		if (! $this->request->is('delete')) {
-			$this->throwBadRequest();
-			return;
+			return $this->throwBadRequest();
 		}
 		if (! $this->UserRole->deleteUserRole($this->data['UserRole'][0])) {
 			$message = Hash::get($this->UserRole->validationErrors, 'key.0');
 			$this->NetCommons->handleValidationError($this->UserRole->validationErrors, $message);
-			$this->redirect('/user_roles/user_roles/edit/' . $this->data['UserRole'][0]['key']);
-			return;
+			return $this->redirect('/user_roles/user_roles/edit/' . $this->data['UserRole'][0]['key']);
+		} else {
+			return $this->redirect('/user_roles/user_roles/index/');
 		}
-		$this->redirect('/user_roles/user_roles/index/');
 	}
 }

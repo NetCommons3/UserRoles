@@ -87,3 +87,5 @@ msgstr ""
 msgid "The total size of Private Room"
 msgstr ""
 
+msgid "Add user role"
+msgstr ""

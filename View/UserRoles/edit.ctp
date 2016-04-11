@@ -19,7 +19,7 @@ if ($this->params['action'] === 'edit') {
 ?>
 
 <?php echo $this->element('UserRoles.subtitle'); ?>
-<?php echo $this->element('UserRoles.tabs'); ?>
+<?php echo $this->Wizard->outputWizard(UserRolesAppController::WIZARD_USER_ROLES); ?>
 
 <div class="panel panel-default">
 	<?php echo $this->NetCommonsForm->create('UserRole', array('type' => $type)); ?>

@@ -46,8 +46,7 @@ class UserRoleSettingsController extends UserRolesAppController {
 			)
 		));
 		if (! $userRole) {
-			$this->throwBadRequest();
-			return;
+			return $this->throwBadRequest();
 		}
 
 		if ($this->request->is('put')) {

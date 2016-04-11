@@ -13,7 +13,7 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 ?>
 
 <?php echo $this->element('UserRoles.subtitle'); ?>
-<?php echo $this->element('UserRoles.tabs'); ?>
+<?php echo $this->Wizard->outputWizard(UserRolesAppController::WIZARD_USER_ATTRIBUTES_ROLES); ?>
 
 <?php echo $this->NetCommonsForm->create('UserAttributesRoles', array(
 		'type' => 'put',

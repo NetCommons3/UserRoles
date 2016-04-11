@@ -13,6 +13,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
+#
+# 権限一覧
+#
+msgid "You can add, edit and delete authority in your NetCommons."
+msgstr "権限の追加、編集、削除ができます。"
+
+msgid "Add user role"
+msgstr "権限の追加"
+
+#
+# ウィザードナビ
+#
+msgid "General setting"
+msgstr "一般設定"
+
+msgid "Details setting"
+msgstr "詳細設定"
+
+msgid "Information Policy"
+msgstr "個人情報設定"
+
+
+
+
 #: UserRoles/Controller/UserAttributesRolesController.php:118
 msgid "User manager"
 msgstr "会員管理"
@@ -26,18 +50,6 @@ msgstr "ルーム管理"
 #: UserRoles/View/UserRoles/index.ctp:24
 msgid "User role name"
 msgstr "権限名"
-
-#: UserRoles/View/Elements/tabs.ctp:30
-msgid "General setting"
-msgstr "一般設定"
-
-#: UserRoles/View/Elements/tabs.ctp:35
-msgid "Details setting"
-msgstr "詳細設定"
-
-#: UserRoles/View/Elements/tabs.ctp:41
-msgid "Information Policy"
-msgstr "個人情報設定"
 
 #: UserRoles/View/Elements/UserRoles/delete_form.ctp:25;35
 msgid "User role"
@@ -90,4 +102,3 @@ msgstr "プライベートルームの容量"
 #: UserRoles/View/UserRoleSettings/edit.ctp:85
 msgid "Can not be deleted because it has this authority is used."
 msgstr "この権限は使用されているため、削除できません。使われているユーザの権限を変更してから削除して下さい。"
-
