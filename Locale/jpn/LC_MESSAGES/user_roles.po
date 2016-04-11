@@ -37,11 +37,11 @@ msgstr "個人情報設定"
 #
 # 一般設定
 #
-msgid "Enter the title of the authority, enter the description of authority, and specify the level of the authority, and press &#039;OK&#039;."
-msgstr "作成する権限の名称と説明及び作成する基となる権限を指定して、[決定]ボタンを押してください。"
+msgid "Enter the title of the authority, enter the description of authority, and specify the level of the authority, and press &#039;NEXT&#039;."
+msgstr "作成する権限の名称と説明及び作成する基となる権限を指定して、[次へ]ボタンを押してください。"
 
-msgid "Enter the title of the authority, enter the description of authority, and press &#039;OK&#039;."
-msgstr "編集する権限の名称と説明を入力して、[決定]ボタンを押してください。"
+msgid "Enter the title of the authority, enter the description of authority, and press &#039;NEXT&#039;."
+msgstr "編集する権限の名称と説明を入力して、[次へ]ボタンを押してください。"
 
 #: UserRoles/Model/UserRole.php:189
 #: UserRoles/View/UserRoles/index.ctp:24
@@ -59,6 +59,32 @@ msgstr "以下の権限を基に新しい権限を作成する"
 msgid "Role description"
 msgstr "新規に権限を作成するときは、適切に設定しないと個人情報の流出が起こる可能性があります。"
 
+#
+# 詳細設定
+#
+msgid "Make sure your change, and press &#039;NEXT&#039;."
+msgstr "詳細設定を変更/確認して、[次へ]ボタンを押してください。"
+
+
+#: UserRoles/View/UserRoleSettings/edit.ctp:71
+msgid "Use private room?"
+msgstr "プライベートルーム"
+
+msgid "Select site-manager plugin to use"
+msgstr "サイト運営プラグインの選択"
+
+#: UserRoles/View/Helper/UserRoleFormHelper.php:81
+msgid "Use"
+msgstr "使用する"
+
+#: UserRoles/View/Helper/UserRoleFormHelper.php:82
+msgid "Not use"
+msgstr "使用しない"
+
+
+
+
+
 
 
 #: UserRoles/Controller/UserAttributesRolesController.php:118
@@ -73,13 +99,6 @@ msgstr "ルーム管理"
 msgid "User role"
 msgstr "権限"
 
-#: UserRoles/View/Helper/UserRoleFormHelper.php:81
-msgid "Use"
-msgstr "使用する"
-
-#: UserRoles/View/Helper/UserRoleFormHelper.php:82
-msgid "Not use"
-msgstr "使用しない"
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:86
 msgid "Permitted"
@@ -100,10 +119,6 @@ msgstr "他人の会員情報を閲覧させる"
 #: UserRoles/View/Helper/UserRoleFormHelper.php:246
 msgid "Editable of others"
 msgstr "他人の会員情報を編集させる"
-
-#: UserRoles/View/UserRoleSettings/edit.ctp:71
-msgid "Use private room?"
-msgstr "プライベートルーム"
 
 #: UserRoles/View/UserRoleSettings/edit.ctp:85
 msgid "The total size of Private Room"

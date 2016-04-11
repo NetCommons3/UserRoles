@@ -55,32 +55,23 @@ class UserRoleFormHelper extends AppHelper {
 	}
 
 /**
- * ユーザ毎のプラグインの利用(サイト管理系プラグイン)RADIOボタンの出力
+ * ユーザ毎のプラグインの利用(サイト管理系プラグイン)checkboxの出力
  *
  * @param string $fieldName フィールド名(Modelname.fieldname形式)
- * @param bool $isPlugin プラグインかどうか
  * @param array $attributes タグ属性
  * @return string HTMLタグ
  */
-	public function radioUserRole($fieldName, $isPlugin, $attributes = array()) {
+	public function checkboxUserRole($fieldName, $attributes = array()) {
 		$html = '';
 
-		$options = array(
-			'1' => __d('user_roles', 'Use'),
-			'0' => __d('user_roles', 'Not use'),
-		);
-		$radioAttributes = array(
-			'legend' => false,
-			'separator' => '<span class="radio-separator"> </span>',
-		);
-
-		if ($isPlugin && $this->_View->data['UserRoleSetting']['origin_role_key'] === UserRole::USER_ROLE_KEY_COMMON_USER) {
-			$html .= $this->NetCommonsForm->hidden($fieldName);
-			$html .= $this->NetCommonsForm->radio(null, $options,
-					Hash::merge($radioAttributes, array('disabled' => true, 'hiddenField' => false), $attributes));
+		if ($this->_View->data['UserRoleSetting']['origin_role_key'] === UserRole::USER_ROLE_KEY_COMMON_USER) {
+			$html .= $this->NetCommonsForm->checkbox($fieldName,
+				Hash::merge($attributes, array('disabled' => true)
+			));
 		} else {
-			$html .= $this->NetCommonsForm->radio($fieldName, $options,
-					Hash::merge($radioAttributes, $attributes));
+			$html .= $this->NetCommonsForm->checkbox($fieldName,
+				Hash::merge($attributes, array()
+			));
 		}
 
 		return $html;
