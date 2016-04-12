@@ -101,15 +101,19 @@ class UserRoleFormHelper extends AppHelper {
 			$this->_View->request->data = Hash::insert($this->_View->request->data, $fieldName, UserAttributesRolesController::OTHER_NOT_READABLE);
 		}
 
+		$ngModel = $this->domId($fieldName);
+		$ngValue = Hash::get($this->_View->request->data, $fieldName);
+
 		$html = '';
-		$html .= '<div class="form-group">';
-		$html .= '<div class="input-group input-group-sm user-attribute-roles-edit">';
+		$html .= '<div class="form-group" ng-init="' . $ngModel . ' = \'' . $ngValue . '\'">';
+		$html .= '<div class="input-group input-group-sm user-attribute-roles-edit" ' .
+						'ng-class="{\'bg-success\': ' . $ngModel . ' !== \'other_not_readable\'}">';
 
 		$label = h($userAttribute['UserAttribute']['name']);
 		if ($userAttribute['UserAttributeSetting']['required']) {
 			$label .= $this->_View->element('NetCommons.required', array('size' => 'h5'));
 		}
-		$html .= $this->Form->label($fieldName, $label, array('class' => 'input-group-addon user-attribute-roles-edit'));
+		$html .= $this->Form->label($fieldName, $label, array('class' => 'input-group-addon'));
 
 		if ($this->_View->request->data['UserRoleSetting']['is_usable_user_manager']) {
 			$disabled = true;
@@ -129,6 +133,7 @@ class UserRoleFormHelper extends AppHelper {
 			'class' => 'form-control',
 			'empty' => false,
 			'disabled' => $disabled,
+			'ng-model' => $ngModel,
 		);
 		$html .= $this->Form->select($fieldName, $options, $attributes);
 

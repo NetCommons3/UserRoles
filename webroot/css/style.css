@@ -20,3 +20,7 @@
 label.user-roles-label {
 	margin-right: 30px;
 }
+
+.user-attribute-roles-edit .input-group-addon {
+	background-color: transparent;
+}

@@ -59,12 +59,19 @@ msgstr "以下の権限を基に新しい権限を作成する"
 msgid "Role description"
 msgstr "新規に権限を作成するときは、適切に設定しないと個人情報の流出が起こる可能性があります。"
 
+#: UserRoles/View/Elements/UserRoles/delete_form.ctp:25;35
+msgid "User role"
+msgstr "権限"
+
+#: UserRoles/View/UserRoleSettings/edit.ctp:85
+msgid "Can not be deleted because it has this authority is used."
+msgstr "この権限は使用されているため、削除できません。使われているユーザの権限を変更してから削除して下さい。"
+
 #
 # 詳細設定
 #
 msgid "Make sure your change, and press &#039;NEXT&#039;."
 msgstr "詳細設定を変更/確認して、[次へ]ボタンを押してください。"
-
 
 #: UserRoles/View/UserRoleSettings/edit.ctp:71
 msgid "Use private room?"
@@ -81,33 +88,9 @@ msgstr "使用する"
 msgid "Not use"
 msgstr "使用しない"
 
-
-
-
-
-
-
-#: UserRoles/Controller/UserAttributesRolesController.php:118
-msgid "User manager"
-msgstr "会員管理"
-
-#: UserRoles/Controller/UserRoleSettingsController.php:93
-msgid "Room manager"
-msgstr "ルーム管理"
-
-#: UserRoles/View/Elements/UserRoles/delete_form.ctp:25;35
-msgid "User role"
-msgstr "権限"
-
-
-#: UserRoles/View/Helper/UserRoleFormHelper.php:86
-msgid "Permitted"
-msgstr "許可する"
-
-#: UserRoles/View/Helper/UserRoleFormHelper.php:87
-msgid "Not permitted"
-msgstr "許可しない"
-
+#
+# 詳細設定
+#
 #: UserRoles/View/Helper/UserRoleFormHelper.php:244
 msgid "Not readable of others"
 msgstr "他人の会員情報を閲覧させない"
@@ -120,10 +103,5 @@ msgstr "他人の会員情報を閲覧させる"
 msgid "Editable of others"
 msgstr "他人の会員情報を編集させる"
 
-#: UserRoles/View/UserRoleSettings/edit.ctp:85
-msgid "The total size of Private Room"
-msgstr "プライベートルームの容量"
-
-#: UserRoles/View/UserRoleSettings/edit.ctp:85
-msgid "Can not be deleted because it has this authority is used."
-msgstr "この権限は使用されているため、削除できません。使われているユーザの権限を変更してから削除して下さい。"
+msgid "You can set whether or not to view the user information of others. However, if the user manger plugin can be used, because you can view and edit all of the user information, here, it can not be set."
+msgstr "他人の会員情報を閲覧させるかどうか設定できます。ただし、会員管理プラグインが使用できる場合は、すべての会員情報の閲覧及び編集できるため、ここでは、設定できません。"
