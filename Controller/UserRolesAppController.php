@@ -62,7 +62,7 @@ class UserRolesAppController extends AppController {
  */
 	public $helpers = array(
 		'NetCommons.Wizard' => array(
-			'navbar' => array(
+			'navibar' => array(
 				self::WIZARD_USER_ROLES => array(
 					'url' => array(
 						'controller' => 'user_roles',
@@ -84,7 +84,8 @@ class UserRolesAppController extends AppController {
 					),
 					'label' => array('user_roles', 'Information Policy'),
 				),
-			)
+			),
+			'cancelUrl' => array('controller' => 'user_roles', 'action' => 'index'),
 		),
 	);
 
@@ -98,9 +99,9 @@ class UserRolesAppController extends AppController {
 		$this->Auth->deny('index', 'view');
 
 		if ($this->params['action'] === 'edit') {
-			$navbar = Hash::insert($this->helpers['NetCommons.Wizard']['navbar'], '{s}.url.key', $this->params['pass'][0]);
-			$this->helpers['NetCommons.Wizard']['navbar'] = $navbar;
+			$navibar = Hash::insert($this->helpers['NetCommons.Wizard']['navibar'], '{s}.url.key', $this->params['pass'][0]);
+			$this->helpers['NetCommons.Wizard']['navibar'] = $navibar;
+			$this->helpers['NetCommons.Wizard']['navibar'][self::WIZARD_USER_ROLES]['url']['action'] = $this->params['action'];
 		}
-		$this->helpers['NetCommons.Wizard']['navbar'][self::WIZARD_USER_ROLES]['url']['action'] = $this->params['action'];
 	}
 }

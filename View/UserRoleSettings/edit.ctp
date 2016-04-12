@@ -16,7 +16,7 @@ echo $this->NetCommonsHtml->css(array(
 ?>
 
 <?php echo $this->element('UserRoles.subtitle'); ?>
-<?php echo $this->Wizard->outputWizard(UserRolesAppController::WIZARD_USER_ROLE_SETTINGS); ?>
+<?php echo $this->Wizard->navibar(UserRolesAppController::WIZARD_USER_ROLE_SETTINGS); ?>
 <?php echo $this->MessageFlash->description(__d('user_roles', 'Make sure your change, and press &#039;NEXT&#039;.')); ?>
 
 <div class="panel panel-default">
@@ -66,11 +66,7 @@ echo $this->NetCommonsHtml->css(array(
 	</div>
 
 	<div class="panel-footer text-center">
-		<?php echo $this->Button->cancelAndSave(
-				__d('net_commons', 'Cancel'),
-				__d('net_commons', 'NEXT') . '<span class="glyphicon glyphicon-chevron-right"></span>',
-				$this->NetCommonsHtml->url(array('controller' => 'user_roles', 'action' => 'index'))
-			); ?>
+		<?php echo $this->Wizard->buttons(UserRolesAppController::WIZARD_USER_ROLE_SETTINGS); ?>
 	</div>
 
 	<?php echo $this->NetCommonsForm->end(); ?>

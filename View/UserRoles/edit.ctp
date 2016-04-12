@@ -21,7 +21,7 @@ if ($this->params['action'] === 'edit') {
 ?>
 
 <?php echo $this->element('UserRoles.subtitle'); ?>
-<?php echo $this->Wizard->outputWizard(UserRolesAppController::WIZARD_USER_ROLES); ?>
+<?php echo $this->Wizard->navibar(UserRolesAppController::WIZARD_USER_ROLES); ?>
 <?php echo $this->MessageFlash->description($description); ?>
 
 <div class="panel panel-default">
@@ -36,11 +36,7 @@ if ($this->params['action'] === 'edit') {
 	</div>
 
 	<div class="panel-footer text-center">
-		<?php echo $this->Button->cancelAndSave(
-				__d('net_commons', 'Cancel'),
-				__d('net_commons', 'NEXT') . '<span class="glyphicon glyphicon-chevron-right"></span>',
-				$this->NetCommonsHtml->url(array('action' => 'index'))
-			); ?>
+		<?php echo $this->Wizard->buttons(UserRolesAppController::WIZARD_USER_ROLES); ?>
 	</div>
 
 	<?php echo $this->NetCommonsForm->end(); ?>
