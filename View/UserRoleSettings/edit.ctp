@@ -37,7 +37,7 @@ echo $this->NetCommonsHtml->css(array(
 						'0' => __d('user_roles', 'Not use'),
 					),
 					'class' => false,
-					'childDiv' => array('class' => 'form-inline'),
+					'div' => array('class' => 'form-inline'),
 					'separator' => '<span class="radio-separator"></span>',
 				)); ?>
 			</div>
