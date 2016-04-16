@@ -47,8 +47,8 @@ echo $this->NetCommonsHtml->css(array(
 				<?php echo __d('user_roles', 'Select site-manager plugin to use'); ?>
 			</div>
 			<div class="panel-body clearfix">
-				<?php foreach ($this->data['PluginsRole'] as $i => $pluginsRole) : ?>
-					<div class="pull-left form-inline plugin-checkbox-separator">
+				<div class="plugin-checkbox-outer plugin-outer-sm">
+					<?php foreach ($this->data['PluginsRole'] as $i => $pluginsRole) : ?>
 						<?php echo $this->UserRoleForm->checkboxUserRole('PluginsRole.' . $i . '.PluginsRole.is_usable_plugin', array(
 							'label' => $pluginsRole['Plugin']['name'],
 							'div' => false,
@@ -58,8 +58,8 @@ echo $this->NetCommonsHtml->css(array(
 						<?php echo $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.id'); ?>
 						<?php echo $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.role_key', array('value' => $roleKey)); ?>
 						<?php echo $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.plugin_key', array('value' => $pluginsRole['Plugin']['key'])); ?>
-					</div>
-				<?php endforeach; ?>
+					<?php endforeach; ?>
+				</div>
 			</div>
 		</div>
 	</div>
