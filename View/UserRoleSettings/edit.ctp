@@ -38,7 +38,6 @@ echo $this->NetCommonsHtml->css(array(
 					),
 					'class' => false,
 					'div' => array('class' => 'form-inline'),
-					'separator' => '<span class="radio-separator"></span>',
 				)); ?>
 			</div>
 		</div>
