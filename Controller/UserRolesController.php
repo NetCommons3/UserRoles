@@ -93,6 +93,9 @@ class UserRolesController extends UserRolesAppController {
 			$userRoles = $this->UserRole->saveUserRole($this->request->data);
 			if ($userRoles) {
 				//正常の場合
+				$this->NetCommons->setFlashNotification(
+					__d('net_commons', 'Successfully saved.'), array('class' => 'success')
+				);
 				$userRoleKey = Hash::extract($userRoles, '{n}.UserRole[language_id=' . Current::read('Language.id') . '].key');
 				return $this->redirect('/user_roles/user_role_settings/edit/' . Hash::get($userRoleKey, '0') . '/');
 			}
@@ -147,6 +150,9 @@ class UserRolesController extends UserRolesAppController {
 			$result = $this->UserRole->saveUserRole($this->request->data);
 			if ($result) {
 				//正常の場合
+				$this->NetCommons->setFlashNotification(
+					__d('net_commons', 'Successfully saved.'), array('class' => 'success')
+				);
 				$userRoleKey = Hash::extract($result, '{n}.UserRole[language_id=' . Current::read('Language.id') . '].key');
 				return $this->redirect('/user_roles/user_role_settings/edit/' . Hash::get($userRoleKey, '0') . '/');
 			}

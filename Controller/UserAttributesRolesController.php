@@ -110,6 +110,9 @@ class UserAttributesRolesController extends UserRolesAppController {
 			//登録処理
 			if ($this->UserAttributesRole->saveUserAttributesRoles($this->request->data)) {
 				//正常の場合
+				$this->NetCommons->setFlashNotification(
+					__d('net_commons', 'Successfully saved.'), array('class' => 'success')
+				);
 				$this->redirect('/user_roles/user_roles/index/');
 			} else {
 				$this->NetCommons->handleValidationError($this->UserAttributesRole->validationErrors);

@@ -16,20 +16,32 @@
 	<?php echo $this->LinkButton->add(__d('user_roles', 'Add user role'), array('action' => 'add')); ?>
 </div>
 
-<table class="table table-condensed">
+<table class="table table-hover">
 	<thead>
 		<tr>
 			<th>
 				<?php echo __d('user_roles', 'User role name'); ?>
 			</th>
+			<th>
+				<?php echo __d('user_roles', 'User role description'); ?>
+			</th>
+			<th></th>
 		</tr>
 	</thead>
 	<tbody>
 		<?php foreach ($userRoles as $index => $userRole) : ?>
 			<tr>
 				<td>
-					<?php echo h($userRole['UserRole']['name']); ?>
+					<div class="text-nowrap">
+						<?php echo h($userRole['UserRole']['name']); ?>
+					</div>
+				</td>
 
+				<td>
+					<?php echo h($userRole['UserRole']['description']); ?>
+				</td>
+
+				<td>
 					<?php if ($userRole['UserRole']['key'] !== UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR) : ?>
 						<?php echo $this->LinkButton->edit('', array('action' => 'edit', h($userRole['UserRole']['key'])), array('iconSize' => ' btn-xs')); ?>
 					<?php endif; ?>
