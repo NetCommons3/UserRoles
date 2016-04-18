@@ -99,9 +99,11 @@ class UserRolesAppController extends AppController {
 		$this->Auth->deny('index', 'view');
 
 		if ($this->params['action'] === 'edit') {
-			$navibar = Hash::insert($this->helpers['NetCommons.Wizard']['navibar'], '{s}.url.key', $this->params['pass'][0]);
+			$navibar = Hash::insert(
+				$this->helpers['NetCommons.Wizard']['navibar'], '{s}.url.key', $this->params['pass'][0]
+			);
+			$navibar[self::WIZARD_USER_ROLES]['url']['action'] = $this->params['action'];
 			$this->helpers['NetCommons.Wizard']['navibar'] = $navibar;
-			$this->helpers['NetCommons.Wizard']['navibar'][self::WIZARD_USER_ROLES]['url']['action'] = $this->params['action'];
 		}
 	}
 }

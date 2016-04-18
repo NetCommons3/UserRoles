@@ -121,8 +121,11 @@ class UserAttributesRolesController extends UserRolesAppController {
 
 		} else {
 			//既存データ取得
-			$this->request->data = $this->UserRoleSetting->getUserRoleSetting(Plugin::PLUGIN_TYPE_FOR_SITE_MANAGER, $roleKey);
-			$this->request->data['UserAttributesRole'] = $this->UserAttributesRole->getUserAttributesRole($roleKey);
+			$this->request->data = $this->UserRoleSetting->getUserRoleSetting(
+				Plugin::PLUGIN_TYPE_FOR_SITE_MANAGER, $roleKey
+			);
+			$this->request->data['UserAttributesRole'] =
+								$this->UserAttributesRole->getUserAttributesRole($roleKey);
 			$this->request->data['UserAttribute'] = $this->viewVars['userAttributes'];
 			$userRole = $this->UserRole->find('first', array(
 				'recursive' => -1,

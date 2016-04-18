@@ -96,8 +96,11 @@ class UserRoleSetting extends UserRolesAppModel {
 		$userRoleSetting['PluginsRole'] = $this->PluginsRole->getPlugins($pluginType, $roleKey);
 
 		//会員管理の使用有無のフラグセット
-		$isUsableUserManager = Hash::extract($userRoleSetting['PluginsRole'], '{n}.PluginsRole[plugin_key=user_manager].id');
-		$userRoleSetting['UserRoleSetting']['is_usable_user_manager'] = (bool)Hash::get($isUsableUserManager, '0', false);
+		$isUsableUserManager = Hash::extract(
+			$userRoleSetting['PluginsRole'], '{n}.PluginsRole[plugin_key=user_manager].id'
+		);
+		$userRoleSetting['UserRoleSetting']['is_usable_user_manager'] =
+										(bool)Hash::get($isUsableUserManager, '0', false);
 
 		return $userRoleSetting;
 	}
@@ -132,9 +135,13 @@ class UserRoleSetting extends UserRolesAppModel {
 			//PluginsRoleのデータ登録処理
 			foreach ($data['PluginsRole'] as $pluginRole) {
 				if (Hash::get($pluginRole, 'PluginsRole.is_usable_plugin', false)) {
-					$this->savePluginsRole($pluginRole['PluginsRole']['role_key'], $pluginRole['PluginsRole']['plugin_key']);
+					$this->savePluginsRole(
+						$pluginRole['PluginsRole']['role_key'], $pluginRole['PluginsRole']['plugin_key']
+					);
 				} else {
-					$this->deletePluginsRole($pluginRole['PluginsRole']['role_key'], $pluginRole['PluginsRole']['plugin_key']);
+					$this->deletePluginsRole(
+						$pluginRole['PluginsRole']['role_key'], $pluginRole['PluginsRole']['plugin_key']
+					);
 				}
 			}
 

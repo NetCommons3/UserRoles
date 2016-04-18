@@ -81,7 +81,11 @@ class UserRoleBehavior extends ModelBehavior {
 		foreach (['id', 'created', 'created_user', 'modified', 'modified_user'] as $field) {
 			$userAttributesRole = Hash::remove($userAttributesRole, '{n}.UserAttributesRole.' . $field);
 		}
-		$userAttributesRole = Hash::insert($userAttributesRole, '{n}.UserAttributesRole.role_key', $data['UserRoleSetting']['role_key']);
+		$userAttributesRole = Hash::insert(
+			$userAttributesRole,
+			'{n}.UserAttributesRole.role_key',
+			$data['UserRoleSetting']['role_key']
+		);
 		if (! $model->UserAttributesRole->saveMany($userAttributesRole, array('validate' => false))) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
@@ -115,7 +119,9 @@ class UserRoleBehavior extends ModelBehavior {
 		foreach (['id', 'created', 'created_user', 'modified', 'modified_user'] as $field) {
 			$pluginsRole = Hash::remove($pluginsRole, '{n}.PluginsRole.' . $field);
 		}
-		$pluginsRole = Hash::insert($pluginsRole, '{n}.PluginsRole.role_key', $data['UserRoleSetting']['role_key']);
+		$pluginsRole = Hash::insert(
+			$pluginsRole, '{n}.PluginsRole.role_key', $data['UserRoleSetting']['role_key']
+		);
 		if (! $model->PluginsRole->saveMany($pluginsRole, array('validate' => false))) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
@@ -219,8 +225,9 @@ class UserRoleBehavior extends ModelBehavior {
 
 		$data['UserAttributesRole'] = array();
 		foreach ($userAttrSettings as $i => $userAttrSetting) {
+			$userAttributeKey = $userAttrSetting['UserAttributeSetting']['user_attribute_key'];
 			$userAttrRole = Hash::extract($UserAttributesRoles,
-					'{n}.UserAttributesRole[user_attribute_key=' . $userAttrSetting['UserAttributeSetting']['user_attribute_key'] . ']');
+					'{n}.UserAttributesRole[user_attribute_key=' . $userAttributeKey . ']');
 
 			$data['UserAttributesRole'][$i] = Hash::merge(
 				$model->UserAttributesRole->create(Hash::get($userAttrRole, '0')),

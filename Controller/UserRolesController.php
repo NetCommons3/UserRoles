@@ -96,8 +96,12 @@ class UserRolesController extends UserRolesAppController {
 				$this->NetCommons->setFlashNotification(
 					__d('net_commons', 'Successfully saved.'), array('class' => 'success')
 				);
-				$userRoleKey = Hash::extract($userRoles, '{n}.UserRole[language_id=' . Current::read('Language.id') . '].key');
-				return $this->redirect('/user_roles/user_role_settings/edit/' . Hash::get($userRoleKey, '0') . '/');
+				$userRoleKey = Hash::extract(
+					$userRoles, '{n}.UserRole[language_id=' . Current::read('Language.id') . '].key'
+				);
+				return $this->redirect(
+					'/user_roles/user_role_settings/edit/' . Hash::get($userRoleKey, '0') . '/'
+				);
 			}
 			$this->NetCommons->handleValidationError($this->UserRole->validationErrors);
 
@@ -153,13 +157,21 @@ class UserRolesController extends UserRolesAppController {
 				$this->NetCommons->setFlashNotification(
 					__d('net_commons', 'Successfully saved.'), array('class' => 'success')
 				);
-				$userRoleKey = Hash::extract($result, '{n}.UserRole[language_id=' . Current::read('Language.id') . '].key');
-				return $this->redirect('/user_roles/user_role_settings/edit/' . Hash::get($userRoleKey, '0') . '/');
+				$userRoleKey = Hash::extract(
+					$result, '{n}.UserRole[language_id=' . Current::read('Language.id') . '].key'
+				);
+				return $this->redirect(
+					'/user_roles/user_role_settings/edit/' . Hash::get($userRoleKey, '0') . '/'
+				);
 			}
 			$this->NetCommons->handleValidationError($this->UserRole->validationErrors);
 
-			$isSystem = Hash::extract($userRole, '{n}.UserRole[language_id=' . Current::read('Language.id') . '].is_system');
-			$this->request->data['UserRole'] = Hash::insert($this->request->data['UserRole'], '{n}.is_system', $isSystem);
+			$isSystem = Hash::extract(
+				$userRole, '{n}.UserRole[language_id=' . Current::read('Language.id') . '].is_system'
+			);
+			$this->request->data['UserRole'] = Hash::insert(
+				$this->request->data['UserRole'], '{n}.is_system', $isSystem
+			);
 
 		} else {
 			$this->request->data['UserRole'] = Hash::extract($userRole, '{n}.UserRole');

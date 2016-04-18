@@ -58,7 +58,8 @@ class UserAttributesRoleBehavior extends ModelBehavior {
 		$userAttributeRole['UserAttributesRole']['self_readable'] = true;
 		$userAttributeRole['UserAttributesRole']['self_editable'] = true;
 
-		if ($userAttrSetting['UserAttributeSetting']['user_attribute_key'] === UserAttribute::PASSWORD_FIELD) {
+		$userAttributeKey = $userAttrSetting['UserAttributeSetting']['user_attribute_key'];
+		if ($userAttributeKey === UserAttribute::PASSWORD_FIELD) {
 			$userAttributeRole['UserAttributesRole']['self_readable'] = false;
 			$userAttributeRole['UserAttributesRole']['other_readable'] = false;
 		} elseif ($enableUserManager) {
@@ -70,7 +71,7 @@ class UserAttributesRoleBehavior extends ModelBehavior {
 		} else {
 			$userAttributeRole['UserAttributesRole']['self_readable'] = true;
 			$userAttributeRole['UserAttributesRole']['other_readable'] =
-							in_array($userAttrSetting['UserAttributeSetting']['user_attribute_key'], $this->readableDefault, true);
+							in_array($userAttributeKey, $this->readableDefault, true);
 		}
 
 		$userAttributeRole['UserAttributesRole']['other_editable'] = false;

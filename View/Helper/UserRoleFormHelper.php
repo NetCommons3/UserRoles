@@ -41,8 +41,6 @@ class UserRoleFormHelper extends AppHelper {
  */
 	public function selectOriginUserRoles($fieldName, $attributes = array()) {
 		$html = '';
-		$displayDescription = Hash::get($attributes, 'description', false);
-		Hash::remove($attributes, 'description');
 
 		$attributes = Hash::merge(array(
 			'type' => 'select',
@@ -64,7 +62,8 @@ class UserRoleFormHelper extends AppHelper {
 	public function checkboxUserRole($fieldName, $attributes = array()) {
 		$html = '';
 
-		if ($this->_View->data['UserRoleSetting']['origin_role_key'] === UserRole::USER_ROLE_KEY_COMMON_USER) {
+		$originRoleKey = $this->_View->data['UserRoleSetting']['origin_role_key'];
+		if ($originRoleKey === UserRole::USER_ROLE_KEY_COMMON_USER) {
 			$html .= $this->NetCommonsForm->checkbox($fieldName,
 				Hash::merge($attributes, array('disabled' => true)
 			));
@@ -94,11 +93,17 @@ class UserRoleFormHelper extends AppHelper {
 		$fieldName = 'UserAttributesRole.' . $id . '.UserAttributesRole.other_user_attribute_role';
 
 		if ($userAttributeRole[0]['other_editable']) {
-			$this->_View->request->data = Hash::insert($this->_View->request->data, $fieldName, UserAttributesRolesController::OTHER_EDITABLE);
+			$this->_View->request->data = Hash::insert(
+				$this->_View->request->data, $fieldName, UserAttributesRolesController::OTHER_EDITABLE
+			);
 		} elseif ($userAttributeRole[0]['other_readable']) {
-			$this->_View->request->data = Hash::insert($this->_View->request->data, $fieldName, UserAttributesRolesController::OTHER_READABLE);
+			$this->_View->request->data = Hash::insert(
+				$this->_View->request->data, $fieldName, UserAttributesRolesController::OTHER_READABLE
+			);
 		} else {
-			$this->_View->request->data = Hash::insert($this->_View->request->data, $fieldName, UserAttributesRolesController::OTHER_NOT_READABLE);
+			$this->_View->request->data = Hash::insert(
+				$this->_View->request->data, $fieldName, UserAttributesRolesController::OTHER_NOT_READABLE
+			);
 		}
 
 		$ngModel = $this->domId($fieldName);
@@ -121,7 +126,9 @@ class UserRoleFormHelper extends AppHelper {
 			$disabled = false;
 			$html .= $this->Form->hidden('UserAttributesRole.' . $id . '.UserAttributesRole.id');
 			$html .= $this->Form->hidden('UserAttributesRole.' . $id . '.UserAttributesRole.role_key');
-			$html .= $this->Form->hidden('UserAttributesRole.' . $id . '.UserAttributesRole.user_attribute_key');
+			$html .= $this->Form->hidden(
+				'UserAttributesRole.' . $id . '.UserAttributesRole.user_attribute_key'
+			);
 		}
 
 		$options = $this->__optionsUserAttributeRole($userAttribute);
@@ -155,32 +162,35 @@ class UserRoleFormHelper extends AppHelper {
 			'{n}.UserAttributesRole[user_attribute_key=' . $userAttributeKey . ']'
 		);
 
+		$otherReadable = UserAttributesRolesController::OTHER_READABLE;
+		$otherNotReadable = UserAttributesRolesController::OTHER_NOT_READABLE;
+		$dataTypeKey = $userAttribute['UserAttributeSetting']['data_type_key'];
 		if ($userAttributeRole[0]['user_attribute_key'] === 'handlename') {
 			//ハンドルの場合、「閲覧させない」を除外する
 			$options = array(
-				UserAttributesRolesController::OTHER_READABLE => __d('user_roles', 'Readable of others'),
+				$otherReadable => __d('user_roles', 'Readable of others'),
 			);
-		} elseif ($userAttribute['UserAttributeSetting']['data_type_key'] === DataType::DATA_TYPE_PASSWORD) {
+		} elseif ($dataTypeKey === DataType::DATA_TYPE_PASSWORD) {
 			//パスワードの場合、「閲覧させる」を除外する
 			$options = array(
-				UserAttributesRolesController::OTHER_NOT_READABLE => __d('user_roles', 'Not readable of others'),
+				$otherNotReadable => __d('user_roles', 'Not readable of others'),
 			);
 		} elseif (! $userAttribute['UserAttributeSetting']['only_administrator_readable'] ||
 				$this->_View->request->data['UserRoleSetting']['is_usable_user_manager']) {
 			$options = array(
-				UserAttributesRolesController::OTHER_NOT_READABLE => __d('user_roles', 'Not readable of others'),
-				UserAttributesRolesController::OTHER_READABLE => __d('user_roles', 'Readable of others'),
+				$otherNotReadable => __d('user_roles', 'Not readable of others'),
+				$otherReadable => __d('user_roles', 'Readable of others'),
 			);
 		} else {
 			$options = array(
-				UserAttributesRolesController::OTHER_NOT_READABLE => __d('user_roles', 'Not readable of others'),
+				$otherNotReadable => __d('user_roles', 'Not readable of others'),
 			);
 		}
 
 		//以下の場合、編集の選択肢は表示させない
 		// * ラベルタイプ
 		// * 会員管理が使用できない
-		if ($userAttribute['UserAttributeSetting']['data_type_key'] === DataType::DATA_TYPE_LABEL ||
+		if ($dataTypeKey === DataType::DATA_TYPE_LABEL ||
 				! $this->_View->request->data['UserRoleSetting']['is_usable_user_manager']) {
 			return $options;
 		}
