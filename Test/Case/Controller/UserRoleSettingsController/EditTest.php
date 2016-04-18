@@ -107,14 +107,11 @@ class UserRoleSettingsControllerEditTest extends NetCommonsControllerTestCase {
  * @param int $id PluginsRole.id
  * @param string $roleKey 権限キー
  * @param string $pluginKey プラグインキー
- * @param string $usable0 使用しないの値 (e.g.) value="0" checked="checked"
- * @param string $usable1 使用するの値 (e.g.) value="1" checked="checked"
+ * @param string $usable 使用有無チェックボックス (e.g.) checked="checked" value="1"
  * @return void
  */
-	private function __assertPluginsRole($index, $id, $roleKey, $pluginKey, $usable0, $usable1) {
-		$pattern = '/<input.*?name="' . preg_quote('data[PluginsRole][' . $index . '][PluginsRole][is_usable_plugin]', '/') . '".*?' . $usable1 . ' \/>/';
-		$this->assertRegExp($pattern, $this->view);
-		$pattern = '/<input.*?name="' . preg_quote('data[PluginsRole][' . $index . '][PluginsRole][is_usable_plugin]', '/') . '".*?' . $usable0 . ' \/>/';
+	private function __assertPluginsRole($index, $id, $roleKey, $pluginKey, $usable) {
+		$pattern = '/<input.*?name="' . preg_quote('data[PluginsRole][' . $index . '][PluginsRole][is_usable_plugin]', '/') . '" ' . $usable . '/';
 		$this->assertRegExp($pattern, $this->view);
 		$this->assertInput('input', 'data[PluginsRole][' . $index . '][PluginsRole][id]', $id, $this->view);
 		$this->assertInput('input', 'data[PluginsRole][' . $index . '][PluginsRole][role_key]', $roleKey, $this->view);
@@ -156,9 +153,9 @@ class UserRoleSettingsControllerEditTest extends NetCommonsControllerTestCase {
 		$this->assertInput('input', '_method', 'PUT', $this->view);
 
 		$this->__assertUserRoleSetting('2', $roleKey, 'value="0"', 'value="1" checked="checked"');
-		$this->__assertPluginsRole('0', '3', $roleKey, 'user_manager', 'value="0"', 'value="1" checked="checked"');
-		$this->__assertPluginsRole('1', '1', $roleKey, 'user_roles', 'value="0"', 'value="1" checked="checked"');
-		$this->__assertPluginsRole('2', null, $roleKey, 'test_user_roles', 'value="0" checked="checked"', 'value="1"');
+		$this->__assertPluginsRole('0', '3', $roleKey, 'user_manager', 'checked="checked" value="1"');
+		$this->__assertPluginsRole('1', '1', $roleKey, 'user_roles', 'checked="checked" value="1"');
+		$this->__assertPluginsRole('2', null, $roleKey, 'test_user_roles', 'value="1"');
 	}
 
 /**
@@ -177,9 +174,9 @@ class UserRoleSettingsControllerEditTest extends NetCommonsControllerTestCase {
 		$this->assertInput('input', '_method', 'PUT', $this->view);
 
 		$this->__assertUserRoleSetting('3', $roleKey, 'value="0"', 'value="1" checked="checked"');
-		$this->__assertPluginsRole('0', null, $roleKey, 'user_manager', 'value="0" disabled="disabled" checked="checked"', 'value="1" disabled="disabled"');
-		$this->__assertPluginsRole('1', null, $roleKey, 'user_roles', 'value="0" disabled="disabled" checked="checked"', 'value="1" disabled="disabled"');
-		$this->__assertPluginsRole('2', null, $roleKey, 'test_user_roles', 'value="0" disabled="disabled" checked="checked"', 'value="1" disabled="disabled"');
+		$this->__assertPluginsRole('0', null, $roleKey, 'user_manager', 'disabled="disabled" value="1"');
+		$this->__assertPluginsRole('1', null, $roleKey, 'user_roles', 'disabled="disabled" value="1"');
+		$this->__assertPluginsRole('2', null, $roleKey, 'test_user_roles', 'disabled="disabled" value="1"');
 	}
 
 /**

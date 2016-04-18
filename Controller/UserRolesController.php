@@ -157,6 +157,7 @@ class UserRolesController extends UserRolesAppController {
 				$this->NetCommons->setFlashNotification(
 					__d('net_commons', 'Successfully saved.'), array('class' => 'success')
 				);
+
 				$userRoleKey = Hash::extract(
 					$result, '{n}.UserRole[language_id=' . Current::read('Language.id') . '].key'
 				);
@@ -166,11 +167,11 @@ class UserRolesController extends UserRolesAppController {
 			}
 			$this->NetCommons->handleValidationError($this->UserRole->validationErrors);
 
-			$isSystem = Hash::extract(
-				$userRole, '{n}.UserRole[language_id=' . Current::read('Language.id') . '].is_system'
+			$extract = Hash::extract(
+				$userRole, '{n}.UserRole[language_id=' . Current::read('Language.id') . ']'
 			);
 			$this->request->data['UserRole'] = Hash::insert(
-				$this->request->data['UserRole'], '{n}.is_system', $isSystem
+				$this->request->data['UserRole'], '{n}.is_system', Hash::get($extract, '0.is_system')
 			);
 
 		} else {
