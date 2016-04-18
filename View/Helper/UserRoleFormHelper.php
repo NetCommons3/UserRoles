@@ -41,8 +41,6 @@ class UserRoleFormHelper extends AppHelper {
  */
 	public function selectOriginUserRoles($fieldName, $attributes = array()) {
 		$html = '';
-		$displayDescription = Hash::get($attributes, 'description', false);
-		Hash::remove($attributes, 'description');
 
 		$attributes = Hash::merge(array(
 			'type' => 'select',
@@ -51,40 +49,28 @@ class UserRoleFormHelper extends AppHelper {
 		), $attributes);
 		$html .= $this->NetCommonsForm->input($fieldName, $attributes);
 
-		if ($displayDescription) {
-			$html .= $this->NetCommonsHtml->div(array('user-roles-origin-role-desc', 'bg-warning', 'text-danger'),
-					__d('user_roles', 'Role description'));
-		}
 		return $html;
 	}
 
 /**
- * ユーザ毎のプラグインの利用(サイト管理系プラグイン)RADIOボタンの出力
+ * ユーザ毎のプラグインの利用(サイト管理系プラグイン)checkboxの出力
  *
  * @param string $fieldName フィールド名(Modelname.fieldname形式)
- * @param bool $isPlugin プラグインかどうか
  * @param array $attributes タグ属性
  * @return string HTMLタグ
  */
-	public function radioUserRole($fieldName, $isPlugin, $attributes = array()) {
+	public function checkboxUserRole($fieldName, $attributes = array()) {
 		$html = '';
 
-		$options = array(
-			'1' => __d('user_roles', 'Use'),
-			'0' => __d('user_roles', 'Not use'),
-		);
-		$radioAttributes = array(
-			'legend' => false,
-			'separator' => '<span class="radio-separator"> </span>',
-		);
-
-		if ($isPlugin && $this->_View->data['UserRoleSetting']['origin_role_key'] === UserRole::USER_ROLE_KEY_COMMON_USER) {
-			$html .= $this->NetCommonsForm->hidden($fieldName);
-			$html .= $this->NetCommonsForm->radio(null, $options,
-					Hash::merge($radioAttributes, array('disabled' => true, 'hiddenField' => false), $attributes));
+		$originRoleKey = $this->_View->data['UserRoleSetting']['origin_role_key'];
+		if ($originRoleKey === UserRole::USER_ROLE_KEY_COMMON_USER) {
+			$html .= $this->NetCommonsForm->checkbox($fieldName,
+				Hash::merge($attributes, array('disabled' => true)
+			));
 		} else {
-			$html .= $this->NetCommonsForm->radio($fieldName, $options,
-					Hash::merge($radioAttributes, $attributes));
+			$html .= $this->NetCommonsForm->checkbox($fieldName,
+				Hash::merge($attributes, array()
+			));
 		}
 
 		return $html;
@@ -107,22 +93,32 @@ class UserRoleFormHelper extends AppHelper {
 		$fieldName = 'UserAttributesRole.' . $id . '.UserAttributesRole.other_user_attribute_role';
 
 		if ($userAttributeRole[0]['other_editable']) {
-			$this->_View->request->data = Hash::insert($this->_View->request->data, $fieldName, UserAttributesRolesController::OTHER_EDITABLE);
+			$this->_View->request->data = Hash::insert(
+				$this->_View->request->data, $fieldName, UserAttributesRolesController::OTHER_EDITABLE
+			);
 		} elseif ($userAttributeRole[0]['other_readable']) {
-			$this->_View->request->data = Hash::insert($this->_View->request->data, $fieldName, UserAttributesRolesController::OTHER_READABLE);
+			$this->_View->request->data = Hash::insert(
+				$this->_View->request->data, $fieldName, UserAttributesRolesController::OTHER_READABLE
+			);
 		} else {
-			$this->_View->request->data = Hash::insert($this->_View->request->data, $fieldName, UserAttributesRolesController::OTHER_NOT_READABLE);
+			$this->_View->request->data = Hash::insert(
+				$this->_View->request->data, $fieldName, UserAttributesRolesController::OTHER_NOT_READABLE
+			);
 		}
 
+		$ngModel = $this->domId($fieldName);
+		$ngValue = Hash::get($this->_View->request->data, $fieldName);
+
 		$html = '';
-		$html .= '<div class="form-group">';
-		$html .= '<div class="input-group input-group-sm user-attribute-roles-edit">';
+		$html .= '<div class="form-group" ng-init="' . $ngModel . ' = \'' . $ngValue . '\'">';
+		$html .= '<div class="input-group input-group-sm user-attribute-roles-edit" ' .
+						'ng-class="{\'bg-success\': ' . $ngModel . ' !== \'other_not_readable\'}">';
 
 		$label = h($userAttribute['UserAttribute']['name']);
 		if ($userAttribute['UserAttributeSetting']['required']) {
 			$label .= $this->_View->element('NetCommons.required', array('size' => 'h5'));
 		}
-		$html .= $this->Form->label($fieldName, $label, array('class' => 'input-group-addon user-attribute-roles-edit'));
+		$html .= $this->Form->label($fieldName, $label, array('class' => 'input-group-addon'));
 
 		if ($this->_View->request->data['UserRoleSetting']['is_usable_user_manager']) {
 			$disabled = true;
@@ -130,7 +126,9 @@ class UserRoleFormHelper extends AppHelper {
 			$disabled = false;
 			$html .= $this->Form->hidden('UserAttributesRole.' . $id . '.UserAttributesRole.id');
 			$html .= $this->Form->hidden('UserAttributesRole.' . $id . '.UserAttributesRole.role_key');
-			$html .= $this->Form->hidden('UserAttributesRole.' . $id . '.UserAttributesRole.user_attribute_key');
+			$html .= $this->Form->hidden(
+				'UserAttributesRole.' . $id . '.UserAttributesRole.user_attribute_key'
+			);
 		}
 
 		$options = $this->__optionsUserAttributeRole($userAttribute);
@@ -142,6 +140,7 @@ class UserRoleFormHelper extends AppHelper {
 			'class' => 'form-control',
 			'empty' => false,
 			'disabled' => $disabled,
+			'ng-model' => $ngModel,
 		);
 		$html .= $this->Form->select($fieldName, $options, $attributes);
 
@@ -163,32 +162,35 @@ class UserRoleFormHelper extends AppHelper {
 			'{n}.UserAttributesRole[user_attribute_key=' . $userAttributeKey . ']'
 		);
 
+		$otherReadable = UserAttributesRolesController::OTHER_READABLE;
+		$otherNotReadable = UserAttributesRolesController::OTHER_NOT_READABLE;
+		$dataTypeKey = $userAttribute['UserAttributeSetting']['data_type_key'];
 		if ($userAttributeRole[0]['user_attribute_key'] === 'handlename') {
 			//ハンドルの場合、「閲覧させない」を除外する
 			$options = array(
-				UserAttributesRolesController::OTHER_READABLE => __d('user_roles', 'Readable of others'),
+				$otherReadable => __d('user_roles', 'Readable of others'),
 			);
-		} elseif ($userAttribute['UserAttributeSetting']['data_type_key'] === DataType::DATA_TYPE_PASSWORD) {
+		} elseif ($dataTypeKey === DataType::DATA_TYPE_PASSWORD) {
 			//パスワードの場合、「閲覧させる」を除外する
 			$options = array(
-				UserAttributesRolesController::OTHER_NOT_READABLE => __d('user_roles', 'Not readable of others'),
+				$otherNotReadable => __d('user_roles', 'Not readable of others'),
 			);
 		} elseif (! $userAttribute['UserAttributeSetting']['only_administrator_readable'] ||
 				$this->_View->request->data['UserRoleSetting']['is_usable_user_manager']) {
 			$options = array(
-				UserAttributesRolesController::OTHER_NOT_READABLE => __d('user_roles', 'Not readable of others'),
-				UserAttributesRolesController::OTHER_READABLE => __d('user_roles', 'Readable of others'),
+				$otherNotReadable => __d('user_roles', 'Not readable of others'),
+				$otherReadable => __d('user_roles', 'Readable of others'),
 			);
 		} else {
 			$options = array(
-				UserAttributesRolesController::OTHER_NOT_READABLE => __d('user_roles', 'Not readable of others'),
+				$otherNotReadable => __d('user_roles', 'Not readable of others'),
 			);
 		}
 
 		//以下の場合、編集の選択肢は表示させない
 		// * ラベルタイプ
 		// * 会員管理が使用できない
-		if ($userAttribute['UserAttributeSetting']['data_type_key'] === DataType::DATA_TYPE_LABEL ||
+		if ($dataTypeKey === DataType::DATA_TYPE_LABEL ||
 				! $this->_View->request->data['UserRoleSetting']['is_usable_user_manager']) {
 			return $options;
 		}

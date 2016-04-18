@@ -13,13 +13,16 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 
 if ($this->params['action'] === 'edit') {
 	$type = 'put';
+	$description = __d('user_roles', 'Enter the title of the authority, enter the description of authority, and press &#039;NEXT&#039;.');
 } else {
 	$type = 'post';
+	$description = __d('user_roles', 'Enter the title of the authority, enter the description of authority, and specify the level of the authority, and press &#039;NEXT&#039;.');
 }
 ?>
 
 <?php echo $this->element('UserRoles.subtitle'); ?>
-<?php echo $this->element('UserRoles.tabs'); ?>
+<?php echo $this->Wizard->navibar(UserRolesAppController::WIZARD_USER_ROLES); ?>
+<?php echo $this->MessageFlash->description($description); ?>
 
 <div class="panel panel-default">
 	<?php echo $this->NetCommonsForm->create('UserRole', array('type' => $type)); ?>
@@ -33,11 +36,7 @@ if ($this->params['action'] === 'edit') {
 	</div>
 
 	<div class="panel-footer text-center">
-		<?php echo $this->Button->cancelAndSave(
-				__d('net_commons', 'Cancel'),
-				__d('net_commons', 'OK'),
-				$this->NetCommonsHtml->url(array('action' => 'index'))
-			); ?>
+		<?php echo $this->Wizard->buttons(UserRolesAppController::WIZARD_USER_ROLES); ?>
 	</div>
 
 	<?php echo $this->NetCommonsForm->end(); ?>

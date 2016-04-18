@@ -58,10 +58,10 @@ class UserRolesControllerIndexTest extends NetCommonsControllerTestCase {
 		$this->assertActionLink('add', array('action' => 'add'), true, $this->view);
 		$this->assertNotContains('/user_roles/user_roles/edit/system_administrator', $this->view);
 
-		$pattern = '/<a href=".*?' . preg_quote('/user_roles/user_roles/edit/administrator', '/') . '">/';
+		$pattern = '/<a href=".*?' . preg_quote('/user_roles/user_roles/edit/administrator', '/') . '/';
 		$this->assertRegExp($pattern, $this->view);
 
-		$pattern = '/<a href=".*?' . preg_quote('/user_roles/user_roles/edit/common_user', '/') . '">/';
+		$pattern = '/<a href=".*?' . preg_quote('/user_roles/user_roles/edit/common_user', '/') . '/';
 		$this->assertRegExp($pattern, $this->view);
 
 		TestAuthGeneral::logout($this);

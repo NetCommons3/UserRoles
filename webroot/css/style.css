@@ -21,8 +21,6 @@ label.user-roles-label {
 	margin-right: 30px;
 }
 
-.user-roles-origin-role-desc {
-	margin-top: 6px;
-	padding: 10px;
+.user-attribute-roles-edit .input-group-addon {
+	background-color: transparent;
 }
-

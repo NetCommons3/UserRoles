@@ -76,10 +76,10 @@ class UserRolesControllerAddTest extends NetCommonsControllerTestCase {
 			'active_lang_id' => Current::read('Language.id'),
 			'UserRole' => array(
 				0 => array(
-					'id' => null, 'language_id' => '1', 'key' => null, 'type' => '1', 'name' => 'Add name',
+					'id' => null, 'language_id' => '1', 'key' => null, 'type' => '1', 'name' => 'Add name', 'description' => 'Add user description',
 				),
 				1 => array(
-					'id' => null, 'language_id' => '2', 'key' => null, 'type' => '1', 'name' => 'Add name',
+					'id' => null, 'language_id' => '2', 'key' => null, 'type' => '1', 'name' => 'Add name', 'description' => 'Add user description',
 				)
 			),
 			'UserRoleSetting' => array(

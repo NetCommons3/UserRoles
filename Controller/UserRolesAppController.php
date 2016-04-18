@@ -20,6 +20,27 @@ App::uses('AppController', 'Controller');
 class UserRolesAppController extends AppController {
 
 /**
+ * ウィザード定数(user_roles)
+ *
+ * @var string
+ */
+	const WIZARD_USER_ROLES = 'user_roles';
+
+/**
+ * ウィザード定数(user_role_settings)
+ *
+ * @var string
+ */
+	const WIZARD_USER_ROLE_SETTINGS = 'user_role_settings';
+
+/**
+ * ウィザード定数(user_attributes_roles)
+ *
+ * @var string
+ */
+	const WIZARD_USER_ATTRIBUTES_ROLES = 'user_attributes_roles';
+
+/**
  * use component
  *
  * @var array
@@ -35,6 +56,40 @@ class UserRolesAppController extends AppController {
 	);
 
 /**
+ * use helpers
+ *
+ * @var array
+ */
+	public $helpers = array(
+		'NetCommons.Wizard' => array(
+			'navibar' => array(
+				self::WIZARD_USER_ROLES => array(
+					'url' => array(
+						'controller' => 'user_roles',
+						'action' => 'add',
+					),
+					'label' => array('user_roles', 'General setting'),
+				),
+				self::WIZARD_USER_ROLE_SETTINGS => array(
+					'url' => array(
+						'controller' => 'user_role_settings',
+						'action' => 'edit',
+					),
+					'label' => array('user_roles', 'Details setting'),
+				),
+				self::WIZARD_USER_ATTRIBUTES_ROLES => array(
+					'url' => array(
+						'controller' => 'user_attributes_roles',
+						'action' => 'edit',
+					),
+					'label' => array('user_roles', 'Information Policy'),
+				),
+			),
+			'cancelUrl' => array('controller' => 'user_roles', 'action' => 'index'),
+		),
+	);
+
+/**
  * beforeFilter
  *
  * @return void
@@ -42,5 +97,13 @@ class UserRolesAppController extends AppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 		$this->Auth->deny('index', 'view');
+
+		if ($this->params['action'] === 'edit') {
+			$navibar = Hash::insert(
+				$this->helpers['NetCommons.Wizard']['navibar'], '{s}.url.key', $this->params['pass'][0]
+			);
+			$navibar[self::WIZARD_USER_ROLES]['url']['action'] = $this->params['action'];
+			$this->helpers['NetCommons.Wizard']['navibar'] = $navibar;
+		}
 	}
 }

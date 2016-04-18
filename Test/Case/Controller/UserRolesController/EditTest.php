@@ -78,10 +78,12 @@ class UserRolesControllerEditTest extends NetCommonsControllerTestCase {
 			'active_lang_id' => Current::read('Language.id'),
 			'UserRole' => array(
 				array(
-					'id' => '7', 'language_id' => '2', 'key' => 'test_user', 'type' => '1', 'name' => 'Test user',
+					'id' => '7', 'language_id' => '2', 'key' => 'test_user', 'type' => '1',
+					'name' => 'Test user', 'description' => 'Test user description',
 				),
 				array(
-					'id' => '8', 'language_id' => '1', 'key' => 'test_user', 'type' => '1', 'name' => 'Test user',
+					'id' => '8', 'language_id' => '1', 'key' => 'test_user', 'type' => '1',
+					'name' => 'Test user', 'description' => 'Test user description',
 				),
 			),
 			'UserRoleSetting' => array(
@@ -107,9 +109,6 @@ class UserRolesControllerEditTest extends NetCommonsControllerTestCase {
 		$pattern = '/<select.*?name="' . preg_quote('data[UserRoleSetting][origin_role_key]', '/') . '".*?' .
 					'disabled="disabled".*?id="UserRoleSettingOriginRoleKey".*?>/';
 		$this->assertRegExp($pattern, $this->view);
-
-		$this->assertContains('/user_roles/user_role_settings/edit/' . $roleKey, $this->view);
-		$this->assertContains('/user_roles/user_attributes_roles/edit/' . $roleKey, $this->view);
 
 		if ($isSystem) {
 			$this->assertNotContains('dangerZone', $this->view);
@@ -213,7 +212,9 @@ class UserRolesControllerEditTest extends NetCommonsControllerTestCase {
  * @return void
  */
 	public function testEditPost() {
-		$this->_mockForReturnTrue('UserRoles.UserRole', 'saveUserRole');
+		$this->_mockForReturn('UserRoles.UserRole', 'saveUserRole', array(
+			0 => array('UserRole' => array('language_id' => '2', 'key' => 'test_user'))
+		));
 
 		//テスト実行
 		$data = $this->__data();
@@ -221,7 +222,7 @@ class UserRolesControllerEditTest extends NetCommonsControllerTestCase {
 
 		//チェック
 		$header = $this->controller->response->header();
-		$this->assertTextContains('/user_roles/user_roles/index/', $header['Location']);
+		$this->assertTextContains('/user_roles/user_role_settings/edit/test_user', $header['Location']);
 	}
 
 /**

@@ -9,11 +9,15 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
+echo $this->NetCommonsHtml->css(array(
+	'/user_roles/css/style.css',
+	'/plugin_manager/css/style.css',
+));
 ?>
 
 <?php echo $this->element('UserRoles.subtitle'); ?>
-<?php echo $this->element('UserRoles.tabs'); ?>
+<?php echo $this->Wizard->navibar(UserRolesAppController::WIZARD_USER_ROLE_SETTINGS); ?>
+<?php echo $this->MessageFlash->description(__d('user_roles', 'Make sure your change, and press &#039;NEXT&#039;.')); ?>
 
 <div class="panel panel-default">
 	<?php echo $this->NetCommonsForm->create('UserRoleSetting'); ?>
@@ -23,43 +27,45 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 		<?php echo $this->NetCommonsForm->hidden('UserRoleSetting.role_key'); ?>
 		<?php echo $this->NetCommonsForm->hidden('UserRoleSetting.origin_role_key'); ?>
 
-		<?php foreach ($this->data['PluginsRole'] as $i => $pluginsRole) : ?>
-			<div class="row form-group">
-				<div class="col-xs-12 col-sm-6 col-md-4">
-					<?php echo $this->NetCommonsForm->label('PluginsRole.' . $i . '.PluginsRole.is_usable_plugin', $pluginsRole['Plugin']['name']); ?>
-				</div>
-
-				<div class="col-xs-12 col-sm-6 col-md-8">
-					<?php echo $this->UserRoleForm->radioUserRole('PluginsRole.' . $i . '.PluginsRole.is_usable_plugin', true, array(
-						'value' => (bool)$pluginsRole['PluginsRole']['id']
-					)); ?>
-
-					<?php echo $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.id'); ?>
-					<?php echo $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.role_key', array('value' => $roleKey)); ?>
-					<?php echo $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.plugin_key', array('value' => $pluginsRole['Plugin']['key'])); ?>
-				</div>
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<?php echo $this->NetCommonsForm->input('UserRoleSetting.use_private_room', array(
+					'type' => 'radio',
+					'label' => __d('user_roles', 'Use private room?'),
+					'options' => array(
+						'1' => __d('user_roles', 'Use'),
+						'0' => __d('user_roles', 'Not use'),
+					),
+					'class' => false,
+					'div' => array('class' => 'form-inline'),
+				)); ?>
 			</div>
-		<?php endforeach; ?>
+		</div>
 
-		<div class="row form-group">
-			<div class="col-xs-12 col-sm-6 col-md-4">
-				<?php echo $this->NetCommonsForm->label('UserRoleSetting.use_private_room',
-						__d('user_roles', 'Use private room?')
-					); ?>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<?php echo __d('user_roles', 'Select site-manager plugin to use'); ?>
 			</div>
+			<div class="panel-body clearfix">
+				<div class="plugin-checkbox-outer plugin-outer-sm">
+					<?php foreach ($this->data['PluginsRole'] as $i => $pluginsRole) : ?>
+						<?php echo $this->UserRoleForm->checkboxUserRole('PluginsRole.' . $i . '.PluginsRole.is_usable_plugin', array(
+							'label' => $pluginsRole['Plugin']['name'],
+							'div' => false,
+							'checked' => (bool)$pluginsRole['PluginsRole']['id']
+						)); ?>
 
-			<div class="col-xs-12 col-sm-6 col-md-8">
-				<?php echo $this->UserRoleForm->radioUserRole('UserRoleSetting.use_private_room', false); ?>
+						<?php echo $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.id'); ?>
+						<?php echo $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.role_key', array('value' => $roleKey)); ?>
+						<?php echo $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.plugin_key', array('value' => $pluginsRole['Plugin']['key'])); ?>
+					<?php endforeach; ?>
+				</div>
 			</div>
 		</div>
 	</div>
 
 	<div class="panel-footer text-center">
-		<?php echo $this->Button->cancelAndSave(
-				__d('net_commons', 'Cancel'),
-				__d('net_commons', 'OK'),
-				$this->NetCommonsHtml->url(array('controller' => 'user_roles', 'action' => 'index'))
-			); ?>
+		<?php echo $this->Wizard->buttons(UserRolesAppController::WIZARD_USER_ROLE_SETTINGS); ?>
 	</div>
 
 	<?php echo $this->NetCommonsForm->end(); ?>

@@ -79,8 +79,7 @@ class UserAttributesRolesController extends UserRolesAppController {
 	public function edit($roleKey = null) {
 		if ($this->request->is('put')) {
 			if (! Hash::get($this->request->data, 'UserAttributesRole')) {
-				$this->throwBadRequest();
-				return;
+				return $this->throwBadRequest();
 			}
 
 			//不要パラメータ除去
@@ -97,8 +96,7 @@ class UserAttributesRolesController extends UserRolesAppController {
 				}
 
 				if (! in_array($otherRole, [self::OTHER_READABLE, self::OTHER_NOT_READABLE], true)) {
-					$this->throwBadRequest();
-					return;
+					return $this->throwBadRequest();
 				}
 
 				$this->request->data['UserAttributesRole'][$id]['UserAttributesRole']['other_readable'] = false;
@@ -112,6 +110,9 @@ class UserAttributesRolesController extends UserRolesAppController {
 			//登録処理
 			if ($this->UserAttributesRole->saveUserAttributesRoles($this->request->data)) {
 				//正常の場合
+				$this->NetCommons->setFlashNotification(
+					__d('net_commons', 'Successfully saved.'), array('class' => 'success')
+				);
 				$this->redirect('/user_roles/user_roles/index/');
 			} else {
 				$this->NetCommons->handleValidationError($this->UserAttributesRole->validationErrors);
@@ -120,8 +121,11 @@ class UserAttributesRolesController extends UserRolesAppController {
 
 		} else {
 			//既存データ取得
-			$this->request->data = $this->UserRoleSetting->getUserRoleSetting(Plugin::PLUGIN_TYPE_FOR_SITE_MANAGER, $roleKey);
-			$this->request->data['UserAttributesRole'] = $this->UserAttributesRole->getUserAttributesRole($roleKey);
+			$this->request->data = $this->UserRoleSetting->getUserRoleSetting(
+				Plugin::PLUGIN_TYPE_FOR_SITE_MANAGER, $roleKey
+			);
+			$this->request->data['UserAttributesRole'] =
+								$this->UserAttributesRole->getUserAttributesRole($roleKey);
 			$this->request->data['UserAttribute'] = $this->viewVars['userAttributes'];
 			$userRole = $this->UserRole->find('first', array(
 				'recursive' => -1,

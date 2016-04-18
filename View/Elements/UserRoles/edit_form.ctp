@@ -17,12 +17,7 @@
 			continue;
 		}
 
-		if ($activeLangId === $languageId) {
-			$activeCss = ' active';
-		} else {
-			$activeCss = '';
-		}
-		echo '<div id="user-roles-' . $languageId . '" class="tab-pane' . $activeCss . '">';
+		echo '<div class="form-group" ng-show="activeLangId === \'' . (string)$languageId . '\'" ng-cloak>';
 		echo $this->NetCommonsForm->hidden('UserRole.' . $index . '.id');
 		echo $this->NetCommonsForm->hidden('UserRole.' . $index . '.key');
 		echo $this->NetCommonsForm->hidden('UserRole.' . $index . '.language_id');
@@ -30,15 +25,38 @@
 
 		echo $this->NetCommonsForm->input('UserRole.' . $index . '.name', array(
 			'type' => 'text',
-			'label' => __d('user_roles', 'User role name') . $this->element('NetCommons.required'),
+			'label' => $this->SwitchLanguage->inputLabel(__d('user_roles', 'User role name'), $languageId),
+			'required' => true,
+			'error' => array(
+				'ng-show' => 'activeLangId === \'' . (string)$languageId . '\'',
+			),
 		));
 
 		echo '</div>';
-	}
 
-	echo $this->UserRoleForm->selectOriginUserRoles('UserRoleSetting.origin_role_key', array(
-			'label' => __d('user_roles', 'Origin roles'),
-			'value' => $this->data['UserRoleSetting']['origin_role_key'],
-			'disabled' => ($this->params['action'] === 'edit'),
-			'description' => true,
+		echo $this->NetCommonsForm->input('UserRole.' . $index . '.description', array(
+			'type' => 'textarea',
+			'label' => $this->SwitchLanguage->inputLabel(__d('user_roles', 'User role description'), $languageId),
+			'required' => true,
+			'rows' => '3',
+			'div' => array(
+				'class' => 'form-group',
+				'ng-show' => 'activeLangId === \'' . (string)$languageId . '\'',
+				'ng-cloak' => ' '
+			),
 		));
+	}
+?>
+
+<div class="form-group row">
+	<div class="col-xs-11 col-xs-offset-1">
+		<?php
+			echo $this->UserRoleForm->selectOriginUserRoles('UserRoleSetting.origin_role_key', array(
+					'label' => __d('user_roles', 'Origin roles'),
+					'value' => $this->data['UserRoleSetting']['origin_role_key'],
+					'disabled' => ($this->params['action'] === 'edit'),
+					'help' => '<div class="alert alert-warning">' . __d('user_roles', 'Role description') . '</div>',
+				));
+		?>
+	</div>
+</div>

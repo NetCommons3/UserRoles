@@ -93,9 +93,15 @@ class UserRolesController extends UserRolesAppController {
 			$userRoles = $this->UserRole->saveUserRole($this->request->data);
 			if ($userRoles) {
 				//正常の場合
-				$userRoleKey = Hash::extract($userRoles, '{n}.UserRole[language_id=' . Current::read('Language.id') . '].key');
-				$this->redirect('/user_roles/user_role_settings/edit/' . Hash::get($userRoleKey, '0') . '/');
-				return;
+				$this->NetCommons->setFlashNotification(
+					__d('net_commons', 'Successfully saved.'), array('class' => 'success')
+				);
+				$userRoleKey = Hash::extract(
+					$userRoles, '{n}.UserRole[language_id=' . Current::read('Language.id') . '].key'
+				);
+				return $this->redirect(
+					'/user_roles/user_role_settings/edit/' . Hash::get($userRoleKey, '0') . '/'
+				);
 			}
 			$this->NetCommons->handleValidationError($this->UserRole->validationErrors);
 
@@ -129,8 +135,15 @@ class UserRolesController extends UserRolesAppController {
  */
 	public function edit($roleKey = null) {
 		if ($roleKey === UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR) {
-			$this->throwBadRequest();
-			return;
+			return $this->throwBadRequest();
+		}
+		//既存データ取得
+		$userRole = $this->UserRole->find('all', array(
+			'recursive' => -1,
+			'conditions' => array('key' => $roleKey)
+		));
+		if (! $userRole) {
+			return $this->throwBadRequest();
 		}
 
 		if ($this->request->is('put')) {
@@ -138,34 +151,43 @@ class UserRolesController extends UserRolesAppController {
 			unset($this->request->data['save'], $this->request->data['active_lang_id']);
 
 			//登録処理
-			if ($this->UserRole->saveUserRole($this->request->data)) {
+			$result = $this->UserRole->saveUserRole($this->request->data);
+			if ($result) {
 				//正常の場合
-				$this->redirect('/user_roles/user_roles/index/');
-				return;
+				$this->NetCommons->setFlashNotification(
+					__d('net_commons', 'Successfully saved.'), array('class' => 'success')
+				);
+
+				$userRoleKey = Hash::extract(
+					$result, '{n}.UserRole[language_id=' . Current::read('Language.id') . '].key'
+				);
+				return $this->redirect(
+					'/user_roles/user_role_settings/edit/' . Hash::get($userRoleKey, '0') . '/'
+				);
 			}
 			$this->NetCommons->handleValidationError($this->UserRole->validationErrors);
 
-		} else {
-			//既存データ取得
-			$result = $this->UserRole->find('all', array(
-				'recursive' => -1,
-				'conditions' => array('key' => $roleKey)
-			));
-			if (! $result) {
-				$this->throwBadRequest();
-				return;
-			}
-			$this->request->data['UserRole'] = Hash::extract($result, '{n}.UserRole');
+			$extract = Hash::extract(
+				$userRole, '{n}.UserRole[language_id=' . Current::read('Language.id') . ']'
+			);
+			$this->request->data['UserRole'] = Hash::insert(
+				$this->request->data['UserRole'], '{n}.is_system', Hash::get($extract, '0.is_system')
+			);
 
-			$result = $this->UserRoleSetting->find('first', array(
-				'recursive' => -1,
-				'conditions' => array('role_key' => $roleKey),
-			));
-			$this->request->data = Hash::merge($this->request->data, $result);
+		} else {
+			$this->request->data['UserRole'] = Hash::extract($userRole, '{n}.UserRole');
 		}
+
+		$result = $this->UserRoleSetting->find('first', array(
+			'recursive' => -1,
+			'conditions' => array('role_key' => $roleKey),
+		));
+		$this->request->data = Hash::merge($this->request->data, $result);
+
 		$this->set('roleKey', $roleKey);
 
 		$this->set('subtitle', Hash::get($this->viewVars['userRoles'], $roleKey, ''));
+
 		$this->set('isDeletable', $this->UserRole->verifyDeletable($roleKey));
 	}
 
@@ -176,15 +198,14 @@ class UserRolesController extends UserRolesAppController {
  */
 	public function delete() {
 		if (! $this->request->is('delete')) {
-			$this->throwBadRequest();
-			return;
+			return $this->throwBadRequest();
 		}
 		if (! $this->UserRole->deleteUserRole($this->data['UserRole'][0])) {
 			$message = Hash::get($this->UserRole->validationErrors, 'key.0');
 			$this->NetCommons->handleValidationError($this->UserRole->validationErrors, $message);
-			$this->redirect('/user_roles/user_roles/edit/' . $this->data['UserRole'][0]['key']);
-			return;
+			return $this->redirect('/user_roles/user_roles/edit/' . $this->data['UserRole'][0]['key']);
+		} else {
+			return $this->redirect('/user_roles/user_roles/index/');
 		}
-		$this->redirect('/user_roles/user_roles/index/');
 	}
 }

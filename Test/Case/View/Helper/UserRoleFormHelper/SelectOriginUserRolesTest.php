@@ -111,7 +111,6 @@ class UserRoleFormHelperSelectOriginUserRolesTest extends NetCommonsHelperTestCa
 		$this->assertInput('option', 'administrator', null, $result);
 		$this->assertInput('option', 'common_user', 'selected', $result);
 		$this->assertInput('option', 'test_user', null, $result);
-		$this->assertContains(__d('user_roles', 'Role description'), $result);
 	}
 
 }

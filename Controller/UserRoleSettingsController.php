@@ -46,8 +46,7 @@ class UserRoleSettingsController extends UserRolesAppController {
 			)
 		));
 		if (! $userRole) {
-			$this->throwBadRequest();
-			return;
+			return $this->throwBadRequest();
 		}
 
 		if ($this->request->is('put')) {
@@ -57,6 +56,9 @@ class UserRoleSettingsController extends UserRolesAppController {
 			//登録処理
 			if ($this->UserRoleSetting->saveUserRoleSetting($this->request->data)) {
 				//正常の場合
+				$this->NetCommons->setFlashNotification(
+					__d('net_commons', 'Successfully saved.'), array('class' => 'success')
+				);
 				$this->redirect('/user_roles/user_attributes_roles/edit/' . h($roleKey));
 			} else {
 				$this->NetCommons->handleValidationError($this->UserRoleSetting->validationErrors);

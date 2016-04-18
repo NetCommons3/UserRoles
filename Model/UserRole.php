@@ -126,7 +126,18 @@ class UserRole extends Role {
 			'name' => array(
 				'notBlank' => array(
 					'rule' => array('notBlank'),
-					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('user_roles', 'User role name')),
+					'message' => sprintf(
+						__d('net_commons', 'Please input %s.'), __d('user_roles', 'User role name')
+					),
+					'required' => true
+				),
+			),
+			'description' => array(
+				'notBlank' => array(
+					'rule' => array('notBlank'),
+					'message' => sprintf(
+						__d('net_commons', 'Please input %s.'), __d('user_roles', 'User role description')
+					),
 					'required' => true
 				),
 			),
@@ -238,10 +249,14 @@ class UserRole extends Role {
 			if (! $this->deleteAll(array($this->alias . '.key' => $data['key']), false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
-			if (! $this->UserRoleSetting->deleteAll(array($this->UserRoleSetting->alias . '.role_key' => $data['key']), false)) {
+
+			$conditions = array($this->UserRoleSetting->alias . '.role_key' => $data['key']);
+			if (! $this->UserRoleSetting->deleteAll($conditions, false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
-			if (! $this->UserAttributesRole->deleteAll(array($this->UserAttributesRole->alias . '.role_key' => $data['key']), false)) {
+
+			$conditions = array($this->UserAttributesRole->alias . '.role_key' => $data['key']);
+			if (! $this->UserAttributesRole->deleteAll($conditions, false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 
@@ -291,7 +306,8 @@ class UserRole extends Role {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 		if ($count > 0) {
-			$this->validationErrors['key'][] = __d('user_roles', 'Can not be deleted because it has this authority is used.');
+			$this->validationErrors['key'][] =
+					__d('user_roles', 'Can not be deleted because it has this authority is used.');
 			return false;
 		}
 
