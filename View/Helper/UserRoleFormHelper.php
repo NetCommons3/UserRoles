@@ -77,7 +77,7 @@ class UserRoleFormHelper extends AppHelper {
 
 		$html .= '</tbody>';
 		$html .= '</table>';
-		$html .= '<div>';
+		$html .= '</div>';
 
 		return $html;
 	}
