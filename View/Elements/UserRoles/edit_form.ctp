@@ -49,9 +49,9 @@
 ?>
 
 <div class="form-group row">
-	<div class="col-xs-11 col-xs-offset-1"
-		 ng-init="<?php echo $this->UserRoleForm->domId('UserRoleSetting.origin_role_key') . '=\'' .
-				 $this->data['UserRoleSetting']['origin_role_key'] . '\';'; ?>">
+	<?php $ngInit = $this->UserRoleForm->domId('UserRoleSetting.origin_role_key') . '=\'' .
+					$this->data['UserRoleSetting']['origin_role_key'] . '\';'; ?>
+	<div class="col-xs-11 col-xs-offset-1" ng-init="<?php echo $ngInit; ?>">
 		<?php
 			echo $this->UserRoleForm->selectOriginUserRoles('UserRoleSetting.origin_role_key', array(
 					'label' => __d('user_roles', 'Origin roles'),

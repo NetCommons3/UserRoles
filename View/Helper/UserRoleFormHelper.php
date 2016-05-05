@@ -68,7 +68,9 @@ class UserRoleFormHelper extends AppHelper {
 
 		foreach ($this->_View->viewVars['userRolesDescription'] as $key => $description) {
 			$html .= '<tr ng-class="{active: ' . $this->domId($fieldName) . ' === \'' . $key . '\'}">';
-			$html .= '<td><div class="text-nowrap">' . $this->_View->viewVars['userRoles'][$key] . '</div></td>';
+			$html .= '<td><div class="text-nowrap">' .
+						$this->_View->viewVars['userRoles'][$key] .
+					'</div></td>';
 			$html .= '<td>' . $description . '</td>';
 			$html .= '</tr>';
 		}
