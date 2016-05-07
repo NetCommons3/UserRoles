@@ -49,17 +49,22 @@ class UserRolesController extends UserRolesAppController {
 		if (! in_array($this->params['action'], ['add', 'edit'], true)) {
 			return;
 		}
-		$userRoles = $this->UserRole->find('list', array(
+		$result = $this->UserRole->find('all', array(
 			'recursive' => -1,
-			'fields' => array('key', 'name'),
+			'fields' => array('key', 'name', 'description'),
 			'conditions' => array(
 				'language_id' => Current::read('Language.id')
 			),
 			'order' => array('id' => 'asc')
 		));
-		unset($userRoles[UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR]);
 
+		$userRoles = Hash::combine($result, '{n}.UserRole.key', '{n}.UserRole.name');
+		unset($userRoles[UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR]);
 		$this->set('userRoles', $userRoles);
+
+		$userRoles = Hash::combine($result, '{n}.UserRole.key', '{n}.UserRole.description');
+		unset($userRoles[UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR]);
+		$this->set('userRolesDescription', $userRoles);
 	}
 
 /**

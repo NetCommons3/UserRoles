@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('AppController', 'Controller');
+App::uses('UserRolesController', 'UserRoles.Controller');
 
 /**
  * View/Elements/UserRoles/edit_formテスト用Controller
@@ -17,26 +17,7 @@ App::uses('AppController', 'Controller');
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\UserRoles\Test\test_app\Plugin\UserRoles\Controller
  */
-class TestViewElementsUserRolesEditFormController extends AppController {
-
-/**
- * use component
- *
- * @var array
- */
-	public $components = array(
-		'M17n.SwitchLanguage',
-		'UserRoles.UserRoleForm',
-	);
-
-/**
- * use model
- *
- * @var array
- */
-	public $uses = array(
-		'UserRoles.UserRole',
-	);
+class TestViewElementsUserRolesEditFormController extends UserRolesController {
 
 /**
  * beforeRender
@@ -44,20 +25,12 @@ class TestViewElementsUserRolesEditFormController extends AppController {
  * @return void
  */
 	public function beforeRender() {
+		$action = $this->params['action'];
+		$this->params['action'] = 'add';
+
 		parent::beforeFilter();
-		$this->Auth->allow('edit_form');
 
-		$userRoles = $this->UserRole->find('list', array(
-			'recursive' => -1,
-			'fields' => array('key', 'name'),
-			'conditions' => array(
-				'language_id' => Current::read('Language.id')
-			),
-			'order' => array('id' => 'asc')
-		));
-		unset($userRoles[UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR]);
-
-		$this->set('userRoles', $userRoles);
+		$this->params['action'] = $action;
 	}
 
 /**

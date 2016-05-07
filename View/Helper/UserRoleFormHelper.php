@@ -45,9 +45,39 @@ class UserRoleFormHelper extends AppHelper {
 		$attributes = Hash::merge(array(
 			'type' => 'select',
 			'div' => false,
-			'options' => $this->_View->viewVars['userRoles']
+			'options' => $this->_View->viewVars['userRoles'],
+			'ng-model' => $this->domId($fieldName),
 		), $attributes);
 		$html .= $this->NetCommonsForm->input($fieldName, $attributes);
+
+		return $html;
+	}
+
+/**
+ * コピー元の権限の説明出力
+ *
+ * @param string $fieldName フィールド名(Modelname.fieldname形式)
+ * @return string Formatted HTMLタグ
+ */
+	public function displayUserRoleDescriptions($fieldName) {
+		$html = '';
+
+		$html .= '<div class="table-responsive">';
+		$html .= '<table class="table">';
+		$html .= '<tbody>';
+
+		foreach ($this->_View->viewVars['userRolesDescription'] as $key => $description) {
+			$html .= '<tr ng-class="{active: ' . $this->domId($fieldName) . ' === \'' . $key . '\'}">';
+			$html .= '<td><div class="text-nowrap">' .
+						$this->_View->viewVars['userRoles'][$key] .
+					'</div></td>';
+			$html .= '<td>' . $description . '</td>';
+			$html .= '</tr>';
+		}
+
+		$html .= '</tbody>';
+		$html .= '</table>';
+		$html .= '</div>';
 
 		return $html;
 	}

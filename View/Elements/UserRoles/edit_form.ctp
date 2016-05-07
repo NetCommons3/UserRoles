@@ -49,14 +49,18 @@
 ?>
 
 <div class="form-group row">
-	<div class="col-xs-11 col-xs-offset-1">
+	<?php $ngInit = $this->UserRoleForm->domId('UserRoleSetting.origin_role_key') . '=\'' .
+					$this->data['UserRoleSetting']['origin_role_key'] . '\';'; ?>
+	<div class="col-xs-11 col-xs-offset-1" ng-init="<?php echo $ngInit; ?>">
 		<?php
 			echo $this->UserRoleForm->selectOriginUserRoles('UserRoleSetting.origin_role_key', array(
 					'label' => __d('user_roles', 'Origin roles'),
-					'value' => $this->data['UserRoleSetting']['origin_role_key'],
+					//'value' => $this->data['UserRoleSetting']['origin_role_key'],
 					'disabled' => ($this->params['action'] === 'edit'),
 					'help' => '<div class="alert alert-warning">' . __d('user_roles', 'Role description') . '</div>',
 				));
 		?>
+
+		<?php echo $this->UserRoleForm->displayUserRoleDescriptions('UserRoleSetting.origin_role_key'); ?>
 	</div>
 </div>
