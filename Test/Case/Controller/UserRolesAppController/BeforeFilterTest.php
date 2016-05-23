@@ -25,7 +25,10 @@ class UserRolesAppControllerBeforeFilterTest extends NetCommonsControllerTestCas
  *
  * @var array
  */
-	public $fixtures = array();
+	public $fixtures = array(
+		'plugin.user_roles.plugin4permission',
+		'plugin.user_roles.plugins_role4permission',
+	);
 
 /**
  * Plugin name
