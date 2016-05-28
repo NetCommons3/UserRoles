@@ -46,20 +46,28 @@ echo $this->NetCommonsHtml->css(array(
 			<div class="panel-heading">
 				<?php echo __d('user_roles', 'Select site-manager plugin to use'); ?>
 			</div>
-			<div class="panel-body clearfix">
-				<div class="plugin-checkbox-outer plugin-outer-sm">
-					<?php foreach ($this->data['PluginsRole'] as $i => $pluginsRole) : ?>
-						<?php echo $this->UserRoleForm->checkboxUserRole('PluginsRole.' . $i . '.PluginsRole.is_usable_plugin', array(
-							'label' => $pluginsRole['Plugin']['name'],
-							'div' => false,
-							'checked' => (bool)$pluginsRole['PluginsRole']['id']
-						)); ?>
+			<div class="panel-body plugin-checkbox-outer clearfix">
+				<?php
+					$hidden = '';
+					foreach ($this->data['PluginsRole'] as $i => $pluginsRole) {
+						echo $this->UserRoleForm->checkboxUserRole('PluginsRole.' . $i . '.PluginsRole.is_usable_plugin',
+							array(
+								'label' => $pluginsRole['Plugin']['name'],
+								'div' => false,
+								'checked' => (bool)$pluginsRole['PluginsRole']['id'],
+							)
+						);
+						$hidden .= $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.id');
+						$hidden .= $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.role_key', array(
+							'value' => $roleKey)
+						);
+						$hidden .= $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.plugin_key', array(
+							'value' => $pluginsRole['Plugin']['key'])
+						);
+					}
 
-						<?php echo $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.id'); ?>
-						<?php echo $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.role_key', array('value' => $roleKey)); ?>
-						<?php echo $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.plugin_key', array('value' => $pluginsRole['Plugin']['key'])); ?>
-					<?php endforeach; ?>
-				</div>
+					echo $hidden;
+				?>
 			</div>
 		</div>
 	</div>

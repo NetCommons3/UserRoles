@@ -65,7 +65,7 @@ msgstr "権限"
 
 #: UserRoles/View/UserRoleSettings/edit.ctp:85
 msgid "Can not be deleted because it has this authority is used."
-msgstr "この権限は使用されているため、削除できません。使われているユーザの権限を変更してから削除して下さい。"
+msgstr "この権限は使用されているため、削除できません。使われているユーザの権限を変更してから削除してください。"
 
 #
 # 詳細設定

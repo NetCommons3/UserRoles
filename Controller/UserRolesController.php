@@ -35,7 +35,11 @@ class UserRolesController extends UserRolesAppController {
  * @var array
  */
 	public $components = array(
-		'M17n.SwitchLanguage'
+		'M17n.SwitchLanguage' => array(
+			'fields' => array(
+				'UserRole.name', 'UserRole.description'
+			)
+		)
 	);
 
 /**
@@ -93,6 +97,9 @@ class UserRolesController extends UserRolesAppController {
 		if ($this->request->is('post')) {
 			//不要パラメータ除去
 			unset($this->request->data['save'], $this->request->data['active_lang_id']);
+
+			//他言語が入力されていない場合、表示されている言語データをセット
+			$this->SwitchLanguage->setM17nRequestValue();
 
 			//登録処理
 			$userRoles = $this->UserRole->saveUserRole($this->request->data);
@@ -154,6 +161,9 @@ class UserRolesController extends UserRolesAppController {
 		if ($this->request->is('put')) {
 			//不要パラメータ除去
 			unset($this->request->data['save'], $this->request->data['active_lang_id']);
+
+			//他言語が入力されていない場合、表示されている言語データをセット
+			$this->SwitchLanguage->setM17nRequestValue();
 
 			//登録処理
 			$result = $this->UserRole->saveUserRole($this->request->data);
