@@ -169,6 +169,20 @@ class UserRole extends Role {
 	}
 
 /**
+ * 会員権限のバリデーション
+ *
+ * @param array $data リクエストデータ
+ * @return bool True on success, false on validation errors
+ * @throws InternalErrorException
+ */
+	public function validateUserRole($data) {
+		//UserRoleのバリデーション
+		//　※$data['UserRole'][0]['key']という形からvalidateMany()を通すことで
+		//　　$data['UserRole'][0]['UserRole']['key']となる
+		return $this->validateMany($data['UserRole']);
+	}
+
+/**
  * 会員権限の登録
  *
  * @param array $data received post data

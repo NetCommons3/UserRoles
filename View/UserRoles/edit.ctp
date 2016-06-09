@@ -21,7 +21,7 @@ if ($this->params['action'] === 'edit') {
 ?>
 
 <?php echo $this->element('UserRoles.subtitle'); ?>
-<?php echo $this->Wizard->navibar(UserRolesAppController::WIZARD_USER_ROLES); ?>
+<?php echo $this->Wizard->navibar(UserRoleAddController::WIZARD_USER_ROLES); ?>
 <?php echo $this->MessageFlash->description($description); ?>
 
 <div class="panel panel-default">
@@ -36,7 +36,7 @@ if ($this->params['action'] === 'edit') {
 	</div>
 
 	<div class="panel-footer text-center">
-		<?php echo $this->Wizard->buttons(UserRolesAppController::WIZARD_USER_ROLES); ?>
+		<?php echo $this->Wizard->buttons(UserRoleAddController::WIZARD_USER_ROLES); ?>
 	</div>
 
 	<?php echo $this->NetCommonsForm->end(); ?>

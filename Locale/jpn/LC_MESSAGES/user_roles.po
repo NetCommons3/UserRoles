@@ -28,20 +28,17 @@ msgstr "権限の追加"
 msgid "General setting"
 msgstr "一般設定"
 
-msgid "Details setting"
-msgstr "詳細設定"
-
 msgid "Information Policy"
 msgstr "個人情報設定"
 
 #
 # 一般設定
 #
-msgid "Enter the title of the authority, enter the description of authority, and specify the level of the authority, and press &#039;NEXT&#039;."
+msgid "Enter the title of the authority, enter the description of authority, and specify the level of the authority, and press [NEXT]."
 msgstr "作成する権限の名称と説明及び作成する基となる権限を指定して、[次へ]ボタンを押してください。"
 
-msgid "Enter the title of the authority, enter the description of authority, and press &#039;NEXT&#039;."
-msgstr "編集する権限の名称と説明を入力して、[次へ]ボタンを押してください。"
+msgid "Enter the title of the authority, enter the description of authority, and press [OK]."
+msgstr "編集する権限の名称と説明を入力して、[決定]ボタンを押してください。"
 
 #: UserRoles/Model/UserRole.php:189
 #: UserRoles/View/UserRoles/index.ctp:24
@@ -53,11 +50,11 @@ msgstr "説明"
 
 #: UserRoles/View/Elements/UserRoles/edit_form_for_user_role_setting.ctp:15
 msgid "Origin roles"
-msgstr "以下の権限を基に新しい権限を作成する"
+msgstr "ベースの権限"
 
 #: UserRoles/View/Elements/UserRoles/edit_form_for_user_role_setting.ctp:21
 msgid "Role description"
-msgstr "新規に権限を作成するときは、適切に設定しないと個人情報の流出が起こる可能性があります。"
+msgstr "適切にベースの権限を選ばないと個人情報の流出が起こる可能性があります。"
 
 #: UserRoles/View/Elements/UserRoles/delete_form.ctp:25;35
 msgid "User role"
@@ -70,15 +67,19 @@ msgstr "この権限は使用されているため、削除できません。使
 #
 # 詳細設定
 #
-msgid "Make sure your change, and press &#039;NEXT&#039;."
-msgstr "詳細設定を変更/確認して、[次へ]ボタンを押してください。"
+msgid "Select site-manager plugin to use, and press [NEXT]."
+msgstr "利用させるサイト運営プラグインを選択して、[次へ]ボタンを押してください。"
 
 #: UserRoles/View/UserRoleSettings/edit.ctp:71
 msgid "Use private room?"
-msgstr "プライベートルーム"
+msgstr "プライベートルームを使用する"
 
 msgid "Select site-manager plugin to use"
 msgstr "サイト運営プラグインの選択"
+
+#: UserRoles/View/UserRoleSettings/edit.ctp:71
+msgid "Have authority of create group?"
+msgstr "グループを作成できる"
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:81
 msgid "Use"

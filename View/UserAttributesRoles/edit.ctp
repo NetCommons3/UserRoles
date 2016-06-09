@@ -13,7 +13,7 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 ?>
 
 <?php echo $this->element('UserRoles.subtitle'); ?>
-<?php echo $this->Wizard->navibar(UserRolesAppController::WIZARD_USER_ATTRIBUTES_ROLES); ?>
+<?php echo $this->Wizard->navibar(UserRoleAddController::WIZARD_USER_ATTRIBUTES_ROLES); ?>
 <?php echo $this->MessageFlash->description(__d('user_roles', 'You can set whether or not to view the user information of others. However, if the user manger plugin can be used, because you can view and edit all of the user information, here, it can not be set.')); ?>
 
 <?php echo $this->NetCommonsForm->create('UserAttributesRoles', array(
@@ -25,7 +25,7 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 
 	<div class="text-center">
 		<?php echo $this->Wizard->buttons(
-				UserRolesAppController::WIZARD_USER_ATTRIBUTES_ROLES,
+				UserRoleAddController::WIZARD_USER_ATTRIBUTES_ROLES,
 				array(),
 				array(),
 				array('ng-disabled' => '(sending || ' . ($this->data['UserRoleSetting']['is_usable_user_manager'] ? 'true' : 'false') . ')')
