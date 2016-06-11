@@ -1,16 +1,20 @@
 /**
- * bbses/css/style.css
+ * user_roles/css/style.css
  *
  * @author   Takako Miyagawa <nekoget@gmail.com>
  * @link     http://www.netcommons.org NetCommons Project
  * @license  http://www.netcommons.org/license.txt NetCommons License
  */
 
+.table.user-roles-origin-role-key {
+	margin-bottom: 0px;
+}
+
 .user-attribute-roles-edit {
 	width: 100%;
 }
 .user-attribute-roles-edit label {
-	width: 40%;
+	width: 36%;
 	text-align: left;
 }
 .user-attribute-roles-edit select.form-control {

@@ -176,8 +176,6 @@ class UserAttributesRolesControllerEditTest extends NetCommonsControllerTestCase
 
 			$buttonDisabled = 'false';
 		}
-		$pattern = '<button name="save".*?ng-disabled="' . preg_quote('(sending || ' . $buttonDisabled . ')', '/') . '".*?type="submit".*?>';
-		$this->assertRegExp($pattern, $this->view);
 	}
 
 /**

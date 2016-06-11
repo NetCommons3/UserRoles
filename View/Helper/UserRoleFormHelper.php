@@ -33,6 +33,60 @@ class UserRoleFormHelper extends AppHelper {
 	);
 
 /**
+ * タブ出力
+ *
+ * @param string $activeKey アクティブキー
+ * @return string HTMLタグ
+ */
+	public function settingTabs($activeKey) {
+		$html = '';
+
+		$tabs = array(
+			UserRolesAppController::WIZARD_USER_ROLES => array(
+				'label' => __d('user_roles', 'General setting'),
+				'url' => array(
+					'controller' => 'user_roles',
+					'action' => 'edit',
+					'key' => $this->_View->viewVars['roleKey']
+				)
+			),
+			UserRolesAppController::WIZARD_USER_ROLES_PLUGINS => array(
+				'label' => __d('user_roles', 'Select site-manager plugin to use'),
+				'url' => array(
+					'controller' => 'user_roles_plugins',
+					'action' => 'edit',
+					'key' => $this->_View->viewVars['roleKey']
+				)
+			),
+			UserRolesAppController::WIZARD_USER_ATTRIBUTES_ROLES => array(
+				'label' => __d('user_roles', 'Information Policy'),
+				'url' => array(
+					'controller' => 'user_attributes_roles',
+					'action' => 'edit',
+					'key' => $this->_View->viewVars['roleKey']
+				)
+			),
+		);
+
+		$html .= '<ul class="nav nav-tabs" role="tablist">';
+
+		foreach ($tabs as $key => $tab) {
+			if ($key === $activeKey) {
+				$activeClass = ' class="active"';
+			} else {
+				$activeClass = '';
+			}
+			$html .= '<li' . $activeClass . '>';
+			$html .= $this->NetCommonsHtml->link($tab['label'], $tab['url']);
+			$html .= '</li>';
+		}
+
+		$html .= '</ul>';
+
+		return $html;
+	}
+
+/**
  * コピー元の権限のSELECTボックス出力
  *
  * @param string $fieldName フィールド名(Modelname.fieldname形式)
@@ -42,13 +96,30 @@ class UserRoleFormHelper extends AppHelper {
 	public function selectOriginUserRoles($fieldName, $attributes = array()) {
 		$html = '';
 
-		$attributes = Hash::merge(array(
-			'type' => 'select',
-			'div' => false,
-			'options' => $this->_View->viewVars['userRoles'],
-			'ng-model' => $this->domId($fieldName),
-		), $attributes);
-		$html .= $this->NetCommonsForm->input($fieldName, $attributes);
+		if (Hash::get($this->data, 'UserRole.0.is_system')) {
+			return $html;
+		}
+
+		$domId = $this->domId($fieldName);
+		$ngInit = $domId . ' = \'' . Hash::get($this->data, $fieldName) . '\';';
+
+		$html .= '<div class="form-group" ng-init="' . $ngInit . '">';
+
+		if ($this->_View->request->params['action'] === 'edit') {
+			$html .= $this->NetCommonsForm->label($fieldName, $attributes['label']);
+		} else {
+			$attributes = Hash::merge(array(
+				'type' => 'select',
+				'div' => false,
+				'options' => $this->_View->viewVars['userRoles'],
+				'ng-model' => $this->domId($fieldName),
+			), $attributes);
+			$html .= $this->NetCommonsForm->input($fieldName, $attributes);
+		}
+
+		$html .= $this->displayUserRoleDescriptions($fieldName);
+
+		$html .= '</div>';
 
 		return $html;
 	}
@@ -63,16 +134,27 @@ class UserRoleFormHelper extends AppHelper {
 		$html = '';
 
 		$html .= '<div class="table-responsive">';
-		$html .= '<table class="table">';
+		$html .= '<table class="table user-roles-origin-role-key">';
 		$html .= '<tbody>';
 
-		foreach ($this->_View->viewVars['userRolesDescription'] as $key => $description) {
-			$html .= '<tr ng-class="{active: ' . $this->domId($fieldName) . ' === \'' . $key . '\'}">';
-			$html .= '<td><div class="text-nowrap">' .
-						$this->_View->viewVars['userRoles'][$key] .
-					'</div></td>';
+		if ($this->_View->request->params['action'] === 'edit') {
+			$key = Hash::get($this->_View->request->data, 'UserRoleSetting.origin_role_key');
+			$userRoleName = Hash::get($this->_View->viewVars['userRoles'], $key);
+			$description = Hash::get($this->_View->viewVars['userRolesDescription'], $key);
+
+			$html .= '<tr class="active">';
+			$html .= '<td><div class="text-nowrap">' . $userRoleName . '</div></td>';
 			$html .= '<td>' . $description . '</td>';
 			$html .= '</tr>';
+		} else {
+			foreach ($this->_View->viewVars['userRolesDescription'] as $key => $description) {
+				$userRoleName = Hash::get($this->_View->viewVars['userRoles'], $key);
+
+				$html .= '<tr ng-class="{active: ' . $this->domId($fieldName) . ' === \'' . $key . '\'}">';
+				$html .= '<td><div class="text-nowrap">' . $userRoleName . '</div></td>';
+				$html .= '<td>' . $description . '</td>';
+				$html .= '</tr>';
+			}
 		}
 
 		$html .= '</tbody>';
@@ -152,10 +234,25 @@ class UserRoleFormHelper extends AppHelper {
 
 		if ($this->_View->request->data['UserRoleSetting']['is_usable_user_manager']) {
 			$disabled = true;
+		} elseif ($this->_View->params['controller'] === 'user_role_add') {
+			$disabled = false;
+			$html .= $this->Form->hidden(
+				'UserAttributesRole.' . $id . '.UserAttributesRole.id', array('value' => false)
+			);
+			$html .= $this->Form->hidden(
+				'UserAttributesRole.' . $id . '.UserAttributesRole.role_key', array('value' => false)
+			);
+			$html .= $this->Form->hidden(
+				'UserAttributesRole.' . $id . '.UserAttributesRole.user_attribute_key'
+			);
 		} else {
 			$disabled = false;
-			$html .= $this->Form->hidden('UserAttributesRole.' . $id . '.UserAttributesRole.id');
-			$html .= $this->Form->hidden('UserAttributesRole.' . $id . '.UserAttributesRole.role_key');
+			$html .= $this->Form->hidden(
+				'UserAttributesRole.' . $id . '.UserAttributesRole.id'
+			);
+			$html .= $this->Form->hidden(
+				'UserAttributesRole.' . $id . '.UserAttributesRole.role_key'
+			);
 			$html .= $this->Form->hidden(
 				'UserAttributesRole.' . $id . '.UserAttributesRole.user_attribute_key'
 			);

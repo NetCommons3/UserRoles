@@ -169,6 +169,20 @@ class UserRole extends Role {
 	}
 
 /**
+ * 会員権限のバリデーション
+ *
+ * @param array $data リクエストデータ
+ * @return bool True on success, false on validation errors
+ * @throws InternalErrorException
+ */
+	public function validateUserRole($data) {
+		//UserRoleのバリデーション
+		//　※$data['UserRole'][0]['key']という形からvalidateMany()を通すことで
+		//　　$data['UserRole'][0]['UserRole']['key']となる
+		return $this->validateMany($data['UserRole']);
+	}
+
+/**
  * 会員権限の登録
  *
  * @param array $data received post data
@@ -201,16 +215,11 @@ class UserRole extends Role {
 			}
 
 			if ($created) {
-				$data['UserRoleSetting']['role_key'] = $roleKey;
-
-				//UserRoleSettingのデフォルトデータ登録処理
-				$this->saveDefaultUserRoleSetting($data);
-
-				//UserAttributesRoleのデフォルトデータ登録処理
-				$this->saveDefaultUserAttributesRole($data);
-
-				//PluginsRoleのデフォルトデータ登録処理
-				$this->saveDefaultPluginsRole($data);
+				$this->__saveCreatedUserRole($roleKey, $data);
+			} else {
+				if (! $this->UserRoleSetting->saveUserRoleSetting($data)) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error 1'));
+				}
 			}
 
 			//トランザクションCommit
@@ -222,6 +231,102 @@ class UserRole extends Role {
 		}
 
 		return $userRoles;
+	}
+
+/**
+ * 会員権限の登録
+ *
+ * @param string $roleKey ロールキー
+ * @param array $data リクエストデータ
+ * @return bool
+ * @throws InternalErrorException
+ */
+	private function __saveCreatedUserRole($roleKey, $data) {
+		$this->loadModels([
+			'UserAttributesRole' => 'UserRoles.UserAttributesRole',
+		]);
+
+		$original = $this->UserRoleSetting->find('first', array(
+			'recursive' => -1,
+			'conditions' => array(
+				'role_key' => $data['UserRoleSetting']['origin_role_key']
+			)
+		));
+
+		//UserRoleSettingの登録処理
+		$data['UserRoleSetting']['role_key'] = $roleKey;
+		$data['UserRoleSetting']['is_site_plugins'] = $original['UserRoleSetting']['is_site_plugins'];
+		if (isset($data['DefaultRolePermission'])) {
+			$data['DefaultRolePermission'] = Hash::insert(
+				$data['DefaultRolePermission'], '{s}.role_key', $roleKey
+			);
+		}
+
+		if (! $this->UserRoleSetting->saveUserRoleSetting($data)) {
+			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+		}
+
+		//UserAttributesRoleのデータ登録処理
+		if ($data['UserRoleSetting']['is_usable_user_manager']) {
+			$result = $this->saveDefaultUserAttributesRole($data);
+		} else {
+			$data['UserAttributesRole'] = Hash::insert(
+				$data['UserAttributesRole'], '{n}.UserAttributesRole.id', null
+			);
+			$data['UserAttributesRole'] = Hash::insert(
+				$data['UserAttributesRole'], '{n}.UserAttributesRole.role_key', $roleKey
+			);
+			$result = $this->UserAttributesRole->saveUserAttributesRoles($data);
+		}
+		if (! $result) {
+			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+		}
+
+		//PluginsRoleのデータ登録処理
+		if (isset($data['PluginsRole'])) {
+			$data['PluginsRole'] = Hash::insert(
+				$data['PluginsRole'], '{n}.PluginsRole.role_key', $roleKey
+			);
+			$this->saveUserRolePlugins($data);
+		}
+
+		return true;
+	}
+
+/**
+ * UserRoleSettingの登録処理
+ *
+ * @param array $data received post data
+ * @return bool True on success, false on validation errors
+ * @throws InternalErrorException
+ */
+	public function saveUserRolePlugins($data) {
+		//トランザクションBegin
+		$this->begin();
+
+		try {
+			//PluginsRoleのデータ登録処理
+			foreach ($data['PluginsRole'] as $pluginRole) {
+				if (Hash::get($pluginRole, 'PluginsRole.is_usable_plugin', false)) {
+					$this->savePluginsRole(
+						$pluginRole['PluginsRole']['role_key'], $pluginRole['PluginsRole']['plugin_key']
+					);
+				} else {
+					$this->deletePluginsRole(
+						$pluginRole['PluginsRole']['role_key'], $pluginRole['PluginsRole']['plugin_key']
+					);
+				}
+			}
+
+			//トランザクションCommit
+			$this->commit();
+
+		} catch (Exception $ex) {
+			//トランザクションRollback
+			$this->rollback($ex);
+		}
+
+		return true;
 	}
 
 /**

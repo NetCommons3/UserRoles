@@ -10,10 +10,17 @@
  */
 ?>
 
-<?php echo $this->MessageFlash->description(__d('user_roles', 'You can add, edit and delete authority in your NetCommons.')); ?>
+<?php
+	echo $this->MessageFlash->description(
+		__d('user_roles', 'You can add, edit and delete authority in your NetCommons.')
+	);
+?>
 
 <div class="text-right">
-	<?php echo $this->LinkButton->add(__d('user_roles', 'Add user role'), array('action' => 'add')); ?>
+	<?php echo $this->LinkButton->add(
+		__d('user_roles', 'Add user role'),
+		array('controller' => 'user_role_add', 'action' => 'basic')
+	); ?>
 </div>
 
 <table class="table table-hover">
@@ -42,9 +49,11 @@
 				</td>
 
 				<td>
-					<?php if ($userRole['UserRole']['key'] !== UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR) : ?>
-						<?php echo $this->LinkButton->edit('', array('action' => 'edit', h($userRole['UserRole']['key'])), array('iconSize' => ' btn-xs')); ?>
-					<?php endif; ?>
+					<?php echo $this->LinkButton->edit(
+							'',
+							array('action' => 'edit', h($userRole['UserRole']['key'])),
+							array('iconSize' => ' btn-xs')
+						); ?>
 				</td>
 			</tr>
 		<?php endforeach; ?>

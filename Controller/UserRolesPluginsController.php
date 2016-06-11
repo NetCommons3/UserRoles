@@ -1,6 +1,6 @@
 <?php
 /**
- * UserRoleSettings Controller
+ * UserRolesPlugins Controller
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
@@ -12,12 +12,12 @@
 App::uses('UserRolesAppController', 'UserRoles.Controller');
 
 /**
- * UserRoleSettings Controller
+ * UserRolesPlugins Controller
  *
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\UserRoles\Controller
  */
-class UserRoleSettingsController extends UserRolesAppController {
+class UserRolesPluginsController extends UserRolesAppController {
 
 /**
  * use model
@@ -62,7 +62,7 @@ class UserRoleSettingsController extends UserRolesAppController {
 				$this->redirect('/user_roles/user_attributes_roles/edit/' . h($roleKey));
 			} else {
 				$this->NetCommons->handleValidationError($this->UserRoleSetting->validationErrors);
-				$this->redirect('/user_roles/user_role_settings/edit/' . h($roleKey));
+				$this->redirect('/user_roles/user_roles_plugins/edit/' . h($roleKey));
 			}
 
 		} else {

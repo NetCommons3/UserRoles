@@ -78,6 +78,7 @@ class UserRolesSchema extends CakeSchema {
 		'role_key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'origin_role_key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'use_private_room' => array('type' => 'boolean', 'null' => true, 'default' => null, 'comment' => 'プライベートルームの使用有無'),
+		'is_site_plugins' => array('type' => 'boolean', 'null' => true, 'default' => null, 'comment' => 'サイト運営プラグインの有無'),
 		'created_user' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'modified_user' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),

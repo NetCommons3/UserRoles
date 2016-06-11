@@ -10,8 +10,6 @@
  */
 ?>
 
-<?php $this->start('subtitle'); ?>
-	<?php if (isset($subtitle)) : ?>
-		<span class="text-muted">(<?php echo h($subtitle); ?>)</span>
-	<?php endif; ?>
-<?php $this->end();
+<?php if (isset($subtitle)) : ?>
+	<h2><?php echo h($subtitle); ?></h2>
+<?php endif;

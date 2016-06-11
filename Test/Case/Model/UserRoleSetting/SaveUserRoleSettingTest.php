@@ -63,23 +63,6 @@ class UserRoleSettingSaveUserRoleSettingTest extends NetCommonsModelTestCase {
 			'UserRoleSetting' => array (
 				'id' => '2', 'role_key' => 'administrator', 'origin_role_key' => 'administrator', 'use_private_room' => $value,
 			),
-			'PluginsRole' => array (
-				0 => array (
-					'PluginsRole' => array(
-						'id' => '3', 'is_usable_plugin' => $value, 'role_key' => 'administrator', 'plugin_key' => 'user_manager',
-					),
-				),
-				1 => array (
-					'PluginsRole' => array (
-						'id' => '1', 'is_usable_plugin' => $value, 'role_key' => 'administrator', 'plugin_key' => 'user_roles',
-					),
-				),
-				2 => array (
-					'PluginsRole' => array (
-						'id' => null, 'is_usable_plugin' => $value, 'role_key' => 'administrator', 'plugin_key' => 'test_user_roles',
-					),
-				),
-			),
 		);
 
 		return $data;
@@ -134,14 +117,6 @@ class UserRoleSettingSaveUserRoleSettingTest extends NetCommonsModelTestCase {
 		$model = $this->_modelName;
 		$method = $this->_methodName;
 
-		$mockMethods = array(
-			'savePluginsRole',
-			'deletePluginsRole',
-		);
-		$this->$model = $this->getMockForModel('UserRoles.UserRoleSetting', $mockMethods);
-		$this->_mockForReturn($model, 'UserRoles.UserRoleSetting', 'savePluginsRole', true, 3);
-		$this->_mockForReturn($model, 'UserRoles.UserRoleSetting', 'deletePluginsRole', true, 0);
-
 		//テストデータ生成
 		$data = $this->__data('1');
 
@@ -165,14 +140,6 @@ class UserRoleSettingSaveUserRoleSettingTest extends NetCommonsModelTestCase {
 	public function testSave4Delete() {
 		$model = $this->_modelName;
 		$method = $this->_methodName;
-
-		$mockMethods = array(
-			'savePluginsRole',
-			'deletePluginsRole',
-		);
-		$this->$model = $this->getMockForModel('UserRoles.UserRoleSetting', $mockMethods);
-		$this->_mockForReturn($model, 'UserRoles.UserRoleSetting', 'savePluginsRole', true, 0);
-		$this->_mockForReturn($model, 'UserRoles.UserRoleSetting', 'deletePluginsRole', true, 3);
 
 		//テストデータ生成
 		$data = $this->__data('0');

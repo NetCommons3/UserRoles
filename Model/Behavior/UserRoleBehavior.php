@@ -22,40 +22,6 @@ App::uses('DataType', 'DataTypes.Model');
 class UserRoleBehavior extends ModelBehavior {
 
 /**
- * Save default UserRoleSetting
- *
- * @param Model $model Model using this behavior
- * @param array $data User role data
- * @return bool True on success
- * @throws InternalErrorException
- */
-	public function saveDefaultUserRoleSetting(Model $model, $data) {
-		$model->loadModels([
-			'UserRoleSetting' => 'UserRoles.UserRoleSetting',
-		]);
-
-		//UserRoleSettingデフォルトのデータ取得
-		$userRoleSetting = $model->UserRoleSetting->find('first', array(
-			'recursive' => -1,
-			'conditions' => array('role_key' => $data['UserRoleSetting']['origin_role_key'])
-		));
-		if (! $userRoleSetting) {
-			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-		}
-
-		//UserRoleSettingの登録処理
-		foreach (['id', 'created', 'created_user', 'modified', 'modified_user'] as $field) {
-			$userRoleSetting = Hash::remove($userRoleSetting, 'UserRoleSetting.' . $field);
-		}
-		$userRoleSetting['UserRoleSetting']['role_key'] = $data['UserRoleSetting']['role_key'];
-		if (! $model->UserRoleSetting->save($userRoleSetting, false)) {
-			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-		}
-
-		return true;
-	}
-
-/**
  * Save default UserAttributesRole
  *
  * @param Model $model Model using this behavior
@@ -87,42 +53,6 @@ class UserRoleBehavior extends ModelBehavior {
 			$data['UserRoleSetting']['role_key']
 		);
 		if (! $model->UserAttributesRole->saveMany($userAttributesRole, array('validate' => false))) {
-			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-		}
-
-		return true;
-	}
-
-/**
- * Save default PluginsRole
- *
- * @param Model $model Model using this behavior
- * @param array $data User role data
- * @return bool True on success
- * @throws InternalErrorException
- */
-	public function saveDefaultPluginsRole(Model $model, $data) {
-		$model->loadModels([
-			'PluginsRole' => 'PluginManager.PluginsRole',
-		]);
-
-		//PluginsRoleデフォルトのデータ取得
-		$pluginsRole = $model->PluginsRole->find('all', array(
-			'recursive' => -1,
-			'conditions' => array('role_key' => $data['UserRoleSetting']['origin_role_key'])
-		));
-		if (! $pluginsRole) {
-			return true;
-		}
-
-		//PluginsRoleの登録処理
-		foreach (['id', 'created', 'created_user', 'modified', 'modified_user'] as $field) {
-			$pluginsRole = Hash::remove($pluginsRole, '{n}.PluginsRole.' . $field);
-		}
-		$pluginsRole = Hash::insert(
-			$pluginsRole, '{n}.PluginsRole.role_key', $data['UserRoleSetting']['role_key']
-		);
-		if (! $model->PluginsRole->saveMany($pluginsRole, array('validate' => false))) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 

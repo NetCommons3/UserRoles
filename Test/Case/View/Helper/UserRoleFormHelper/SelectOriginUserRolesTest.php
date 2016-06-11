@@ -45,19 +45,20 @@ class UserRoleFormHelperSelectOriginUserRolesTest extends NetCommonsHelperTestCa
 
 		//テストデータ生成
 		$this->UserRole = ClassRegistry::init('UserRoles.UserRole');
-		$userRoles = $this->UserRole->find('list', array(
+		$userRoles = $this->UserRole->find('all', array(
 			'recursive' => -1,
-			'fields' => array('key', 'name'),
+			'fields' => array('key', 'name', 'description'),
 			'conditions' => array(
 				'language_id' => Current::read('Language.id')
 			),
 			'order' => array('id' => 'asc')
 		));
-		unset($userRoles[UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR]);
 
 		$viewVars = array(
-			'userRoles' => $userRoles,
+			'userRoles' => Hash::combine($userRoles, '{n}.UserRole.key', '{n}.UserRole.name'),
+			'userRolesDescription' => Hash::combine($userRoles, '{n}.UserRole.key', '{n}.UserRole.description')
 		);
+		$viewVars = Hash::remove($viewVars, '{s}.' . UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR);
 		$requestData = array(
 			'UserRoleSetting' => array(
 				'origin_role_key' => UserRole::USER_ROLE_KEY_COMMON_USER,

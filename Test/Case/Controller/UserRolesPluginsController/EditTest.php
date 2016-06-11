@@ -17,7 +17,7 @@ App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\UserRoles\Test\Case\Controller\UserRoleSettingsController
  */
-class UserRoleSettingsControllerEditTest extends NetCommonsControllerTestCase {
+class UserRolesPluginsControllerEditTest extends NetCommonsControllerTestCase {
 
 /**
  * Fixtures
@@ -44,7 +44,7 @@ class UserRoleSettingsControllerEditTest extends NetCommonsControllerTestCase {
  *
  * @var string
  */
-	protected $_controller = 'user_role_settings';
+	protected $_controller = 'user_roles_plugins';
 
 /**
  * setUp method
@@ -119,25 +119,6 @@ class UserRoleSettingsControllerEditTest extends NetCommonsControllerTestCase {
 	}
 
 /**
- * UserRoleSettingのテストチェック
- *
- * @param int $id UserRoleSetting.id
- * @param string $roleKey 権限キー
- * @param string $usable0 使用しないの値 (e.g.) value="0" checked="checked"
- * @param string $usable1 使用するの値 (e.g.) value="1" checked="checked"
- * @return void
- */
-	private function __assertUserRoleSetting($id, $roleKey, $usable0, $usable1) {
-		$this->assertInput('input', 'data[UserRoleSetting][id]', $id, $this->view);
-		$this->assertInput('input', 'data[UserRoleSetting][role_key]', $roleKey, $this->view);
-		$this->assertInput('input', 'data[UserRoleSetting][origin_role_key]', $roleKey, $this->view);
-		$pattern = '/<input.*?name="' . preg_quote('data[UserRoleSetting][use_private_room]', '/') . '".*?' . $usable1 . ' \/>/';
-		$this->assertRegExp($pattern, $this->view);
-		$pattern = '/<input.*?name="' . preg_quote('data[UserRoleSetting][use_private_room]', '/') . '".*?' . $usable0 . ' \/>/';
-		$this->assertRegExp($pattern, $this->view);
-	}
-
-/**
  * edit()アクションのテスト(サイト管理者の設定)
  *
  * @return void
@@ -149,10 +130,9 @@ class UserRoleSettingsControllerEditTest extends NetCommonsControllerTestCase {
 		$this->_testGetAction(array('action' => 'edit', 'key' => $roleKey), array('method' => 'assertNotEmpty'), null, 'view');
 
 		//チェック
-		$this->assertInput('form', null, '/user_roles/user_role_settings/edit/' . $roleKey, $this->view);
+		$this->assertInput('form', null, '/user_roles/user_roles_plugins/edit/' . $roleKey, $this->view);
 		$this->assertInput('input', '_method', 'PUT', $this->view);
 
-		$this->__assertUserRoleSetting('2', $roleKey, 'value="0"', 'value="1" checked="checked"');
 		$this->__assertPluginsRole('0', '3', $roleKey, 'user_manager', 'checked="checked" value="1"');
 		$this->__assertPluginsRole('1', '1', $roleKey, 'user_roles', 'checked="checked" value="1"');
 		$this->__assertPluginsRole('2', null, $roleKey, 'test_user_roles', 'value="1"');
@@ -170,10 +150,9 @@ class UserRoleSettingsControllerEditTest extends NetCommonsControllerTestCase {
 		$this->_testGetAction(array('action' => 'edit', 'key' => $roleKey), array('method' => 'assertNotEmpty'), null, 'view');
 
 		//チェック
-		$this->assertInput('form', null, '/user_roles/user_role_settings/edit/' . $roleKey, $this->view);
+		$this->assertInput('form', null, '/user_roles/user_roles_plugins/edit/' . $roleKey, $this->view);
 		$this->assertInput('input', '_method', 'PUT', $this->view);
 
-		$this->__assertUserRoleSetting('3', $roleKey, 'value="0"', 'value="1" checked="checked"');
 		$this->__assertPluginsRole('0', null, $roleKey, 'user_manager', 'disabled="disabled" value="1"');
 		$this->__assertPluginsRole('1', null, $roleKey, 'user_roles', 'disabled="disabled" value="1"');
 		$this->__assertPluginsRole('2', null, $roleKey, 'test_user_roles', 'disabled="disabled" value="1"');
@@ -232,7 +211,7 @@ class UserRoleSettingsControllerEditTest extends NetCommonsControllerTestCase {
 
 		//チェック
 		$header = $this->controller->response->header();
-		$this->assertTextContains('/user_roles/user_role_settings/edit/' . $roleKey, $header['Location']);
+		$this->assertTextContains('/user_roles/user_roles_plugins/edit/' . $roleKey, $header['Location']);
 	}
 
 }

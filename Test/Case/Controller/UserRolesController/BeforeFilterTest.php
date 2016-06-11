@@ -78,32 +78,4 @@ class UserRolesControllerBeforeFilterTest extends NetCommonsControllerTestCase {
 		$this->assertTrue(Hash::check($this->vars['userRoles'], '{n}.UserRole'));
 	}
 
-/**
- * beforeFilter()アクションのテスト(add()の場合)
- *
- * @return void
- */
-	public function testBeforeFilterAdd() {
-		//テスト実行
-		$this->_testGetAction(array('action' => 'add'), array('method' => 'assertNotEmpty'), null, 'view');
-
-		//チェック
-		$this->assertFalse(Hash::check($this->vars['userRoles'], '{n}.UserRole'));
-		$this->assertEquals(array('administrator', 'common_user'), array_keys($this->vars['userRoles']));
-	}
-
-/**
- * beforeFilter()アクションのテスト(add()の場合)
- *
- * @return void
- */
-	public function testBeforeFilterEdit() {
-		//テスト実行
-		$this->_testGetAction(array('action' => 'add'), array('method' => 'assertNotEmpty'), null, 'view');
-
-		//チェック
-		$this->assertFalse(Hash::check($this->vars['userRoles'], '{n}.UserRole'));
-		$this->assertEquals(array('administrator', 'common_user'), array_keys($this->vars['userRoles']));
-	}
-
 }
