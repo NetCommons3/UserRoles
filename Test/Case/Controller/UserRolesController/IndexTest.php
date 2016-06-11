@@ -55,8 +55,10 @@ class UserRolesControllerIndexTest extends NetCommonsControllerTestCase {
 		$this->_testGetAction(array('action' => 'index'), array('method' => 'assertNotEmpty'), null, 'view');
 
 		//チェック
-		$this->assertActionLink('add', array('action' => 'add'), true, $this->view);
-		$this->assertNotContains('/user_roles/user_roles/edit/system_administrator', $this->view);
+		$this->assertActionLink('basic', array('controller' => 'user_role_add'), true, $this->view);
+
+		$pattern = '/<a href=".*?' . preg_quote('/user_roles/user_roles/edit/system_administrator', '/') . '/';
+		$this->assertRegExp($pattern, $this->view);
 
 		$pattern = '/<a href=".*?' . preg_quote('/user_roles/user_roles/edit/administrator', '/') . '/';
 		$this->assertRegExp($pattern, $this->view);

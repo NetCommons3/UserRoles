@@ -10,6 +10,7 @@
  */
 
 App::uses('UserRolesAppController', 'UserRoles.Controller');
+App::uses('UserAttributesRolesController', 'UserRoles.Controller');
 
 /**
  * 権限の作成(ウィザード形式) Controller
@@ -18,27 +19,6 @@ App::uses('UserRolesAppController', 'UserRoles.Controller');
  * @package NetCommons\UserRoles\Controller
  */
 class UserRoleAddController extends UserRolesAppController {
-
-/**
- * ウィザード定数(user_roles)
- *
- * @var string
- */
-	const WIZARD_USER_ROLES = 'user_roles';
-
-/**
- * ウィザード定数(user_roles_plugins)
- *
- * @var string
- */
-	const WIZARD_USER_ROLES_PLUGINS = 'user_roles_plugins';
-
-/**
- * ウィザード定数(user_attributes_roles)
- *
- * @var string
- */
-	const WIZARD_USER_ATTRIBUTES_ROLES = 'user_attributes_roles';
 
 /**
  * use component
@@ -77,21 +57,21 @@ class UserRoleAddController extends UserRolesAppController {
 	public $helpers = array(
 		'NetCommons.Wizard' => array(
 			'navibar' => array(
-				self::WIZARD_USER_ROLES => array(
+				parent::WIZARD_USER_ROLES => array(
 					'url' => array(
 						'controller' => 'user_role_add',
 						'action' => 'basic',
 					),
 					'label' => array('user_roles', 'General setting'),
 				),
-				self::WIZARD_USER_ROLES_PLUGINS => array(
+				parent::WIZARD_USER_ROLES_PLUGINS => array(
 					'url' => array(
 						'controller' => 'user_role_add',
 						'action' => 'user_roles_plugins',
 					),
 					'label' => array('user_roles', 'Select site-manager plugin to use'),
 				),
-				self::WIZARD_USER_ATTRIBUTES_ROLES => array(
+				parent::WIZARD_USER_ATTRIBUTES_ROLES => array(
 					'url' => array(
 						'controller' => 'user_role_add',
 						'action' => 'user_attributes_roles',
@@ -106,7 +86,32 @@ class UserRoleAddController extends UserRolesAppController {
 	);
 
 /**
- * add
+ * beforeFilter
+ *
+ * @return void
+ */
+	public function beforeFilter() {
+		parent::beforeFilter();
+
+		if ($this->params['action'] === 'basic') {
+			return;
+		}
+
+		if (! $this->Session->read('UserRoleAdd')) {
+			return $this->redirect('/user_roles/user_role_add/basic');
+		}
+
+		if ($this->params['action'] === 'user_attributes_roles' &&
+					! $this->Session->read('UserRoleAdd.PluginsRole')) {
+
+			$navibar = $this->helpers['NetCommons.Wizard']['navibar'];
+			$navibar[parent::WIZARD_USER_ROLES_PLUGINS]['url'] = null;
+			$this->helpers['NetCommons.Wizard']['navibar'] = $navibar;
+		}
+	}
+
+/**
+ * 一般設定
  *
  * @return void
  */
@@ -131,6 +136,9 @@ class UserRoleAddController extends UserRolesAppController {
 				if ($count > 0) {
 					return $this->redirect('/user_roles/user_role_add/user_roles_plugins');
 				} else {
+					$this->Session->write(
+						'UserRoleAdd.UserRoleSetting.is_usable_user_manager', false
+					);
 					return $this->redirect('/user_roles/user_role_add/user_attributes_roles');
 				}
 			}
@@ -138,33 +146,39 @@ class UserRoleAddController extends UserRolesAppController {
 
 		} else {
 			//初期値セット
-			$this->request->data['UserRole'] = array();
-			foreach (array_keys($this->viewVars['languages']) as $langId) {
-				$index = count($this->request->data['UserRole']);
+			$pattern = preg_quote('/user_roles/user_role_add/', '/') .
+						'(user_attributes_roles|user_roles_plugins)';
+			if (preg_match('/' . $pattern . '/', $this->referer())) {
+				$this->request->data = $this->Session->read('UserRoleAdd');
+			} else {
+				$this->request->data['UserRole'] = array();
+				foreach (array_keys($this->viewVars['languages']) as $langId) {
+					$index = count($this->request->data['UserRole']);
 
-				$userRole = $this->UserRole->create(array(
-					'id' => null,
-					'language_id' => (string)$langId,
-					'type' => UserRole::ROLE_TYPE_USER,
-				));
-				$this->request->data['UserRole'][$index] = $userRole['UserRole'];
+					$userRole = $this->UserRole->create(array(
+						'id' => null,
+						'language_id' => (string)$langId,
+						'type' => UserRole::ROLE_TYPE_USER,
+					));
+					$this->request->data['UserRole'][$index] = $userRole['UserRole'];
+				}
+				$this->request->data = Hash::merge($this->request->data,
+					$this->UserRoleSetting->create(array(
+						'id' => null,
+						'origin_role_key' => UserRole::USER_ROLE_KEY_COMMON_USER,
+						'use_private_room' => true
+					))
+				);
 			}
-			$this->request->data = Hash::merge($this->request->data,
-				$this->UserRoleSetting->create(array(
-					'id' => null,
-					'origin_role_key' => UserRole::USER_ROLE_KEY_COMMON_USER,
-					'use_private_room' => true
-				))
-			);
 
-			$defaultRolePermission = $this->DefaultRolePermission->create(array(
+			$defaultPermission = $this->DefaultRolePermission->create(array(
 				'id' => null,
 				'type' => DefaultRolePermission::TYPE_USER_ROLE,
 				'permission' => 'group_creatable',
 				'value' => true,
 				'fixed' => false,
 			))['DefaultRolePermission'];
-			$this->request->data['DefaultRolePermission']['group_creatable'] = $defaultRolePermission;
+			$this->request->data['DefaultRolePermission']['group_creatable'] = $defaultPermission;
 		}
 
 		$result = $this->UserRole->find('all', array(
@@ -197,6 +211,14 @@ class UserRoleAddController extends UserRolesAppController {
 			//不要パラメータ除去
 			unset($this->request->data['save']);
 
+			$isUsableUserManager = Hash::extract(
+				$this->request->data['PluginsRole'], '{n}.PluginsRole[plugin_key=user_manager]'
+			);
+			$isUsableUserManager = (bool)Hash::get($isUsableUserManager, '0', false);
+			$this->Session->write(
+				'UserRoleAdd.UserRoleSetting.is_usable_user_manager', $isUsableUserManager
+			);
+
 			$this->Session->write('UserRoleAdd.PluginsRole', $this->request->data['PluginsRole']);
 			return $this->redirect('/user_roles/user_role_add/user_attributes_roles');
 
@@ -206,7 +228,13 @@ class UserRoleAddController extends UserRolesAppController {
 				Plugin::PLUGIN_TYPE_FOR_SITE_MANAGER,
 				Hash::get($baseUserRole, 'UserRoleSetting.origin_role_key')
 			);
-			$this->request->data = Hash::merge($baseUserRole, $this->request->data);
+
+			$pattern = preg_quote('/user_roles/user_role_add/', '/') . 'user_attributes_roles';
+			if (preg_match('/' . $pattern . '/', $this->referer())) {
+				$this->request->data = Hash::merge($this->request->data, $baseUserRole);
+			} else {
+				$this->request->data = Hash::merge($baseUserRole, $this->request->data);
+			}
 		}
 	}
 
@@ -218,83 +246,61 @@ class UserRoleAddController extends UserRolesAppController {
 	public function user_attributes_roles() {
 		$baseUserRole = $this->Session->read('UserRoleAdd');
 
-		$count = $this->PluginsRole->find('count', array(
-			'recursive' => -1,
-			'conditions' => array(
-				'role_key' => $baseUserRole['UserRoleSetting']['origin_role_key']
-			)
-		));
+		$rolekey = $baseUserRole['UserRoleSetting']['origin_role_key'];
+		$userAttributesRoles = $this->UserAttributesRole->getUserAttributesRole($rolekey);
 
 		if ($this->request->is('post')) {
-			if (! Hash::get($this->request->data, 'UserAttributesRole')) {
-				return $this->throwBadRequest();
+			//不要パラメータ除去
+			unset($this->request->data['save']);
+
+			//リクエストの整形
+			if ($this->Session->read('UserRoleAdd.UserRoleSetting.is_usable_user_manager')) {
+				$this->request->data['UserAttributesRole'] = $userAttributesRoles;
+			} else {
+				foreach ($userAttributesRoles as $id => $userAttributesRole) {
+					$otherRole = Hash::get(
+						$this->request->data,
+						'UserAttributesRole.' . $id . '.UserAttributesRole.other_user_attribute_role',
+						false
+					);
+
+					if ($otherRole === false) {
+						$this->request->data['UserAttributesRole'][$id] = $userAttributesRole;
+						continue;
+					}
+
+					$choices = array(
+						UserAttributesRolesController::OTHER_READABLE,
+						UserAttributesRolesController::OTHER_NOT_READABLE
+					);
+					if (! in_array($otherRole, $choices, true)) {
+						return $this->throwBadRequest();
+					}
+
+					$userAttributesRole['UserAttributesRole']['other_readable'] = false;
+					$userAttributesRole['UserAttributesRole']['other_editable'] = false;
+					if ($otherRole === UserAttributesRolesController::OTHER_READABLE) {
+						$userAttributesRole['UserAttributesRole']['other_readable'] = true;
+					}
+					$this->request->data['UserAttributesRole'][$id] = $userAttributesRole;
+				}
 			}
+			$baseUserRole['UserAttributesRole'] = $this->request->data['UserAttributesRole'];
 
-//			//不要パラメータ除去
-//			unset($this->request->data['save']);
-//
-//			//リクエストの整形
-//			$ids = array_keys($this->request->data['UserAttributesRole']);
-//			foreach ($ids as $id) {
-//				$otherRole = Hash::get($this->request->data,
-//						'UserAttributesRole.' . $id . '.UserAttributesRole.other_user_attribute_role', false);
-//				if ($otherRole === false) {
-//					$this->request->data = Hash::remove($this->request->data, 'UserAttributesRole.' . $id);
-//					continue;
-//				}
-//
-//				if (! in_array($otherRole, [self::OTHER_READABLE, self::OTHER_NOT_READABLE], true)) {
-//					return $this->throwBadRequest();
-//				}
-//
-//				$this->request->data['UserAttributesRole'][$id]['UserAttributesRole']['other_readable'] = false;
-//				$this->request->data['UserAttributesRole'][$id]['UserAttributesRole']['other_editable'] = false;
-//
-//				if ($otherRole === self::OTHER_READABLE) {
-//					$this->request->data['UserAttributesRole'][$id]['UserAttributesRole']['other_readable'] = true;
-//				}
-//			}
-//
-//			//登録処理
-//			if ($this->UserAttributesRole->saveUserAttributesRoles($this->request->data)) {
-//				//正常の場合
-//				$this->NetCommons->setFlashNotification(
-//					__d('net_commons', 'Successfully saved.'), array('class' => 'success')
-//				);
-//				$this->redirect('/user_roles/user_roles/index/');
-//			} else {
-//				$this->NetCommons->handleValidationError($this->UserAttributesRole->validationErrors);
-//				$this->redirect('/user_roles/user_attributes_roles/edit/' . h($roleKey));
-//			}
-//
-		} else {
-//			//既存データ取得
-//			$this->request->data = $this->UserRoleSetting->getUserRoleSetting(
-//				Plugin::PLUGIN_TYPE_FOR_SITE_MANAGER, $roleKey
-//			);
-
-			$rolekey = $baseUserRole['UserRoleSetting']['origin_role_key'];
-			$userAttributesRoles = $this->UserAttributesRole->getUserAttributesRole($rolekey);
-
-			$this->request->data['UserAttributesRole'] = $userAttributesRoles;
-			$this->request->data['UserAttribute'] = $this->viewVars['userAttributes'];
-
-//			$userRole = $this->UserRole->find('first', array(
-//				'recursive' => -1,
-//				'conditions' => array(
-//					'key' => $roleKey,
-//					'language_id' => Current::read('Language.id')
-//				)
-//			));
-//			$this->request->data = Hash::merge($userRole, $this->request->data);
-
-			$isUsableUserManager = Hash::extract(
-				$baseUserRole['PluginsRole'], '{n}.PluginsRole[plugin_key=user_manager]'
-			);
-			$isUsableUserManager = (bool)Hash::get($isUsableUserManager, '0', false);
-			$baseUserRole['UserRoleSetting']['is_usable_user_manager'] = $isUsableUserManager;
-
-			$this->request->data = Hash::merge($baseUserRole, $this->request->data);
+			//登録処理
+			if ($this->UserRole->saveUserRole($baseUserRole)) {
+				//正常の場合
+				$this->Session->delete('UserRoleAdd');
+				$this->NetCommons->setFlashNotification(
+					__d('net_commons', 'Successfully saved.'), array('class' => 'success')
+				);
+				return $this->redirect('/user_roles/user_roles/index');
+			}
+			$this->NetCommons->handleValidationError($this->UserRole->validationErrors);
 		}
+		//既存データ取得
+		$this->request->data['UserAttributesRole'] = $userAttributesRoles;
+		$this->request->data['UserAttribute'] = $this->viewVars['userAttributes'];
+		$this->request->data = Hash::merge($baseUserRole, $this->request->data);
 	}
 }

@@ -60,7 +60,7 @@ class UserRolesViewElementsSubtitleTest extends NetCommonsControllerTestCase {
 		//チェック
 		$pattern = '/' . preg_quote('View/Elements/subtitle', '/') . '/';
 		$this->assertRegExp($pattern, $this->view);
-		$this->assertContains('<span class="text-muted">(TestSubtitle)</span>', $this->view);
+		$this->assertContains('<h2>TestSubtitle</h2>', $this->view);
 	}
 
 /**
@@ -76,7 +76,7 @@ class UserRolesViewElementsSubtitleTest extends NetCommonsControllerTestCase {
 		//チェック
 		$pattern = '/' . preg_quote('View/Elements/subtitle', '/') . '/';
 		$this->assertRegExp($pattern, $this->view);
-		$this->assertNotContains('<span class="text-muted">(TestSubtitle)</span>', $this->view);
+		$this->assertNotContains('<h2>TestSubtitle</h2>', $this->view);
 	}
 
 }

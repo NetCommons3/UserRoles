@@ -49,24 +49,6 @@
 	}
 ?>
 
-<?php
-	$domId = $this->UserRoleForm->domId('UserRoleSetting.origin_role_key');
-	$ngInit = $domId . ' = \'' . $this->data['UserRoleSetting']['origin_role_key'] . '\';';
-?>
-<div class="form-group" ng-init="<?php echo $ngInit; ?>">
-	<?php
-		echo $this->UserRoleForm->selectOriginUserRoles('UserRoleSetting.origin_role_key', array(
-			'label' => __d('user_roles', 'Origin roles'),
-			//'value' => $this->data['UserRoleSetting']['origin_role_key'],
-			'disabled' => ($this->params['action'] === 'edit'),
-			'help' => '<div class="alert alert-warning">' .
-							__d('user_roles', 'Role description') .
-					'</div>',
-		));
-		echo $this->UserRoleForm->displayUserRoleDescriptions('UserRoleSetting.origin_role_key');
-	?>
-</div>
-
 <div class="form-group">
 	<?php
 		echo $this->NetCommonsForm->hidden('UserRoleSetting.id');
@@ -80,6 +62,7 @@
 <div class="form-group">
 	<?php
 		echo $this->NetCommonsForm->hidden('DefaultRolePermission.group_creatable.id');
+		echo $this->NetCommonsForm->hidden('DefaultRolePermission.group_creatable.role_key');
 		echo $this->NetCommonsForm->hidden('DefaultRolePermission.group_creatable.type');
 		echo $this->NetCommonsForm->hidden('DefaultRolePermission.group_creatable.permission');
 		echo $this->NetCommonsForm->hidden('DefaultRolePermission.group_creatable.fixed');
@@ -89,3 +72,12 @@
 		));
 	?>
 </div>
+
+<?php
+	echo $this->UserRoleForm->selectOriginUserRoles('UserRoleSetting.origin_role_key', array(
+		'label' => __d('user_roles', 'Origin role'),
+		'disabled' => ($this->params['action'] === 'edit'),
+		'help' => '<div class="alert alert-warning">' .
+						__d('user_roles', 'Origin role description') .
+				'</div>',
+	));

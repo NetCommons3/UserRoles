@@ -25,6 +25,7 @@ class UserRolesController extends UserRolesAppController {
  * @var array
  */
 	public $uses = array(
+		'Roles.DefaultRolePermission',
 		'UserRoles.UserRole',
 		'UserRoles.UserRoleSetting',
 	);
@@ -87,68 +88,12 @@ class UserRolesController extends UserRolesAppController {
 	}
 
 /**
- * add
- *
- * @return void
- */
-	public function add() {
-		$this->view = 'edit';
-
-		if ($this->request->is('post')) {
-			//不要パラメータ除去
-			unset($this->request->data['save'], $this->request->data['active_lang_id']);
-
-			//他言語が入力されていない場合、表示されている言語データをセット
-			$this->SwitchLanguage->setM17nRequestValue();
-
-			//登録処理
-			$userRoles = $this->UserRole->saveUserRole($this->request->data);
-			if ($userRoles) {
-				//正常の場合
-				$this->NetCommons->setFlashNotification(
-					__d('net_commons', 'Successfully saved.'), array('class' => 'success')
-				);
-				$userRoleKey = Hash::extract(
-					$userRoles, '{n}.UserRole[language_id=' . Current::read('Language.id') . '].key'
-				);
-				return $this->redirect(
-					'/user_roles/user_role_settings/edit/' . Hash::get($userRoleKey, '0') . '/'
-				);
-			}
-			$this->NetCommons->handleValidationError($this->UserRole->validationErrors);
-
-		} else {
-			//初期値セット
-			$this->request->data['UserRole'] = array();
-			foreach (array_keys($this->viewVars['languages']) as $langId) {
-				$index = count($this->request->data['UserRole']);
-
-				$userRole = $this->UserRole->create(array(
-					'id' => null,
-					'language_id' => (string)$langId,
-					'type' => UserRole::ROLE_TYPE_USER,
-				));
-				$this->request->data['UserRole'][$index] = $userRole['UserRole'];
-			}
-			$this->request->data = Hash::merge($this->request->data,
-				$this->UserRoleSetting->create(array(
-					'id' => null,
-					'origin_role_key' => UserRole::USER_ROLE_KEY_COMMON_USER,
-				))
-			);
-		}
-	}
-
-/**
  * edit
  *
  * @param string $roleKey user_roles.key
  * @return void
  */
 	public function edit($roleKey = null) {
-		if ($roleKey === UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR) {
-			return $this->throwBadRequest();
-		}
 		//既存データ取得
 		$userRole = $this->UserRole->find('all', array(
 			'recursive' => -1,
@@ -172,13 +117,7 @@ class UserRolesController extends UserRolesAppController {
 				$this->NetCommons->setFlashNotification(
 					__d('net_commons', 'Successfully saved.'), array('class' => 'success')
 				);
-
-				$userRoleKey = Hash::extract(
-					$result, '{n}.UserRole[language_id=' . Current::read('Language.id') . '].key'
-				);
-				return $this->redirect(
-					'/user_roles/user_role_settings/edit/' . Hash::get($userRoleKey, '0') . '/'
-				);
+				return $this->redirect('/user_roles/user_roles/index');
 			}
 			$this->NetCommons->handleValidationError($this->UserRole->validationErrors);
 
@@ -200,10 +139,13 @@ class UserRolesController extends UserRolesAppController {
 		$this->request->data = Hash::merge($this->request->data, $result);
 
 		$this->set('roleKey', $roleKey);
-
 		$this->set('subtitle', Hash::get($this->viewVars['userRoles'], $roleKey, ''));
-
 		$this->set('isDeletable', $this->UserRole->verifyDeletable($roleKey));
+
+		$defaultPermission = $this->DefaultRolePermission->getDefaultRolePermissions(
+			$roleKey, 'group_creatable', DefaultRolePermission::TYPE_USER_ROLE
+		);
+		$this->request->data['DefaultRolePermission'] = $defaultPermission;
 	}
 
 /**

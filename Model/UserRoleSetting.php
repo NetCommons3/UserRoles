@@ -59,6 +59,7 @@ class UserRoleSetting extends UserRolesAppModel {
 					'rule' => array('notBlank'),
 					'message' => __d('net_commons', 'Invalid request.'),
 					'required' => true,
+					'on' => 'create', // Limit validation to 'create' or 'update' operations
 				),
 			),
 			'use_private_room' => array(
@@ -114,6 +115,7 @@ class UserRoleSetting extends UserRolesAppModel {
  */
 	public function saveUserRoleSetting($data) {
 		$this->loadModels([
+			'DefaultRolePermission' => 'Roles.DefaultRolePermission',
 			'UserRoleSetting' => 'UserRoles.UserRoleSetting',
 		]);
 
@@ -129,19 +131,12 @@ class UserRoleSetting extends UserRolesAppModel {
 		try {
 			//UserRoleの登録処理
 			if (! $this->save(null, false)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error 2'));
 			}
 
-			//PluginsRoleのデータ登録処理
-			foreach ($data['PluginsRole'] as $pluginRole) {
-				if (Hash::get($pluginRole, 'PluginsRole.is_usable_plugin', false)) {
-					$this->savePluginsRole(
-						$pluginRole['PluginsRole']['role_key'], $pluginRole['PluginsRole']['plugin_key']
-					);
-				} else {
-					$this->deletePluginsRole(
-						$pluginRole['PluginsRole']['role_key'], $pluginRole['PluginsRole']['plugin_key']
-					);
+			if (isset($data['DefaultRolePermission'])) {
+				if (! $this->DefaultRolePermission->saveMany($data['DefaultRolePermission'])) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}
 			}
 

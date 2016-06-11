@@ -16,9 +16,10 @@ echo $this->NetCommonsHtml->css(array(
 ?>
 
 <?php
-	echo $this->Wizard->navibar(UserRolesAppController::WIZARD_USER_ROLES_PLUGINS);
+	echo $this->UserRoleForm->settingTabs(UserRolesAppController::WIZARD_USER_ROLES_PLUGINS);
+	echo $this->element('UserRoles.subtitle');
 	echo $this->MessageFlash->description(
-		__d('user_roles', 'Select site-manager plugin to use, and press [NEXT].')
+		__d('user_roles', 'Select site-manager plugin to use, and press [OK].')
 	);
 ?>
 
@@ -33,11 +34,13 @@ echo $this->NetCommonsHtml->css(array(
 					array(
 						'label' => $pluginsRole['Plugin']['name'],
 						'div' => false,
-						'checked' => (bool)Hash::get($pluginsRole, 'PluginsRole.is_usable_plugin', $pluginsRole['PluginsRole']['id']),
+						'checked' => (bool)$pluginsRole['PluginsRole']['id'],
 					)
 				);
-				$hidden .= $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.id', array('value' => false));
-				$hidden .= $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.role_key', array('value' => false));
+				$hidden .= $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.id');
+				$hidden .= $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.role_key', array(
+					'value' => $roleKey)
+				);
 				$hidden .= $this->NetCommonsForm->hidden('PluginsRole.' . $i . '.PluginsRole.plugin_key', array(
 					'value' => $pluginsRole['Plugin']['key'])
 				);
@@ -48,7 +51,11 @@ echo $this->NetCommonsHtml->css(array(
 	</div>
 
 	<div class="panel-footer text-center">
-		<?php echo $this->Wizard->buttons(UserRolesAppController::WIZARD_USER_ROLES_PLUGINS); ?>
+		<?php echo $this->Button->cancelAndSave(
+				__d('net_commons', 'Cancel'),
+				__d('net_commons', 'OK'),
+				$this->NetCommonsHtml->url(array('controller' => 'user_roles', 'action' => 'index'))
+			); ?>
 	</div>
 
 	<?php echo $this->NetCommonsForm->end(); ?>

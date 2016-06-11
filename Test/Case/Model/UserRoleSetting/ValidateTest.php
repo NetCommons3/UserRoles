@@ -70,7 +70,7 @@ class UserRoleSettingValidateTest extends NetCommonsValidateTest {
 			array('data' => $data, 'field' => 'role_key', 'value' => '',
 				'message' => __d('net_commons', 'Invalid request.')),
 			array('data' => $data, 'field' => 'origin_role_key', 'value' => '',
-				'message' => __d('net_commons', 'Invalid request.')),
+				'message' => __d('net_commons', 'Invalid request.'), array('UserRoleSetting' => ['id' => null])),
 			array('data' => $data, 'field' => 'use_private_room', 'value' => '2',
 				'message' => __d('net_commons', 'Invalid request.')),
 		);

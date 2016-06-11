@@ -105,10 +105,6 @@ class UserRolesControllerEditTest extends NetCommonsControllerTestCase {
 		//チェック
 		$this->assertInput('form', null, '/user_roles/user_roles/edit/' . $roleKey, $this->view);
 		$this->assertInput('input', '_method', 'PUT', $this->view);
-		$this->assertInput('select', 'data[UserRoleSetting][origin_role_key]', null, $this->view);
-		$pattern = '/<select.*?name="' . preg_quote('data[UserRoleSetting][origin_role_key]', '/') . '".*?' .
-					'disabled="disabled".*?id="UserRoleSettingOriginRoleKey".*?>/';
-		$this->assertRegExp($pattern, $this->view);
 
 		if ($isSystem) {
 			$this->assertNotContains('dangerZone', $this->view);
@@ -165,28 +161,6 @@ class UserRolesControllerEditTest extends NetCommonsControllerTestCase {
 	}
 
 /**
- * edit()アクションのGETリクエストテスト(システム管理者)
- *
- * @return void
- */
-	public function testEditGetBySystemAdmin() {
-		//テスト実行
-		$roleKey = UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR;
-		$this->_testGetAction(array('action' => 'edit', 'key' => $roleKey), null, 'BadRequestException', 'view');
-	}
-
-/**
- * edit()アクションのGETリクエストテスト(システム管理者)(JSON形式)
- *
- * @return void
- */
-	public function testEditGetJsonBySystemAdmin() {
-		//テスト実行
-		$roleKey = UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR;
-		$this->_testGetAction(array('action' => 'edit', 'key' => $roleKey), null, 'BadRequestException', 'json');
-	}
-
-/**
  * edit()アクションのGETリクエストテスト(不正アクセス)
  *
  * @return void
@@ -222,7 +196,7 @@ class UserRolesControllerEditTest extends NetCommonsControllerTestCase {
 
 		//チェック
 		$header = $this->controller->response->header();
-		$this->assertTextContains('/user_roles/user_role_settings/edit/test_user', $header['Location']);
+		$this->assertTextContains('/user_roles/user_roles/index', $header['Location']);
 	}
 
 /**

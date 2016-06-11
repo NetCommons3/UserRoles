@@ -13,7 +13,7 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 ?>
 
 <?php
-	echo $this->Wizard->navibar(UserRoleAddController::WIZARD_USER_ROLES);
+	echo $this->Wizard->navibar(UserRolesAppController::WIZARD_USER_ROLES);
 	echo $this->MessageFlash->description(__d(
 		'user_roles',
 		'Enter the title of the authority, enter the description of authority, and specify the level of the authority, and press [NEXT].'
@@ -32,7 +32,7 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 	</div>
 
 	<div class="panel-footer text-center">
-		<?php echo $this->Wizard->buttons(UserRoleAddController::WIZARD_USER_ROLES); ?>
+		<?php echo $this->Wizard->buttons(UserRolesAppController::WIZARD_USER_ROLES); ?>
 	</div>
 
 	<?php echo $this->NetCommonsForm->end(); ?>
