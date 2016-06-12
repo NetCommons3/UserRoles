@@ -67,6 +67,17 @@ class UserRoleFormHelper extends AppHelper {
 				)
 			),
 		);
+		$systemRoles = array(
+			UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR,
+			UserRole::USER_ROLE_KEY_ADMINISTRATOR
+		);
+
+		if (in_array($this->_View->viewVars['roleKey'], $systemRoles, true)) {
+			unset($tabs[UserRolesAppController::WIZARD_USER_ROLES_PLUGINS]);
+			unset($tabs[UserRolesAppController::WIZARD_USER_ATTRIBUTES_ROLES]);
+		} elseif (! Hash::get($this->_View->data, 'UserRoleSetting.is_site_plugins')) {
+			unset($tabs[UserRolesAppController::WIZARD_USER_ROLES_PLUGINS]);
+		}
 
 		$html .= '<ul class="nav nav-tabs" role="tablist">';
 

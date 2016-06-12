@@ -54,12 +54,12 @@ class UserRolesPluginsController extends UserRolesAppController {
 			unset($this->request->data['save']);
 
 			//登録処理
-			if ($this->UserRoleSetting->saveUserRoleSetting($this->request->data)) {
+			if ($this->UserRole->saveUserRolePlugins($this->request->data)) {
 				//正常の場合
 				$this->NetCommons->setFlashNotification(
 					__d('net_commons', 'Successfully saved.'), array('class' => 'success')
 				);
-				$this->redirect('/user_roles/user_attributes_roles/edit/' . h($roleKey));
+				return $this->redirect('/user_roles/user_roles/index');
 			} else {
 				$this->NetCommons->handleValidationError($this->UserRoleSetting->validationErrors);
 				$this->redirect('/user_roles/user_roles_plugins/edit/' . h($roleKey));

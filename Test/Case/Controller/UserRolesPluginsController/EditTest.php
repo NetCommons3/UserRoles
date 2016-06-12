@@ -184,7 +184,7 @@ class UserRolesPluginsControllerEditTest extends NetCommonsControllerTestCase {
  * @return void
  */
 	public function testEditPost() {
-		$this->_mockForReturnTrue('UserRoles.UserRoleSetting', 'saveUserRoleSetting');
+		$this->_mockForReturnTrue('UserRoles.UserRole', 'saveUserRolePlugins');
 		$roleKey = 'administrator';
 
 		//テスト実行
@@ -193,7 +193,7 @@ class UserRolesPluginsControllerEditTest extends NetCommonsControllerTestCase {
 
 		//チェック
 		$header = $this->controller->response->header();
-		$this->assertTextContains('/user_roles/user_attributes_roles/edit/' . $roleKey, $header['Location']);
+		$this->assertTextContains('/user_roles/user_roles/index', $header['Location']);
 	}
 
 /**
@@ -202,7 +202,7 @@ class UserRolesPluginsControllerEditTest extends NetCommonsControllerTestCase {
  * @return void
  */
 	public function testEditPostOnValidationError() {
-		$this->_mockForReturnFalse('UserRoles.UserRoleSetting', 'saveUserRoleSetting');
+		$this->_mockForReturnFalse('UserRoles.UserRole', 'saveUserRolePlugins');
 		$roleKey = 'administrator';
 
 		//テスト実行
