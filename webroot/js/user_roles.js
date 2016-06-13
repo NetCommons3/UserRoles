@@ -7,8 +7,8 @@
 /**
  * UserRoles controller
  */
-NetCommonsApp.controller('UserRolesController', function(
-    $scope, NetCommonsModal) {
+NetCommonsApp.controller('UserRolesController',
+    ['$scope', 'NetCommonsModal', function($scope, NetCommonsModal) {
 
       /**
        * 会員権限詳細表示
@@ -23,19 +23,21 @@ NetCommonsApp.controller('UserRolesController', function(
             {windowClass: 'user-role-modal'}
         );
       };
-    });
+    }]);
 
 
 /**
  * UserRoles modal controller
  */
-NetCommonsApp.controller('UserRolesView', function($scope, $uibModalInstance) {
-  /**
-   * dialog cancel
-   *
-   * @return {void}
-   */
-  $scope.cancel = function() {
-    $uibModalInstance.dismiss('cancel');
-  };
-});
+NetCommonsApp.controller('UserRolesView',
+    ['$scope', '$uibModalInstance', function($scope, $uibModalInstance) {
+
+      /**
+       * dialog cancel
+       *
+       * @return {void}
+       */
+      $scope.cancel = function() {
+        $uibModalInstance.dismiss('cancel');
+      };
+    }]);
