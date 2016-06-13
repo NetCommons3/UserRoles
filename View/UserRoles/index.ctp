@@ -8,6 +8,12 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
  */
+
+echo $this->NetCommonsHtml->css(array(
+	'/user_roles/css/style.css',
+	'/plugin_manager/css/style.css',
+));
+echo $this->NetCommonsHtml->script('/user_roles/js/user_roles.js');
 ?>
 
 <?php
@@ -19,11 +25,11 @@
 <div class="text-right">
 	<?php echo $this->LinkButton->add(
 		__d('user_roles', 'Add user role'),
-		array('controller' => 'user_role_add', 'action' => 'basic')
+		array('controller' => 'user_role_add', 'action' => 'user_role')
 	); ?>
 </div>
 
-<table class="table table-hover">
+<table class="table table-hover" ng-controller="UserRolesController">
 	<thead>
 		<tr>
 			<th>
@@ -40,7 +46,11 @@
 			<tr>
 				<td>
 					<div class="text-nowrap">
-						<?php echo h($userRole['UserRole']['name']); ?>
+						<?php
+							echo $this->NetCommonsHtml->link($userRole['UserRole']['name'], '#', array(
+								'ng-click' => 'showUserRole(\'' . $userRole['UserRole']['key'] . '\')'
+							));
+						?>
 					</div>
 				</td>
 

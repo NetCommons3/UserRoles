@@ -55,7 +55,7 @@ class UserRoleFormHelperSelectOriginUserRolesTest extends NetCommonsHelperTestCa
 		));
 
 		$viewVars = array(
-			'userRoles' => Hash::combine($userRoles, '{n}.UserRole.key', '{n}.UserRole.name'),
+			'userRolesName' => Hash::combine($userRoles, '{n}.UserRole.key', '{n}.UserRole.name'),
 			'userRolesDescription' => Hash::combine($userRoles, '{n}.UserRole.key', '{n}.UserRole.description')
 		);
 		$viewVars = Hash::remove($viewVars, '{s}.' . UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR);

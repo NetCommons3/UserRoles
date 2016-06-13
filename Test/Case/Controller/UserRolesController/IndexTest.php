@@ -25,7 +25,14 @@ class UserRolesControllerIndexTest extends NetCommonsControllerTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'plugin.user_roles.user_attributes_role',
+		'plugin.user_attributes.user_attribute4edit',
+		'plugin.user_attributes.user_attribute_choice4edit',
+		'plugin.user_attributes.user_attribute_layout',
+		'plugin.user_attributes.user_attribute_setting4edit',
+		'plugin.user_roles.plugin4test',
+		'plugin.user_roles.plugins_role4test',
+		'plugin.user_roles.user_attributes_role4edit',
+		'plugin.user_roles.user_role4test',
 		'plugin.user_roles.user_role_setting',
 	);
 
@@ -55,7 +62,7 @@ class UserRolesControllerIndexTest extends NetCommonsControllerTestCase {
 		$this->_testGetAction(array('action' => 'index'), array('method' => 'assertNotEmpty'), null, 'view');
 
 		//チェック
-		$this->assertActionLink('basic', array('controller' => 'user_role_add'), true, $this->view);
+		$this->assertActionLink('user_role', array('controller' => 'user_role_add'), true, $this->view);
 
 		$pattern = '/<a href=".*?' . preg_quote('/user_roles/user_roles/edit/system_administrator', '/') . '/';
 		$this->assertRegExp($pattern, $this->view);

@@ -10,7 +10,11 @@
 	margin-bottom: 0px;
 }
 
-.user-attribute-roles-edit {
+.form-group.user-attribute-roles-edit {
+	margin-bottom: 8px;
+}
+
+.user-attribute-roles-edit > .input-group {
 	width: 100%;
 }
 .user-attribute-roles-edit label {
@@ -27,4 +31,14 @@ label.user-roles-label {
 
 .user-attribute-roles-edit .input-group-addon {
 	background-color: transparent;
+}
+
+div.col-sm-6 .user-attribute-roles-edit label.input-group-addon {
+	overflow: hidden;
+	max-width: 152px;
+}
+
+.modal.user-role-modal > .modal-dialog {
+	width: auto;
+	max-width: 800px;
 }

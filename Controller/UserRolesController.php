@@ -20,17 +20,6 @@ App::uses('UserRolesAppController', 'UserRoles.Controller');
 class UserRolesController extends UserRolesAppController {
 
 /**
- * use model
- *
- * @var array
- */
-	public $uses = array(
-		'Roles.DefaultRolePermission',
-		'UserRoles.UserRole',
-		'UserRoles.UserRoleSetting',
-	);
-
-/**
  * use component
  *
  * @var array
@@ -40,7 +29,30 @@ class UserRolesController extends UserRolesAppController {
 			'fields' => array(
 				'UserRole.name', 'UserRole.description'
 			)
-		)
+		),
+		'UserAttributes.UserAttributeLayout',
+	);
+
+/**
+ * use model
+ *
+ * @var array
+ */
+	public $uses = array(
+		'PluginManager.Plugin',
+		'Roles.DefaultRolePermission',
+		'UserRoles.UserAttributesRole',
+		'UserRoles.UserRole',
+		'UserRoles.UserRoleSetting',
+	);
+
+/**
+ * use helpers
+ *
+ * @var array
+ */
+	public $helpers = array(
+		'UserAttributes.UserAttributeLayout',
 	);
 
 /**
@@ -51,25 +63,21 @@ class UserRolesController extends UserRolesAppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 
-		if (! in_array($this->params['action'], ['add', 'edit'], true)) {
-			return;
-		}
-		$result = $this->UserRole->find('all', array(
+		$userRoles = $this->UserRole->find('all', array(
 			'recursive' => -1,
-			'fields' => array('key', 'name', 'description'),
 			'conditions' => array(
-				'language_id' => Current::read('Language.id')
-			),
-			'order' => array('id' => 'asc')
+				$this->UserRole->alias . '.language_id' => Current::read('Language.id')
+			)
 		));
+		$this->set(
+			'userRolesName',
+			Hash::combine($userRoles, '{n}.UserRole.key', '{n}.UserRole.name')
+		);
 
-		$userRoles = Hash::combine($result, '{n}.UserRole.key', '{n}.UserRole.name');
-		unset($userRoles[UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR]);
-		$this->set('userRoles', $userRoles);
-
-		$userRoles = Hash::combine($result, '{n}.UserRole.key', '{n}.UserRole.description');
-		unset($userRoles[UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR]);
-		$this->set('userRolesDescription', $userRoles);
+		$this->set(
+			'userRolesDescription',
+			Hash::combine($userRoles, '{n}.UserRole.key', '{n}.UserRole.description')
+		);
 	}
 
 /**
@@ -85,6 +93,47 @@ class UserRolesController extends UserRolesAppController {
 			)
 		));
 		$this->set('userRoles', $userRoles);
+	}
+
+/**
+ * index
+ *
+ * @param string $roleKey user_roles.key
+ * @return void
+ */
+	public function view($roleKey = null) {
+		$this->viewClass = 'View';
+		$this->layout = 'NetCommons.modal';
+
+		//UserRoleデータ取得
+		$result = $this->UserRole->find('all', array(
+			'recursive' => -1,
+			'conditions' => array('key' => $roleKey)
+		));
+		if (! $result) {
+			return $this->throwBadRequest();
+		}
+		$this->request->data['UserRole'] = Hash::extract($result, '{n}.UserRole');
+
+		//UserRoleSettingデータ取得
+		$result = $this->UserRoleSetting->getUserRoleSetting(
+			Plugin::PLUGIN_TYPE_FOR_SITE_MANAGER, $roleKey
+		);
+		$this->request->data = Hash::merge($this->request->data, $result);
+
+		//DefaultRolePermissionデータ取得
+		$defaultPermission = $this->DefaultRolePermission->getDefaultRolePermissions(
+			$roleKey, 'group_creatable', DefaultRolePermission::TYPE_USER_ROLE
+		);
+		$this->request->data['DefaultRolePermission'] = $defaultPermission;
+
+		//UserAttributesRoleデータ取得
+		$this->request->data['UserAttributesRole'] =
+							$this->UserAttributesRole->getUserAttributesRole($roleKey);
+		$this->request->data['UserAttribute'] = $this->viewVars['userAttributes'];
+
+		$this->set('subtitle', Hash::get($this->viewVars['userRolesName'], $roleKey, ''));
+		$this->set('roleKey', $roleKey);
 	}
 
 /**
@@ -139,7 +188,7 @@ class UserRolesController extends UserRolesAppController {
 		$this->request->data = Hash::merge($this->request->data, $result);
 
 		$this->set('roleKey', $roleKey);
-		$this->set('subtitle', Hash::get($this->viewVars['userRoles'], $roleKey, ''));
+		$this->set('subtitle', Hash::get($this->viewVars['userRolesName'], $roleKey, ''));
 		$this->set('isDeletable', $this->UserRole->verifyDeletable($roleKey));
 
 		$defaultPermission = $this->DefaultRolePermission->getDefaultRolePermissions(
