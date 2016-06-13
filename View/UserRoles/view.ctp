@@ -55,7 +55,7 @@
 		<div class="text-right nc-edit-link">
 			<?php echo $this->Button->editLink(__d('net_commons', 'Edit'),
 					array('controller' => 'user_roles', 'action' => 'edit', 'key' => $roleKey),
-					array('iconSize' => ' btn-xs')
+					array('iconSize' => ' btn-sm')
 				); ?>
 		</div>
 		<?php echo $this->element('UserRoles/view_user_role'); ?>
@@ -67,7 +67,7 @@
 				<div class="text-right nc-edit-link">
 					<?php echo $this->Button->editLink(__d('net_commons', 'Edit'),
 							array('controller' => 'user_roles_plugins', 'action' => 'edit', 'key' => $roleKey),
-							array('iconSize' => ' btn-xs')
+							array('iconSize' => ' btn-sm')
 						); ?>
 				</div>
 			<?php endif; ?>
@@ -82,7 +82,7 @@
 			<div class="text-right nc-edit-link">
 				<?php echo $this->Button->editLink(__d('net_commons', 'Edit'),
 						array('controller' => 'user_attributes_roles', 'action' => 'edit', 'key' => $roleKey),
-						array('iconSize' => ' btn-xs')
+						array('iconSize' => ' btn-sm')
 					); ?>
 			</div>
 		<?php endif; ?>
