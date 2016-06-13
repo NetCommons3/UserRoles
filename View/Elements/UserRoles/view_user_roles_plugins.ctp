@@ -1,6 +1,6 @@
 <?php
 /**
- * 権限管理の詳細設定テンプレート
+ * 権限管理の詳細表示のプラグイン設定テンプレート
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>

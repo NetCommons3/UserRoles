@@ -1,6 +1,6 @@
 <?php
 /**
- * 権限管理の会員権限の追加・編集テンプレート
+ * 権限管理の会員権限の詳細表示テンプレート
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>

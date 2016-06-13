@@ -1,6 +1,6 @@
 <?php
 /**
- * 会員権限の編集Element
+ * 会員権限の詳細表示の一般設定Element
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
