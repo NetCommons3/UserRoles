@@ -77,7 +77,8 @@
 	<?php endif; ?>
 
 	<div class="tab-pane" id="<?php echo UserRolesAppController::WIZARD_USER_ATTRIBUTES_ROLES; ?>">
-		<?php if (! in_array($roleKey, UserRole::$systemRoles, true)) : ?>
+		<?php if (! in_array($roleKey, UserRole::$systemRoles, true) &&
+				! Hash::get($this->request->data, 'UserRoleSetting.is_usable_user_manager')) : ?>
 			<div class="text-right nc-edit-link">
 				<?php echo $this->Button->editLink(__d('net_commons', 'Edit'),
 						array('controller' => 'user_attributes_roles', 'action' => 'edit', 'key' => $roleKey),
