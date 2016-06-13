@@ -53,6 +53,16 @@ class UserRole extends Role {
 	const USER_ROLE_KEY_COMMON_USER = 'common_user';
 
 /**
+ * システム権限
+ *
+ * @var const
+ */
+	public static $systemRoles = array(
+		self::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR,
+		self::USER_ROLE_KEY_ADMINISTRATOR
+	);
+
+/**
  * use behaviors
  *
  * @var array

@@ -67,12 +67,8 @@ class UserRoleFormHelper extends AppHelper {
 				)
 			),
 		);
-		$systemRoles = array(
-			UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR,
-			UserRole::USER_ROLE_KEY_ADMINISTRATOR
-		);
 
-		if (in_array($this->_View->viewVars['roleKey'], $systemRoles, true)) {
+		if (in_array($this->_View->viewVars['roleKey'], UserRole::$systemRoles, true)) {
 			unset($tabs[UserRolesAppController::WIZARD_USER_ROLES_PLUGINS]);
 			unset($tabs[UserRolesAppController::WIZARD_USER_ATTRIBUTES_ROLES]);
 		} elseif (! Hash::get($this->_View->data, 'UserRoleSetting.is_site_plugins')) {
@@ -116,19 +112,19 @@ class UserRoleFormHelper extends AppHelper {
 
 		$html .= '<div class="form-group" ng-init="' . $ngInit . '">';
 
-		if ($this->_View->request->params['action'] === 'edit') {
+		if ($this->_View->request->params['action'] === 'edit' || isset($attributes['userRoleKey'])) {
 			$html .= $this->NetCommonsForm->label($fieldName, $attributes['label']);
 		} else {
 			$attributes = Hash::merge(array(
 				'type' => 'select',
 				'div' => false,
-				'options' => $this->_View->viewVars['userRoles'],
+				'options' => $this->_View->viewVars['userRolesName'],
 				'ng-model' => $this->domId($fieldName),
 			), $attributes);
 			$html .= $this->NetCommonsForm->input($fieldName, $attributes);
 		}
 
-		$html .= $this->displayUserRoleDescriptions($fieldName);
+		$html .= $this->displayUserRoleDescriptions($fieldName, $attributes);
 
 		$html .= '</div>';
 
@@ -139,27 +135,32 @@ class UserRoleFormHelper extends AppHelper {
  * コピー元の権限の説明出力
  *
  * @param string $fieldName フィールド名(Modelname.fieldname形式)
+ * @param array $attributes タグ属性
  * @return string Formatted HTMLタグ
  */
-	public function displayUserRoleDescriptions($fieldName) {
+	public function displayUserRoleDescriptions($fieldName, $attributes = array()) {
 		$html = '';
 
 		$html .= '<div class="table-responsive">';
 		$html .= '<table class="table user-roles-origin-role-key">';
 		$html .= '<tbody>';
 
-		if ($this->_View->request->params['action'] === 'edit') {
-			$key = Hash::get($this->_View->request->data, 'UserRoleSetting.origin_role_key');
-			$userRoleName = Hash::get($this->_View->viewVars['userRoles'], $key);
+		if (Hash::get($this->data, 'UserRoleSetting.id')) {
+			$key = Hash::get($this->data, $fieldName);
+			$userRoleName = Hash::get($this->_View->viewVars['userRolesName'], $key);
 			$description = Hash::get($this->_View->viewVars['userRolesDescription'], $key);
 
-			$html .= '<tr class="active">';
+			$html .= '<tr ng-class="{active: ' . $this->domId($fieldName) . ' === \'' . $key . '\'}">';
 			$html .= '<td><div class="text-nowrap">' . $userRoleName . '</div></td>';
 			$html .= '<td>' . $description . '</td>';
 			$html .= '</tr>';
 		} else {
+			$userRoleKey = Hash::get($this->data, 'UserRoleSetting.role_key');
 			foreach ($this->_View->viewVars['userRolesDescription'] as $key => $description) {
-				$userRoleName = Hash::get($this->_View->viewVars['userRoles'], $key);
+				if ($userRoleKey === $key) {
+					continue;
+				}
+				$userRoleName = Hash::get($this->_View->viewVars['userRolesName'], $key);
 
 				$html .= '<tr ng-class="{active: ' . $this->domId($fieldName) . ' === \'' . $key . '\'}">';
 				$html .= '<td><div class="text-nowrap">' . $userRoleName . '</div></td>';
@@ -233,8 +234,9 @@ class UserRoleFormHelper extends AppHelper {
 		$ngValue = Hash::get($this->_View->request->data, $fieldName);
 
 		$html = '';
-		$html .= '<div class="form-group" ng-init="' . $ngModel . ' = \'' . $ngValue . '\'">';
-		$html .= '<div class="input-group input-group-sm user-attribute-roles-edit" ' .
+		$html .= '<div class="form-group user-attribute-roles-edit" ' .
+						'ng-init="' . $ngModel . ' = \'' . $ngValue . '\'">';
+		$html .= '<div class="input-group input-group-sm" ' .
 						'ng-class="{\'bg-success\': ' . $ngModel . ' !== \'other_not_readable\'}">';
 
 		$label = h($userAttribute['UserAttribute']['name']);
@@ -281,6 +283,64 @@ class UserRoleFormHelper extends AppHelper {
 			'ng-model' => $ngModel,
 		);
 		$html .= $this->Form->select($fieldName, $options, $attributes);
+
+		$html .= '</div>';
+		$html .= '</div>';
+		return $html;
+	}
+
+/**
+ * 権限管理の個人情報設定SELECTボックス出力
+ *
+ * @param array $userAttribute UserAttributeデータ
+ * @return string HTMLタグ
+ */
+	public function viewUserAttributeRole($userAttribute) {
+		$userAttributeKey = $userAttribute['UserAttribute']['key'];
+		$userAttributeRole = Hash::extract(
+			$this->_View->request->data['UserAttributesRole'],
+			'{n}.UserAttributesRole[user_attribute_key=' . $userAttributeKey . ']'
+		);
+
+		$id = $userAttributeRole[0]['id'];
+		$fieldName = 'UserAttributesRole.' . $id . '.UserAttributesRole.other_user_attribute_role';
+
+		$ngModel = $this->domId($fieldName);
+		if ($userAttributeRole[0]['other_editable']) {
+			$ngValue = UserAttributesRolesController::OTHER_EDITABLE;
+		} elseif ($userAttributeRole[0]['other_readable']) {
+			$ngValue = UserAttributesRolesController::OTHER_READABLE;
+		} else {
+			$ngValue = UserAttributesRolesController::OTHER_NOT_READABLE;
+		}
+
+		$html = '';
+		$html .= '<div class="form-group user-attribute-roles-edit" ' .
+						'ng-init="' . $ngModel . ' = \'' . $ngValue . '\'" ' .
+						'ng-show="' . $ngModel . ' !== \'other_not_readable\'">';
+		$html .= '<div class="input-group input-group-sm" ' .
+						'ng-class="{\'bg-success\': ' . $ngModel . ' !== \'other_not_readable\'}">';
+
+		$label = h($userAttribute['UserAttribute']['name']);
+		if ($userAttribute['UserAttributeSetting']['required']) {
+			$label .= $this->_View->element('NetCommons.required', array('size' => 'h5'));
+		}
+		$html .= $this->Form->label($fieldName, $label, array('class' => 'input-group-addon'));
+
+		if ($this->_View->request->data['UserRoleSetting']['is_usable_user_manager']) {
+			$disabled = true;
+		} else {
+			$disabled = false;
+		}
+
+		$options = $this->__optionsUserAttributeRole($userAttribute);
+		if (count($options) <= 1) {
+			$disabled = true;
+		}
+
+		$html .= '<div class="form-control text-nowrap">';
+		$html .= Hash::get($options, $ngValue);
+		$html .= '</div>';
 
 		$html .= '</div>';
 		$html .= '</div>';

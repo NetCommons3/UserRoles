@@ -60,7 +60,7 @@ class UserRoleAddController extends UserRolesAppController {
 				parent::WIZARD_USER_ROLES => array(
 					'url' => array(
 						'controller' => 'user_role_add',
-						'action' => 'basic',
+						'action' => 'user_role',
 					),
 					'label' => array('user_roles', 'General setting'),
 				),
@@ -93,12 +93,12 @@ class UserRoleAddController extends UserRolesAppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 
-		if ($this->params['action'] === 'basic') {
+		if ($this->params['action'] === 'user_role') {
 			return;
 		}
 
 		if (! $this->Session->read('UserRoleAdd')) {
-			return $this->redirect('/user_roles/user_role_add/basic');
+			return $this->redirect('/user_roles/user_role_add/user_role');
 		}
 
 		if ($this->params['action'] === 'user_attributes_roles' &&
@@ -115,7 +115,7 @@ class UserRoleAddController extends UserRolesAppController {
  *
  * @return void
  */
-	public function basic() {
+	public function user_role() {
 		if ($this->request->is('post')) {
 			//不要パラメータ除去
 			unset($this->request->data['save'], $this->request->data['active_lang_id']);
@@ -192,7 +192,7 @@ class UserRoleAddController extends UserRolesAppController {
 
 		$userRoles = Hash::combine($result, '{n}.UserRole.key', '{n}.UserRole.name');
 		unset($userRoles[UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR]);
-		$this->set('userRoles', $userRoles);
+		$this->set('userRolesName', $userRoles);
 
 		$userRoles = Hash::combine($result, '{n}.UserRole.key', '{n}.UserRole.description');
 		unset($userRoles[UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR]);
