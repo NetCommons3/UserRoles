@@ -29,43 +29,45 @@ echo $this->NetCommonsHtml->script('/user_roles/js/user_roles.js');
 	); ?>
 </div>
 
-<table class="table table-hover" ng-controller="UserRolesController">
-	<thead>
-		<tr>
-			<th>
-				<?php echo __d('user_roles', 'User role name'); ?>
-			</th>
-			<th>
-				<?php echo __d('user_roles', 'User role description'); ?>
-			</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		<?php foreach ($userRoles as $index => $userRole) : ?>
+<div class="table-responsive">
+	<table class="table" ng-controller="UserRolesController">
+		<thead>
 			<tr>
-				<td>
-					<div class="text-nowrap">
-						<?php
-							echo $this->NetCommonsHtml->link($userRole['UserRole']['name'], '#', array(
-								'ng-click' => 'showUserRole(\'' . $userRole['UserRole']['key'] . '\')'
-							));
-						?>
-					</div>
-				</td>
-
-				<td>
-					<?php echo h($userRole['UserRole']['description']); ?>
-				</td>
-
-				<td>
-					<?php echo $this->LinkButton->edit(
-							'',
-							array('action' => 'edit', h($userRole['UserRole']['key'])),
-							array('iconSize' => ' btn-xs')
-						); ?>
-				</td>
+				<th>
+					<?php echo __d('user_roles', 'User role name'); ?>
+				</th>
+				<th>
+					<?php echo __d('user_roles', 'User role description'); ?>
+				</th>
+				<th></th>
 			</tr>
-		<?php endforeach; ?>
-	</tbody>
-</table>
+		</thead>
+		<tbody>
+			<?php foreach ($userRoles as $index => $userRole) : ?>
+				<tr>
+					<td>
+						<div class="text-nowrap">
+							<?php
+								echo $this->NetCommonsHtml->link($userRole['UserRole']['name'], '#', array(
+									'ng-click' => 'showUserRole(\'' . $userRole['UserRole']['key'] . '\')'
+								));
+							?>
+						</div>
+					</td>
+
+					<td>
+						<?php echo h($userRole['UserRole']['description']); ?>
+					</td>
+
+					<td>
+						<?php echo $this->LinkButton->edit(
+								'',
+								array('action' => 'edit', h($userRole['UserRole']['key'])),
+								array('iconSize' => ' btn-xs')
+							); ?>
+					</td>
+				</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
+</div>
