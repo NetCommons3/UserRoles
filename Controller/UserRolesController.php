@@ -116,9 +116,14 @@ class UserRolesController extends UserRolesAppController {
 		$this->request->data['UserRole'] = Hash::extract($result, '{n}.UserRole');
 
 		//UserRoleSettingデータ取得
-		$result = $this->UserRoleSetting->getUserRoleSetting(
-			Plugin::PLUGIN_TYPE_FOR_SITE_MANAGER, $roleKey
-		);
+		if ($roleKey === UserRole::USER_ROLE_KEY_SYSTEM_ADMINISTRATOR) {
+			$pluginConditions = array(
+				Plugin::PLUGIN_TYPE_FOR_SITE_MANAGER, Plugin::PLUGIN_TYPE_FOR_SYSTEM_MANGER
+			);
+		} else {
+			$pluginConditions = Plugin::PLUGIN_TYPE_FOR_SITE_MANAGER;
+		}
+		$result = $this->UserRoleSetting->getUserRoleSetting($pluginConditions, $roleKey);
 		$this->request->data = Hash::merge($this->request->data, $result);
 
 		//DefaultRolePermissionデータ取得
