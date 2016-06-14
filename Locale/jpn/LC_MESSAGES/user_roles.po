@@ -82,7 +82,7 @@ msgstr "サイト運営プラグインの選択"
 
 #: UserRoles/View/UserRoleSettings/edit.ctp:71
 msgid "Have authority of create group?"
-msgstr "グループを作成できる"
+msgstr "プライベートグループを作成できる"
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:81
 msgid "Use"
