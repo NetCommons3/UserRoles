@@ -44,7 +44,7 @@ msgid "Select site-manager plugins to use"
 msgstr "サイト運営プラグインの選択"
 
 msgid "Information policy setting"
-msgstr "個人情報設定"
+msgstr "個人情報の設定"
 
 #
 # 基本設定

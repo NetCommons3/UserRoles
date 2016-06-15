@@ -269,33 +269,8 @@ class UserRoleAddController extends UserRolesAppController {
 			if ($baseIsUsableUser) {
 				$this->request->data['UserAttributesRole'] = $userAttributesRoles;
 			} else {
-				foreach ($userAttributesRoles as $id => $userAttributesRole) {
-					$otherRole = Hash::get(
-						$this->request->data,
-						'UserAttributesRole.' . $id . '.UserAttributesRole.other_user_attribute_role',
-						false
-					);
-
-					if ($otherRole === false) {
-						$this->request->data['UserAttributesRole'][$id] = $userAttributesRole;
-						continue;
-					}
-
-					$choices = array(
-						UserAttributesRolesController::OTHER_READABLE,
-						UserAttributesRolesController::OTHER_NOT_READABLE
-					);
-					if (! in_array($otherRole, $choices, true)) {
-						return $this->throwBadRequest();
-					}
-
-					$userAttributesRole['UserAttributesRole']['other_readable'] = false;
-					$userAttributesRole['UserAttributesRole']['other_editable'] = false;
-					if ($otherRole === UserAttributesRolesController::OTHER_READABLE) {
-						$userAttributesRole['UserAttributesRole']['other_readable'] = true;
-					}
-					$this->request->data['UserAttributesRole'][$id] = $userAttributesRole;
-				}
+				//この中で、$this->request->data['UserAttributesRole']をセットする
+				$this->__parseUserAttrRoles($userAttributesRoles);
 			}
 			$baseUserRole['UserAttributesRole'] = $this->request->data['UserAttributesRole'];
 
@@ -314,5 +289,41 @@ class UserRoleAddController extends UserRolesAppController {
 		$this->request->data['UserAttributesRole'] = $userAttributesRoles;
 		$this->request->data['UserAttribute'] = $this->viewVars['userAttributes'];
 		$this->request->data = Hash::merge($baseUserRole, $this->request->data);
+	}
+
+/**
+ * 会員項目権限データのパース処理
+ *
+ * @param array $userAttributesRoles 会員項目権限データ配列
+ * @return void
+ */
+	private function __parseUserAttrRoles($userAttributesRoles) {
+		foreach ($userAttributesRoles as $id => $userAttributesRole) {
+			$otherRole = Hash::get(
+				$this->request->data,
+				'UserAttributesRole.' . $id . '.UserAttributesRole.other_user_attribute_role',
+				false
+			);
+
+			if ($otherRole === false) {
+				$this->request->data['UserAttributesRole'][$id] = $userAttributesRole;
+				continue;
+			}
+
+			$choices = array(
+				UserAttributesRolesController::OTHER_READABLE,
+				UserAttributesRolesController::OTHER_NOT_READABLE
+			);
+			if (! in_array($otherRole, $choices, true)) {
+				return $this->throwBadRequest();
+			}
+
+			$userAttributesRole['UserAttributesRole']['other_readable'] = false;
+			$userAttributesRole['UserAttributesRole']['other_editable'] = false;
+			if ($otherRole === UserAttributesRolesController::OTHER_READABLE) {
+				$userAttributesRole['UserAttributesRole']['other_readable'] = true;
+			}
+			$this->request->data['UserAttributesRole'][$id] = $userAttributesRole;
+		}
 	}
 }
