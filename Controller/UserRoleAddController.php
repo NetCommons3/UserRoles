@@ -210,11 +210,10 @@ class UserRoleAddController extends UserRolesAppController {
 		if ($this->request->is('post')) {
 			//不要パラメータ除去
 			unset($this->request->data['save']);
-
 			$isUsableUserManager = Hash::extract(
 				$this->request->data['PluginsRole'], '{n}.PluginsRole[plugin_key=user_manager]'
 			);
-			$isUsableUserManager = (bool)Hash::get($isUsableUserManager, '0', false);
+			$isUsableUserManager = (bool)Hash::get($isUsableUserManager, '0.is_usable_plugin', '0');
 			$this->Session->write(
 				'UserRoleAdd.UserRoleSetting.is_usable_user_manager', $isUsableUserManager
 			);
@@ -246,7 +245,20 @@ class UserRoleAddController extends UserRolesAppController {
 	public function user_attributes_roles() {
 		$baseUserRole = $this->Session->read('UserRoleAdd');
 
-		$rolekey = $baseUserRole['UserRoleSetting']['origin_role_key'];
+		//UserAttributesRoleデータ取得
+		$origUserRole = $this->UserRoleSetting->getUserRoleSetting(
+			Plugin::PLUGIN_TYPE_FOR_SITE_MANAGER,
+			Hash::get($baseUserRole, 'UserRoleSetting.origin_role_key')
+		);
+		$baseIsUsableUser = Hash::get($baseUserRole, 'UserRoleSetting.is_usable_user_manager', false);
+		$origIsUsableUser = Hash::get($origUserRole, 'UserRoleSetting.is_usable_user_manager', false);
+		if ($baseIsUsableUser === $origIsUsableUser) {
+			$rolekey = $baseUserRole['UserRoleSetting']['origin_role_key'];
+		} elseif ($baseIsUsableUser) {
+			$rolekey = UserRole::USER_ROLE_KEY_ADMINISTRATOR;
+		} else {
+			$rolekey = UserRole::USER_ROLE_KEY_COMMON_USER;
+		}
 		$userAttributesRoles = $this->UserAttributesRole->getUserAttributesRole($rolekey);
 
 		if ($this->request->is('post')) {
@@ -254,7 +266,7 @@ class UserRoleAddController extends UserRolesAppController {
 			unset($this->request->data['save']);
 
 			//リクエストの整形
-			if ($this->Session->read('UserRoleAdd.UserRoleSetting.is_usable_user_manager')) {
+			if ($baseIsUsableUser) {
 				$this->request->data['UserAttributesRole'] = $userAttributesRoles;
 			} else {
 				foreach ($userAttributesRoles as $id => $userAttributesRole) {

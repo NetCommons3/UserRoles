@@ -253,6 +253,7 @@ class UserRole extends Role {
  */
 	private function __saveCreatedUserRole($roleKey, $data) {
 		$this->loadModels([
+			'PluginsRole' => 'PluginManager.PluginsRole',
 			'UserAttributesRole' => 'UserRoles.UserAttributesRole',
 		]);
 
@@ -276,28 +277,32 @@ class UserRole extends Role {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 
-		//UserAttributesRoleのデータ登録処理
-		if ($data['UserRoleSetting']['is_usable_user_manager']) {
-			$result = $this->saveDefaultUserAttributesRole($data);
-		} else {
-			$data['UserAttributesRole'] = Hash::insert(
-				$data['UserAttributesRole'], '{n}.UserAttributesRole.id', null
-			);
-			$data['UserAttributesRole'] = Hash::insert(
-				$data['UserAttributesRole'], '{n}.UserAttributesRole.role_key', $roleKey
-			);
-			$result = $this->UserAttributesRole->saveUserAttributesRoles($data);
-		}
-		if (! $result) {
-			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-		}
-
 		//PluginsRoleのデータ登録処理
 		if (isset($data['PluginsRole'])) {
+			$data['PluginsRole'] = Hash::remove(
+				$data['PluginsRole'], '{n}.PluginsRole[is_usable_plugin=0]'
+			);
+			$data['PluginsRole'] = Hash::insert(
+				$data['PluginsRole'], '{n}.PluginsRole.id', null
+			);
 			$data['PluginsRole'] = Hash::insert(
 				$data['PluginsRole'], '{n}.PluginsRole.role_key', $roleKey
 			);
-			$this->saveUserRolePlugins($data);
+			if (! $this->PluginsRole->saveMany($data['PluginsRole'])) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+		}
+
+		//UserAttributesRoleのデータ登録処理
+		$data['UserAttributesRole'] = Hash::insert(
+			$data['UserAttributesRole'], '{n}.UserAttributesRole.id', null
+		);
+		$data['UserAttributesRole'] = Hash::insert(
+			$data['UserAttributesRole'], '{n}.UserAttributesRole.role_key', $roleKey
+		);
+		$result = $this->UserAttributesRole->saveUserAttributesRoles($data);
+		if (! $result) {
+			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 
 		return true;
