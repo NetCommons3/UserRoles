@@ -69,14 +69,14 @@ class UserRoleAddController extends UserRolesAppController {
 						'controller' => 'user_role_add',
 						'action' => 'user_roles_plugins',
 					),
-					'label' => array('user_roles', 'Select site-manager plugin to use'),
+					'label' => array('user_roles', 'Select site-manager plugins to use'),
 				),
 				parent::WIZARD_USER_ATTRIBUTES_ROLES => array(
 					'url' => array(
 						'controller' => 'user_role_add',
 						'action' => 'user_attributes_roles',
 					),
-					'label' => array('user_roles', 'Information Policy'),
+					'label' => array('user_roles', 'Information policy setting'),
 				),
 			),
 			'cancelUrl' => array('controller' => 'user_roles', 'action' => 'index'),

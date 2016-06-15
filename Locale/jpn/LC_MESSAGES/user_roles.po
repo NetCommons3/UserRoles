@@ -23,16 +23,31 @@ msgid "Add user role"
 msgstr "権限の追加"
 
 #
-# ウィザードナビ
+# ウィザードナビ、編集タブ
+#
+msgid "General information"
+msgstr "基本情報"
+
+msgid "Site-manager plugins to use"
+msgstr "利用可能なサイト運営プラグイン"
+
+msgid "Information policy"
+msgstr "個人情報の確認"
+
+#
+# ウィザードナビ、編集タブ
 #
 msgid "General setting"
-msgstr "一般設定"
+msgstr "基本設定"
 
-msgid "Information Policy"
+msgid "Select site-manager plugins to use"
+msgstr "サイト運営プラグインの選択"
+
+msgid "Information policy setting"
 msgstr "個人情報設定"
 
 #
-# 一般設定
+# 基本設定
 #
 msgid "Enter the title of the authority, enter the description of authority, and specify the level of the authority, and press [NEXT]."
 msgstr "作成する権限の名称と説明及び作成する基となる権限を指定して、[次へ]ボタンを押してください。"
@@ -65,7 +80,7 @@ msgid "Can not be deleted because it has this authority is used."
 msgstr "この権限は使用されているため、削除できません。使われているユーザの権限を変更してから削除してください。"
 
 #
-# 詳細設定
+# サイト運営プラグイン
 #
 msgid "Select site-manager plugin to use, and press [NEXT]."
 msgstr "利用させるサイト運営プラグインを選択して、[次へ]ボタンを押してください。"
@@ -76,9 +91,6 @@ msgstr "利用させるサイト運営プラグインを選択して、[決定]�
 #: UserRoles/View/UserRoleSettings/edit.ctp:71
 msgid "Use private room?"
 msgstr "プライベートルームを使用する"
-
-msgid "Select site-manager plugin to use"
-msgstr "サイト運営プラグインの選択"
 
 #: UserRoles/View/UserRoleSettings/edit.ctp:71
 msgid "Have authority of create group?"

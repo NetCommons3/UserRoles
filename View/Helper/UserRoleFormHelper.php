@@ -51,7 +51,7 @@ class UserRoleFormHelper extends AppHelper {
 				)
 			),
 			UserRolesAppController::WIZARD_USER_ROLES_PLUGINS => array(
-				'label' => __d('user_roles', 'Select site-manager plugin to use'),
+				'label' => __d('user_roles', 'Select site-manager plugins to use'),
 				'url' => array(
 					'controller' => 'user_roles_plugins',
 					'action' => 'edit',
@@ -59,7 +59,7 @@ class UserRoleFormHelper extends AppHelper {
 				)
 			),
 			UserRolesAppController::WIZARD_USER_ATTRIBUTES_ROLES => array(
-				'label' => __d('user_roles', 'Information Policy'),
+				'label' => __d('user_roles', 'Information policy setting'),
 				'url' => array(
 					'controller' => 'user_attributes_roles',
 					'action' => 'edit',
