@@ -20,7 +20,7 @@
 	<li class="active">
 		<?php
 			$key = UserRolesAppController::WIZARD_USER_ROLES;
-			$label = __d('user_roles', 'General setting');
+			$label = __d('user_roles', 'General information');
 			echo $this->NetCommonsHtml->link(
 				$label, '#' . $key, ['aria-controls' => $key, 'role' => 'tab', 'data-toggle' => 'tab']
 			);
@@ -31,7 +31,7 @@
 		<li>
 			<?php
 				$key = UserRolesAppController::WIZARD_USER_ROLES_PLUGINS;
-				$label = __d('user_roles', 'Select site-manager plugin to use');
+				$label = __d('user_roles', 'Site-manager plugins to use');
 				echo $this->NetCommonsHtml->link(
 					$label, '#' . $key, ['aria-controls' => $key, 'role' => 'tab', 'data-toggle' => 'tab']
 				);
@@ -42,7 +42,7 @@
 	<li>
 		<?php
 			$key = UserRolesAppController::WIZARD_USER_ATTRIBUTES_ROLES;
-			$label = __d('user_roles', 'Information Policy');
+			$label = __d('user_roles', 'Information policy');
 			echo $this->NetCommonsHtml->link(
 				$label, '#' . $key, ['aria-controls' => $key, 'role' => 'tab', 'data-toggle' => 'tab']
 			);

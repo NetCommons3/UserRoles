@@ -69,14 +69,14 @@ class UserRoleAddController extends UserRolesAppController {
 						'controller' => 'user_role_add',
 						'action' => 'user_roles_plugins',
 					),
-					'label' => array('user_roles', 'Select site-manager plugin to use'),
+					'label' => array('user_roles', 'Select site-manager plugins to use'),
 				),
 				parent::WIZARD_USER_ATTRIBUTES_ROLES => array(
 					'url' => array(
 						'controller' => 'user_role_add',
 						'action' => 'user_attributes_roles',
 					),
-					'label' => array('user_roles', 'Information Policy'),
+					'label' => array('user_roles', 'Information policy setting'),
 				),
 			),
 			'cancelUrl' => array('controller' => 'user_roles', 'action' => 'index'),
@@ -210,11 +210,10 @@ class UserRoleAddController extends UserRolesAppController {
 		if ($this->request->is('post')) {
 			//不要パラメータ除去
 			unset($this->request->data['save']);
-
 			$isUsableUserManager = Hash::extract(
 				$this->request->data['PluginsRole'], '{n}.PluginsRole[plugin_key=user_manager]'
 			);
-			$isUsableUserManager = (bool)Hash::get($isUsableUserManager, '0', false);
+			$isUsableUserManager = (bool)Hash::get($isUsableUserManager, '0.is_usable_plugin', '0');
 			$this->Session->write(
 				'UserRoleAdd.UserRoleSetting.is_usable_user_manager', $isUsableUserManager
 			);
@@ -246,7 +245,20 @@ class UserRoleAddController extends UserRolesAppController {
 	public function user_attributes_roles() {
 		$baseUserRole = $this->Session->read('UserRoleAdd');
 
-		$rolekey = $baseUserRole['UserRoleSetting']['origin_role_key'];
+		//UserAttributesRoleデータ取得
+		$origUserRole = $this->UserRoleSetting->getUserRoleSetting(
+			Plugin::PLUGIN_TYPE_FOR_SITE_MANAGER,
+			Hash::get($baseUserRole, 'UserRoleSetting.origin_role_key')
+		);
+		$baseIsUsableUser = Hash::get($baseUserRole, 'UserRoleSetting.is_usable_user_manager', false);
+		$origIsUsableUser = Hash::get($origUserRole, 'UserRoleSetting.is_usable_user_manager', false);
+		if ($baseIsUsableUser === $origIsUsableUser) {
+			$rolekey = $baseUserRole['UserRoleSetting']['origin_role_key'];
+		} elseif ($baseIsUsableUser) {
+			$rolekey = UserRole::USER_ROLE_KEY_ADMINISTRATOR;
+		} else {
+			$rolekey = UserRole::USER_ROLE_KEY_COMMON_USER;
+		}
 		$userAttributesRoles = $this->UserAttributesRole->getUserAttributesRole($rolekey);
 
 		if ($this->request->is('post')) {
@@ -254,36 +266,11 @@ class UserRoleAddController extends UserRolesAppController {
 			unset($this->request->data['save']);
 
 			//リクエストの整形
-			if ($this->Session->read('UserRoleAdd.UserRoleSetting.is_usable_user_manager')) {
+			if ($baseIsUsableUser) {
 				$this->request->data['UserAttributesRole'] = $userAttributesRoles;
 			} else {
-				foreach ($userAttributesRoles as $id => $userAttributesRole) {
-					$otherRole = Hash::get(
-						$this->request->data,
-						'UserAttributesRole.' . $id . '.UserAttributesRole.other_user_attribute_role',
-						false
-					);
-
-					if ($otherRole === false) {
-						$this->request->data['UserAttributesRole'][$id] = $userAttributesRole;
-						continue;
-					}
-
-					$choices = array(
-						UserAttributesRolesController::OTHER_READABLE,
-						UserAttributesRolesController::OTHER_NOT_READABLE
-					);
-					if (! in_array($otherRole, $choices, true)) {
-						return $this->throwBadRequest();
-					}
-
-					$userAttributesRole['UserAttributesRole']['other_readable'] = false;
-					$userAttributesRole['UserAttributesRole']['other_editable'] = false;
-					if ($otherRole === UserAttributesRolesController::OTHER_READABLE) {
-						$userAttributesRole['UserAttributesRole']['other_readable'] = true;
-					}
-					$this->request->data['UserAttributesRole'][$id] = $userAttributesRole;
-				}
+				//この中で、$this->request->data['UserAttributesRole']をセットする
+				$this->__parseUserAttrRoles($userAttributesRoles);
 			}
 			$baseUserRole['UserAttributesRole'] = $this->request->data['UserAttributesRole'];
 
@@ -302,5 +289,41 @@ class UserRoleAddController extends UserRolesAppController {
 		$this->request->data['UserAttributesRole'] = $userAttributesRoles;
 		$this->request->data['UserAttribute'] = $this->viewVars['userAttributes'];
 		$this->request->data = Hash::merge($baseUserRole, $this->request->data);
+	}
+
+/**
+ * 会員項目権限データのパース処理
+ *
+ * @param array $userAttributesRoles 会員項目権限データ配列
+ * @return void
+ */
+	private function __parseUserAttrRoles($userAttributesRoles) {
+		foreach ($userAttributesRoles as $id => $userAttributesRole) {
+			$otherRole = Hash::get(
+				$this->request->data,
+				'UserAttributesRole.' . $id . '.UserAttributesRole.other_user_attribute_role',
+				false
+			);
+
+			if ($otherRole === false) {
+				$this->request->data['UserAttributesRole'][$id] = $userAttributesRole;
+				continue;
+			}
+
+			$choices = array(
+				UserAttributesRolesController::OTHER_READABLE,
+				UserAttributesRolesController::OTHER_NOT_READABLE
+			);
+			if (! in_array($otherRole, $choices, true)) {
+				return $this->throwBadRequest();
+			}
+
+			$userAttributesRole['UserAttributesRole']['other_readable'] = false;
+			$userAttributesRole['UserAttributesRole']['other_editable'] = false;
+			if ($otherRole === UserAttributesRolesController::OTHER_READABLE) {
+				$userAttributesRole['UserAttributesRole']['other_readable'] = true;
+			}
+			$this->request->data['UserAttributesRole'][$id] = $userAttributesRole;
+		}
 	}
 }
