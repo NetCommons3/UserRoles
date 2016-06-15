@@ -36,10 +36,10 @@ echo $this->NetCommonsHtml->script('/user_roles/js/user_roles.js');
 				<th>
 					<?php echo __d('user_roles', 'User role name'); ?>
 				</th>
+				<th></th>
 				<th>
 					<?php echo __d('user_roles', 'User role description'); ?>
 				</th>
-				<th></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -54,17 +54,15 @@ echo $this->NetCommonsHtml->script('/user_roles/js/user_roles.js');
 							?>
 						</div>
 					</td>
-
-					<td>
-						<?php echo h($userRole['UserRole']['description']); ?>
-					</td>
-
 					<td>
 						<?php echo $this->LinkButton->edit(
 								'',
 								array('action' => 'edit', h($userRole['UserRole']['key'])),
 								array('iconSize' => ' btn-xs')
 							); ?>
+					</td>
+					<td>
+						<?php echo h($userRole['UserRole']['description']); ?>
 					</td>
 				</tr>
 			<?php endforeach; ?>
