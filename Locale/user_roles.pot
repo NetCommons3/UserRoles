@@ -68,15 +68,15 @@ msgid "Not permitted"
 msgstr ""
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:244
-msgid "Not readable of others"
+msgid "Other members can not read"
 msgstr ""
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:245
-msgid "Readable of others"
+msgid "Other members can also read"
 msgstr ""
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:246
-msgid "Editable of others"
+msgid "Other members can edited"
 msgstr ""
 
 #: UserRoles/View/UserRoleSettings/edit.ctp:71

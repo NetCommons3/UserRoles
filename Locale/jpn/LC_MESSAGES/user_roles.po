@@ -108,20 +108,23 @@ msgstr "使用しない"
 # 個人情報設定
 #
 #: UserRoles/View/Helper/UserRoleFormHelper.php:244
-msgid "Not readable of others"
-msgstr "すべての会員の情報を閲覧できない"
+msgid "Other members can not read"
+msgstr "他の会員の情報は閲覧できない"
+
+msgid "Other members can not also read"
+msgstr "他の会員の情報も閲覧できない"
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:245
-msgid "Readable of others"
-msgstr "すべての会員の情報を閲覧できる"
+msgid "Other members can also read"
+msgstr "他の会員の情報も閲覧できる"
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:246
-msgid "Editable of others"
-msgstr "すべての会員の情報を編集できる"
+msgid "Other members can also edited"
+msgstr "他の会員の情報も編集できる"
 
 msgid "You can set whether or not to view the user information of others. "
 "However, if the user manger plugin can be used, because you can view and edit all of the user information, here, it can not be set."
-msgstr "すべての会員の情報を閲覧させるかどうか設定できます。"
+msgstr "他の会員の情報を閲覧させるかどうか設定できます。"
 "ただし、会員管理プラグインが使用できる場合は、すべての会員のパスワードを除く全項目の閲覧及び編集、"
 "すべての会員のパスワードを編集できるため、ここでは、設定できません。"
 

@@ -92,15 +92,15 @@ msgstr ""
 # 詳細設定
 #
 #: UserRoles/View/Helper/UserRoleFormHelper.php:244
-msgid "Not readable of others"
+msgid "Other members can not read"
 msgstr ""
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:245
-msgid "Readable of others"
+msgid "Other members can also read"
 msgstr ""
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:246
-msgid "Editable of others"
+msgid "Other members can edited"
 msgstr ""
 
 msgid "You can set whether or not to view the user information of others. However, if the user manger plugin can be used, because you can view and edit all of the user information, here, it can not be set."
