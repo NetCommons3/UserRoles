@@ -94,7 +94,7 @@ msgstr "プライベートルームを使用する"
 
 #: UserRoles/View/UserRoleSettings/edit.ctp:71
 msgid "Have authority of create group?"
-msgstr "プライベートグループを作成できる"
+msgstr "グループを作成できる"
 
 #: UserRoles/View/Helper/UserRoleFormHelper.php:81
 msgid "Use"
