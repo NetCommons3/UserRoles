@@ -12,7 +12,7 @@
 
 <div class="nc-danger-zone" ng-init="dangerZone=false;">
 	<uib-accordion close-others="false">
-		<uib-accordion-group is-open="dangerZone" class="panel-danger">
+		<div uib-accordion-group is-open="dangerZone" class="panel-danger">
 			<uib-accordion-heading class="clearfix">
 				<span style="cursor: pointer">
 					<?php echo __d('net_commons', 'Danger Zone'); ?>
@@ -41,6 +41,6 @@
 						); ?>
 				<?php echo $this->NetCommonsForm->end(); ?>
 			<?php endif; ?>
-		</uib-accordion-group>
+		</div>
 	</uib-accordion>
 </div>
