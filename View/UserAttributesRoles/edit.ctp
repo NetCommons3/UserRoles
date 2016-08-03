@@ -36,7 +36,7 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 		<?php echo $this->Button->cancelAndSave(
 				__d('net_commons', 'Cancel'),
 				__d('net_commons', 'OK'),
-				$this->NetCommonsHtml->url(array('controller' => 'user_roles', 'action' => 'index')),
+				NetCommonsUrl::actionUrlAsArray(array('controller' => 'user_roles', 'action' => 'index')),
 				array(),
 				array('ng-disabled' => '(sending || ' . ($this->data['UserRoleSetting']['is_usable_user_manager'] ? 'true' : 'false') . ')')
 			); ?>
