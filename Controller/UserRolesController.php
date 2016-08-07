@@ -216,6 +216,9 @@ class UserRolesController extends UserRolesAppController {
 			$this->NetCommons->handleValidationError($this->UserRole->validationErrors, $message);
 			return $this->redirect('/user_roles/user_roles/edit/' . $this->data['UserRole'][0]['key']);
 		} else {
+			$this->NetCommons->setFlashNotification(
+				__d('net_commons', 'Successfully saved.'), array('class' => 'success')
+			);
 			return $this->redirect('/user_roles/user_roles/index/');
 		}
 	}

@@ -26,7 +26,7 @@
 			<?php else : ?>
 				<?php echo $this->NetCommonsForm->create('UserRoleDelete', array(
 						'type' => 'delete',
-						'url' => $this->NetCommonsHtml->url(array('action' => 'delete'))
+						'url' => NetCommonsUrl::actionUrlAsArray(array('action' => 'delete'))
 					)); ?>
 					<div class="pull-left">
 						<?php echo sprintf(__d('net_commons', 'Delete all data associated with the %s.'), __d('user_roles', 'User role')); ?>

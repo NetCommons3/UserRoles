@@ -54,7 +54,7 @@ echo $this->NetCommonsHtml->css(array(
 		<?php echo $this->Button->cancelAndSave(
 				__d('net_commons', 'Cancel'),
 				__d('net_commons', 'OK'),
-				$this->NetCommonsHtml->url(array('controller' => 'user_roles', 'action' => 'index'))
+				NetCommonsUrl::actionUrlAsArray(array('controller' => 'user_roles', 'action' => 'index'))
 			); ?>
 	</div>
 

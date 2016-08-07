@@ -27,7 +27,7 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 
 <?php echo $this->NetCommonsForm->create('UserAttributesRoles', array(
 		'type' => 'put',
-		'url' => $this->NetCommonsHtml->url(array('action' => 'edit', 'key' => $roleKey))
+		'url' => NetCommonsUrl::actionUrlAsArray(array('action' => 'edit', 'key' => $roleKey))
 	)); ?>
 
 	<?php echo $this->UserAttributeLayout->renderRow('UserAttributesRoles/render_edit_row'); ?>
@@ -36,7 +36,7 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 		<?php echo $this->Button->cancelAndSave(
 				__d('net_commons', 'Cancel'),
 				__d('net_commons', 'OK'),
-				$this->NetCommonsHtml->url(array('controller' => 'user_roles', 'action' => 'index')),
+				NetCommonsUrl::actionUrlAsArray(array('controller' => 'user_roles', 'action' => 'index')),
 				array(),
 				array('ng-disabled' => '(sending || ' . ($this->data['UserRoleSetting']['is_usable_user_manager'] ? 'true' : 'false') . ')')
 			); ?>
