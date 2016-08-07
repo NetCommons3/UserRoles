@@ -27,7 +27,7 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 
 <?php echo $this->NetCommonsForm->create('UserAttributesRoles', array(
 		'type' => 'put',
-		'url' => $this->NetCommonsHtml->url(array('action' => 'edit', 'key' => $roleKey))
+		'url' => NetCommonsUrl::actionUrlAsArray(array('action' => 'edit', 'key' => $roleKey))
 	)); ?>
 
 	<?php echo $this->UserAttributeLayout->renderRow('UserAttributesRoles/render_edit_row'); ?>
