@@ -76,11 +76,10 @@ class UserRoleFormComponentStartupTest extends NetCommonsControllerTestCase {
 		$this->assertRegExp($pattern, $this->view);
 
 		$this->assertTrue(in_array('UserRoles.UserRoleForm', $this->controller->helpers, true));
-		$this->assertArrayHasKey('defaultRoles', $this->vars);
-		$this->assertArrayHasKey('defaultRoles', $this->vars);
+		$this->assertArrayHasKey('defaultRoleOptions', $this->vars);
 		$this->assertEquals(
 			array('room_administrator', 'chief_editor', 'editor', 'general_user', 'visitor'),
-			array_keys($this->vars['defaultRoles'])
+			array_keys($this->vars['defaultRoleOptions'])
 		);
 	}
 
