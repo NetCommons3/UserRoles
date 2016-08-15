@@ -44,7 +44,7 @@ class UserRoleFormComponent extends Component {
 			),
 			'order' => array('id' => 'asc')
 		));
-		$controller->set('defaultRoles', $defaultRoles);
+		$controller->set('defaultRoleOptions', $defaultRoles);
 	}
 
 }
