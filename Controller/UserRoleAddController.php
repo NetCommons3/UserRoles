@@ -169,16 +169,15 @@ class UserRoleAddController extends UserRolesAppController {
 						'use_private_room' => true
 					))
 				);
+				$defaultPermission = $this->DefaultRolePermission->create(array(
+					'id' => null,
+					'type' => DefaultRolePermission::TYPE_USER_ROLE,
+					'permission' => 'group_creatable',
+					'value' => true,
+					'fixed' => false,
+				))['DefaultRolePermission'];
+				$this->request->data['DefaultRolePermission']['group_creatable'] = $defaultPermission;
 			}
-
-			$defaultPermission = $this->DefaultRolePermission->create(array(
-				'id' => null,
-				'type' => DefaultRolePermission::TYPE_USER_ROLE,
-				'permission' => 'group_creatable',
-				'value' => true,
-				'fixed' => false,
-			))['DefaultRolePermission'];
-			$this->request->data['DefaultRolePermission']['group_creatable'] = $defaultPermission;
 		}
 
 		$result = $this->UserRole->find('all', array(
