@@ -122,6 +122,9 @@ msgstr "他の会員の情報も閲覧できる"
 msgid "Other members can also edited"
 msgstr "他の会員の情報も編集できる"
 
+msgid "For non-display in the user role setting, can not read"
+msgstr "閲覧不可（会員項目設定で非表示のため）"
+
 msgid "You can set whether or not to view the user information of others. "
 "However, if the user manger plugin can be used, because you can view and edit all of the user information, here, it can not be set."
 msgstr "他の会員の情報を閲覧させるかどうか設定できます。"

@@ -363,7 +363,15 @@ class UserRoleFormHelper extends AppHelper {
 		$otherReadable = UserAttributesRolesController::OTHER_READABLE;
 		$otherNotReadable = UserAttributesRolesController::OTHER_NOT_READABLE;
 		$dataTypeKey = $userAttribute['UserAttributeSetting']['data_type_key'];
-		if ($userAttributeRole[0]['user_attribute_key'] === 'handlename') {
+
+		if (! $userAttribute['UserAttributeSetting']['display']) {
+			//会員項目で非表示の場合「閲覧できない」
+			$options = array(
+				$otherNotReadable => __d(
+					'user_roles', 'For non-display in the user role setting, can not read'
+				),
+			);
+		} elseif ($userAttributeRole[0]['user_attribute_key'] === 'handlename') {
 			//ハンドルの場合、「閲覧させない」を除外する
 			$options = array(
 				$otherReadable => __d('user_roles', 'Other members can also read'),
