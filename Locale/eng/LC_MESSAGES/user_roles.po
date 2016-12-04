@@ -13,95 +13,130 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#
-# 権限一覧
-#
-msgid "You can add, edit and delete authority in your NetCommons."
-msgstr ""
-
-msgid "Add user role"
-msgstr ""
-
-#
-# ウィザードナビ
-#
-msgid "General setting"
-msgstr ""
-
-msgid "Details setting"
-msgstr ""
-
-msgid "Information Policy"
-msgstr ""
-
-#
-# 一般設定
-#
-msgid "Enter the title of the authority, enter the description of authority, and specify the level of the authority, and press &#039;NEXT&#039;."
-msgstr ""
-
-msgid "Enter the title of the authority, enter the description of authority, and press &#039;NEXT&#039;."
-msgstr ""
-
-#: UserRoles/Model/UserRole.php:189
-#: UserRoles/View/UserRoles/index.ctp:24
+#: UserRoles/Model/UserRole.php:140
+#: UserRoles/Test/Case/Controller/UserRolesController/EditTest.php:224
+#: UserRoles/Test/Case/Model/UserRole/ValidateTest.php:81
+#: UserRoles/View/Elements/UserRoles/edit_form.ctp:29
+#: UserRoles/View/Elements/UserRoles/view_user_role.ctp:27
+#: UserRoles/View/UserRoles/index.ctp:37
 msgid "User role name"
 msgstr ""
 
+#: UserRoles/Model/UserRole.php:149
+#: UserRoles/View/Elements/UserRoles/edit_form.ctp:40
+#: UserRoles/View/Elements/UserRoles/view_user_role.ctp:37
+#: UserRoles/View/UserRoles/index.ctp:41
 msgid "User role description"
 msgstr ""
 
-#: UserRoles/View/Elements/UserRoles/edit_form_for_user_role_setting.ctp:15
-msgid "Origin roles"
-msgstr ""
-
-#: UserRoles/View/Elements/UserRoles/edit_form_for_user_role_setting.ctp:21
-msgid "Role description"
-msgstr ""
-
-#: UserRoles/View/Elements/UserRoles/delete_form.ctp:25;35
-msgid "User role"
-msgstr ""
-
-#: UserRoles/View/UserRoleSettings/edit.ctp:85
+#: UserRoles/Model/UserRole.php:430
+#: UserRoles/Test/Case/View/Elements/UserRoles/DeleteFormTest.php:87
+#: UserRoles/Test/test_app/Plugin/TestUserRoles/Controller/TestViewElementsUserRolesDeleteFormController.php:58
 msgid "Can not be deleted because it has this authority is used."
 msgstr ""
 
-#
-# 詳細設定
-#
-msgid "Make sure your change, and press &#039;NEXT&#039;."
+#: UserRoles/Test/Case/View/Helper/UserRoleFormHelper/SelectOriginUserRolesTest.php:91
+msgid "Role description"
 msgstr ""
 
-#: UserRoles/View/UserRoleSettings/edit.ctp:71
+#: UserRoles/View/Elements/UserRoles/delete_form.ctp:32;39
+msgid "User role"
+msgstr ""
+
+#: UserRoles/View/Elements/UserRoles/edit_form.ctp:57
+#: UserRoles/View/Elements/UserRoles/view_user_role.ctp:50
 msgid "Use private room?"
 msgstr ""
 
-msgid "Select site-manager plugin to use"
+#: UserRoles/View/Elements/UserRoles/edit_form.ctp:71
+#: UserRoles/View/Elements/UserRoles/view_user_role.ctp:59
+msgid "Have authority of create group?"
 msgstr ""
 
-#: UserRoles/View/Helper/UserRoleFormHelper.php:81
-msgid "Use"
+#: UserRoles/View/Elements/UserRoles/edit_form.ctp:78
+#: UserRoles/View/Elements/UserRoles/view_user_role.ctp:67
+msgid "Origin role"
 msgstr ""
 
-#: UserRoles/View/Helper/UserRoleFormHelper.php:82
-msgid "Not use"
+#: UserRoles/View/Elements/UserRoles/edit_form.ctp:81
+msgid "Origin role description"
 msgstr ""
 
-#
-# 詳細設定
-#
-#: UserRoles/View/Helper/UserRoleFormHelper.php:244
-msgid "Other members can not read"
+#: UserRoles/View/Helper/UserRoleFormHelper.php:46
+msgid "General setting"
 msgstr ""
 
-#: UserRoles/View/Helper/UserRoleFormHelper.php:245
+#: UserRoles/View/Helper/UserRoleFormHelper.php:54
+msgid "Select site-manager plugins to use"
+msgstr ""
+
+#: UserRoles/View/Helper/UserRoleFormHelper.php:62
+msgid "Information policy setting"
+msgstr ""
+
+#: UserRoles/View/Helper/UserRoleFormHelper.php:370
+msgid "For non-display in the user role setting, can not read"
+msgstr ""
+
+#: UserRoles/View/Helper/UserRoleFormHelper.php:377;388
 msgid "Other members can also read"
 msgstr ""
 
-#: UserRoles/View/Helper/UserRoleFormHelper.php:246
-msgid "Other members can edited"
+#: UserRoles/View/Helper/UserRoleFormHelper.php:382;392
+msgid "Other members can not also read"
 msgstr ""
 
+#: UserRoles/View/Helper/UserRoleFormHelper.php:387
+msgid "Other members can not read"
+msgstr ""
+
+#: UserRoles/View/Helper/UserRoleFormHelper.php:405
+msgid "Other members can also edited"
+msgstr ""
+
+#: UserRoles/View/UserAttributesRoles/edit.ctp:19
+#: UserRoles/View/UserRoleAdd/user_attributes_roles.ctp:18
 msgid "You can set whether or not to view the user information of others. However, if the user manger plugin can be used, because you can view and edit all of the user information, here, it can not be set."
 msgstr ""
+
+#: UserRoles/View/UserAttributesRoles/edit.ctp:25
+#: UserRoles/View/UserRoleAdd/user_attributes_roles.ctp:24
+msgid "There is a possibility that if does not set properly outflow of personal information occurs."
+msgstr ""
+
+#: UserRoles/View/UserRoleAdd/user_role.ctp:17
+msgid "Enter the title of the authority, enter the description of authority, and specify the level of the authority, and press [NEXT]."
+msgstr ""
+
+#: UserRoles/View/UserRoleAdd/user_roles_plugins.ctp:21
+msgid "Select site-manager plugin to use, and press [NEXT]."
+msgstr ""
+
+#: UserRoles/View/UserRoles/edit.ctp:19
+msgid "Enter the title of the authority, enter the description of authority, and press [OK]."
+msgstr ""
+
+#: UserRoles/View/UserRoles/index.ctp:21
+msgid "You can add, edit and delete authority in your NetCommons."
+msgstr ""
+
+#: UserRoles/View/UserRoles/index.ctp:27
+msgid "Add user role"
+msgstr ""
+
+#: UserRoles/View/UserRoles/view.ctp:23
+msgid "General information"
+msgstr ""
+
+#: UserRoles/View/UserRoles/view.ctp:34
+msgid "Site-manager plugins to use"
+msgstr ""
+
+#: UserRoles/View/UserRoles/view.ctp:45
+msgid "Information policy"
+msgstr ""
+
+#: UserRoles/View/UserRolesPlugins/edit.ctp:22
+msgid "Select site-manager plugin to use, and press [OK]."
+msgstr ""
+
