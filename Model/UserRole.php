@@ -228,7 +228,7 @@ class UserRole extends Role {
 				$this->__saveCreatedUserRole($roleKey, $data);
 			} else {
 				if (! $this->UserRoleSetting->saveUserRoleSetting($data)) {
-					throw new InternalErrorException(__d('net_commons', 'Internal Server Error 1'));
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}
 			}
 
