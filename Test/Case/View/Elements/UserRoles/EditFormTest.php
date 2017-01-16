@@ -24,7 +24,9 @@ class UserRolesViewElementsUserRolesEditFormTest extends NetCommonsControllerTes
  *
  * @var array
  */
-	public $fixtures = array();
+	public $fixtures = array(
+		'plugin.user_attributes.user_attribute_layout',
+	);
 
 /**
  * Plugin name
