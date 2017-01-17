@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
+App::uses('UserRolesNetCommonsControllerTestCase', 'UserRoles.TestSuite');
 
 /**
  * UserRoleSettingsController::edit()のテスト
@@ -17,20 +17,7 @@ App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\UserRoles\Test\Case\Controller\UserRoleSettingsController
  */
-class UserRolesPluginsControllerEditTest extends NetCommonsControllerTestCase {
-
-/**
- * Fixtures
- *
- * @var array
- */
-	public $fixtures = array(
-		'plugin.user_roles.plugin4test',
-		'plugin.user_roles.plugins_role4test',
-		'plugin.user_roles.user_attributes_role',
-		'plugin.user_roles.user_role4test',
-		'plugin.user_roles.user_role_setting',
-	);
+class UserRolesPluginsControllerEditTest extends UserRolesNetCommonsControllerTestCase {
 
 /**
  * Plugin name

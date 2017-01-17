@@ -124,6 +124,7 @@ class UserAttributesRolesController extends UserRolesAppController {
 			$this->request->data = $this->UserRoleSetting->getUserRoleSetting(
 				Plugin::PLUGIN_TYPE_FOR_SITE_MANAGER, $roleKey
 			);
+
 			$this->request->data['UserAttributesRole'] =
 								$this->UserAttributesRole->getUserAttributesRole($roleKey);
 			$this->request->data['UserAttribute'] = $this->viewVars['userAttributes'];

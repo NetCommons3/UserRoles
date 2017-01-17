@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
+App::uses('UserRolesNetCommonsControllerTestCase', 'UserRoles.TestSuite');
 App::uses('UserRole', 'UserRoles.Model');
 
 /**
@@ -18,7 +18,7 @@ App::uses('UserRole', 'UserRoles.Model');
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\UserRoles\Test\Case\Controller\UserRolesAppController
  */
-class UserRolesAppControllerBeforeFilterTest extends NetCommonsControllerTestCase {
+class UserRolesAppControllerBeforeFilterTest extends UserRolesNetCommonsControllerTestCase {
 
 /**
  * Fixtures

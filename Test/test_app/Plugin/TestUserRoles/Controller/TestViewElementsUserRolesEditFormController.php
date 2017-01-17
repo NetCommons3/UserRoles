@@ -20,6 +20,15 @@ App::uses('UserRolesController', 'UserRoles.Controller');
 class TestViewElementsUserRolesEditFormController extends UserRolesController {
 
 /**
+ * use helpers
+ *
+ * @var array
+ */
+	public $helpers = array(
+		'UserRoles.UserRoleForm',
+	);
+
+/**
  * beforeRender
  *
  * @return void

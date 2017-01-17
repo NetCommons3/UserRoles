@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
+App::uses('UserRolesNetCommonsControllerTestCase', 'UserRoles.TestSuite');
 
 /**
  * View/Elements/UserAttributesRoles/render_edit_colのテスト
@@ -17,19 +17,7 @@ App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\UserRoles\Test\Case\View\Elements\UserAttributesRoles\RenderEditCol
  */
-class UserRolesViewElementsUserAttributesRolesRenderEditColTest extends NetCommonsControllerTestCase {
-
-/**
- * Fixtures
- *
- * @var array
- */
-	public $fixtures = array(
-		'plugin.user_attributes.user_attribute_layout',
-		'plugin.user_roles.user_attributes_role4edit',
-		'plugin.user_roles.user_role4test',
-		'plugin.user_roles.user_role_setting',
-	);
+class UserRolesViewElementsUserAttributesRolesRenderEditColTest extends UserRolesNetCommonsControllerTestCase {
 
 /**
  * Plugin name
