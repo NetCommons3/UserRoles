@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
+App::uses('UserRolesNetCommonsControllerTestCase', 'UserRoles.TestSuite');
 
 /**
  * View/Elements/UserAttributesRoles/render_edit_rowのテスト
@@ -17,16 +17,7 @@ App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\UserRoles\Test\Case\View\Elements\UserAttributesRoles\RenderEditRow
  */
-class UserRolesViewElementsUserAttributesRolesRenderEditRowTest extends NetCommonsControllerTestCase {
-
-/**
- * Fixtures
- *
- * @var array
- */
-	public $fixtures = array(
-		'plugin.user_attributes.user_attribute_layout',
-	);
+class UserRolesViewElementsUserAttributesRolesRenderEditRowTest extends UserRolesNetCommonsControllerTestCase {
 
 /**
  * Plugin name

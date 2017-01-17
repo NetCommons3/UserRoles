@@ -18,29 +18,6 @@
 class UserAttributesRoleFixture extends CakeTestFixture {
 
 /**
- * Fields
- *
- * @var array
- */
-	public $fields = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
-		'role_key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'user_attribute_key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'self_readable' => array('type' => 'boolean', 'null' => true, 'default' => null),
-		'self_editable' => array('type' => 'boolean', 'null' => true, 'default' => null),
-		'other_readable' => array('type' => 'boolean', 'null' => true, 'default' => null),
-		'other_editable' => array('type' => 'boolean', 'null' => true, 'default' => null),
-		'created_user' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
-		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
-		'modified_user' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
-		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
-		'indexes' => array(
-			'PRIMARY' => array('column' => 'id', 'unique' => 1)
-		),
-		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
-	);
-
-/**
  * Records
  *
  * @var array
@@ -83,5 +60,16 @@ class UserAttributesRoleFixture extends CakeTestFixture {
 			'other_editable' => '0',
 		),
 	);
+
+/**
+ * Initialize the fixture.
+ *
+ * @return void
+ */
+	public function init() {
+		require_once App::pluginPath('UserRoles') . 'Config' . DS . 'Schema' . DS . 'schema.php';
+		$this->fields = (new UserRolesSchema())->tables['user_attributes_roles'];
+		parent::init();
+	}
 
 }

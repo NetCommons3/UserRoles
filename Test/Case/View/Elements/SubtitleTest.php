@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
+App::uses('UserRolesNetCommonsControllerTestCase', 'UserRoles.TestSuite');
 
 /**
  * View/Elements/subtitleのテスト
@@ -17,14 +17,7 @@ App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\UserRoles\Test\Case\View\Elements\Subtitle
  */
-class UserRolesViewElementsSubtitleTest extends NetCommonsControllerTestCase {
-
-/**
- * Fixtures
- *
- * @var array
- */
-	public $fixtures = array();
+class UserRolesViewElementsSubtitleTest extends UserRolesNetCommonsControllerTestCase {
 
 /**
  * Plugin name

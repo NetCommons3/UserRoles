@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
+App::uses('UserRolesNetCommonsControllerTestCase', 'UserRoles.TestSuite');
 
 /**
  * UserRolesController::beforeFilter()のテスト
@@ -17,24 +17,7 @@ App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\UserRoles\Test\Case\Controller\UserRolesController
  */
-class UserRolesControllerBeforeFilterTest extends NetCommonsControllerTestCase {
-
-/**
- * Fixtures
- *
- * @var array
- */
-	public $fixtures = array(
-		'plugin.user_attributes.user_attribute4edit',
-		'plugin.user_attributes.user_attribute_choice4edit',
-		'plugin.user_attributes.user_attribute_layout',
-		'plugin.user_attributes.user_attribute_setting4edit',
-		'plugin.user_roles.plugin4test',
-		'plugin.user_roles.plugins_role4test',
-		'plugin.user_roles.user_attributes_role4edit',
-		'plugin.user_roles.user_role4test',
-		'plugin.user_roles.user_role_setting',
-	);
+class UserRolesControllerBeforeFilterTest extends UserRolesNetCommonsControllerTestCase {
 
 /**
  * Plugin name
