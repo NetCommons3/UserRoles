@@ -206,7 +206,9 @@ class UserRole extends Role {
 		//UserRoleのバリデーション
 		//　※$data['UserRole'][0]['key']という形からvalidateMany()を通すことで
 		//　　$data['UserRole'][0]['UserRole']['key']となる
-		$roleKey = $data['UserRole'][0]['key'];
+		//$roleKey = $data['UserRole'][0]['key'];
+		$roleKey = Hash::extract($data, 'UserRole.{n}.key')[0];
+
 		if (! $this->validateMany($data['UserRole'])) {
 			return false;
 		}
