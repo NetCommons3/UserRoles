@@ -126,10 +126,10 @@ msgid "For non-display in the user role setting, can not read"
 msgstr "閲覧不可（会員項目設定で非表示のため）"
 
 msgid "You can set whether or not to view the user information of others. "
-"However, if the user manger plugin can be used, because you can view and edit all of the user information, here, it can not be set."
+"However, if you can use the membership management menu, you can view and edit all the items except the password of all members, edit the password."
 msgstr "他の会員の情報を閲覧させるかどうか設定できます。"
-"ただし、会員管理プラグインが使用できる場合は、すべての会員のパスワードを除く全項目の閲覧及び編集、"
-"すべての会員のパスワードを編集できるため、ここでは、設定できません。"
+"ただし、会員管理メニューを使用できる場合は、すべての会員のパスワードを除く全項目の閲覧及び編集、"
+"パスワードを編集できます。"
 
 msgid "There is a possibility that if does not set properly outflow of personal information occurs."
 msgstr "適切に設定しないと個人情報の流出が起こる可能性があります。"
