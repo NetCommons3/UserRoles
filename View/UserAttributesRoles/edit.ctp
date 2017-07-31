@@ -16,8 +16,7 @@ echo $this->NetCommonsHtml->css('/user_roles/css/style.css');
 	echo $this->UserRoleForm->settingTabs(UserRolesAppController::WIZARD_USER_ATTRIBUTES_ROLES);
 	echo $this->element('UserRoles.subtitle');
 	echo $this->MessageFlash->description(
-		__d('user_roles', 'You can set whether or not to view the user information of others. ' .
-				'However, if you can use the membership management menu, you can view and edit all the items except the password of all members, edit the password.')
+		__d('user_roles', 'You can set whether or not to view the user information of others.')
 	);
 ?>
 

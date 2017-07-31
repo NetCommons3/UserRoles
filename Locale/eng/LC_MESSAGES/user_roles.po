@@ -96,8 +96,10 @@ msgstr ""
 
 #: UserRoles/View/UserAttributesRoles/edit.ctp:19
 #: UserRoles/View/UserRoleAdd/user_attributes_roles.ctp:18
-msgid "You can set whether or not to view the user information of others. However, if you can use the membership management menu, you can view and edit all the items except the password of all members, edit the password."
-msgstr ""
+msgid "You can set whether or not to view the user information of others."
+msgstr "You can set whether or not to view the user information of others. "
+"However, even if you set it here, members who have authority to use the members management menu can view and edit all items of all members "
+"(password can not be viewed but only edited)."
 
 #: UserRoles/View/UserAttributesRoles/edit.ctp:25
 #: UserRoles/View/UserRoleAdd/user_attributes_roles.ctp:24

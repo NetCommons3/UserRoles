@@ -96,7 +96,7 @@ msgstr ""
 
 #: UserRoles/View/UserAttributesRoles/edit.ctp:19
 #: UserRoles/View/UserRoleAdd/user_attributes_roles.ctp:18
-msgid "You can set whether or not to view the user information of others. However, if you can use the membership management menu, you can view and edit all the items except the password of all members, edit the password."
+msgid "You can set whether or not to view the user information of others."
 msgstr ""
 
 #: UserRoles/View/UserAttributesRoles/edit.ctp:25
