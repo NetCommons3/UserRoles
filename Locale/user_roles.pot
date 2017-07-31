@@ -96,7 +96,7 @@ msgstr ""
 
 #: UserRoles/View/UserAttributesRoles/edit.ctp:19
 #: UserRoles/View/UserRoleAdd/user_attributes_roles.ctp:18
-msgid "You can set whether or not to view the user information of others. However, if the user manger plugin can be used, because you can view and edit all of the user information, here, it can not be set."
+msgid "You can set whether or not to view the user information of others."
 msgstr ""
 
 #: UserRoles/View/UserAttributesRoles/edit.ctp:25
