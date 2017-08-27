@@ -20,7 +20,7 @@ App::uses('UserAttribute', 'UserAttributes.Model');
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\UserRoles\Test\Case\View\Elements\UserAttributesRoles\RenderEditCol
  */
-class UserRolesNetCommonsControllerTestCase extends NetCommonsControllerTestCase {
+abstract class UserRolesNetCommonsControllerTestCase extends NetCommonsControllerTestCase {
 
 /**
  * Fixtures
