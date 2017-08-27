@@ -19,7 +19,7 @@ App::uses('NetCommonsHelperTestCase', 'NetCommons.TestSuite');
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\UserRoles\Test\Case\View\Elements\UserAttributesRoles\RenderEditCol
  */
-class UserRolesNetCommonsHelperTestCase extends NetCommonsHelperTestCase {
+abstract class UserRolesNetCommonsHelperTestCase extends NetCommonsHelperTestCase {
 
 /**
  * Fixtures
