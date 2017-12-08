@@ -48,7 +48,7 @@ class UserRolesAppController extends AppController {
 	public $components = array(
 		'ControlPanel.ControlPanelLayout',
 		'NetCommons.Permission' => array(
-			'type' => PermissionComponent::CHECK_TYEP_SYSTEM_PLUGIN,
+			'type' => PermissionComponent::CHECK_TYPE_SYSTEM_PLUGIN,
 			'allow' => array()
 		),
 		'Security',
