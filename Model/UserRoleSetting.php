@@ -88,6 +88,9 @@ class UserRoleSetting extends UserRolesAppModel {
 		//UserRoleSettingデータ取得
 		$userRoleSetting = $this->find('first', array(
 			'recursive' => -1,
+			'fields' => [
+				'id', 'role_key', 'origin_role_key', 'use_private_room', 'is_site_plugins'
+			],
 			'conditions' => array(
 				'role_key' => $roleKey,
 			)
