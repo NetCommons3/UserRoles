@@ -10,6 +10,7 @@
  */
 
 App::uses('UserRolesNetCommonsControllerTestCase', 'UserRoles.TestSuite');
+App::uses('TestAuthGeneral', 'AuthGeneral.TestSuite');
 
 /**
  * View/Elements/UserRoles/edit_formのテスト
@@ -38,6 +39,9 @@ class UserRolesViewElementsUserRolesEditFormTest extends UserRolesNetCommonsCont
 		NetCommonsCakeTestCase::loadTestPlugin($this, 'UserRoles', 'TestUserRoles');
 		//テストコントローラ生成
 		$this->generateNc('TestUserRoles.TestViewElementsUserRolesEditForm');
+
+		//ログイン
+		TestAuthGeneral::login($this);
 	}
 
 /**
