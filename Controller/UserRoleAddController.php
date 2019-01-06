@@ -126,7 +126,7 @@ class UserRoleAddController extends UserRolesAppController {
 			//登録処理
 			if ($this->UserRole->validateUserRole($this->request->data)) {
 				$this->Session->write('UserRoleAdd', $this->request->data);
-				$count = $this->PluginsRole->find('count', array(
+				$count = $this->PluginsRole->cacheFindQuery('count', array(
 					'recursive' => -1,
 					'conditions' => array(
 						'role_key' => $this->request->data['UserRoleSetting']['origin_role_key']
