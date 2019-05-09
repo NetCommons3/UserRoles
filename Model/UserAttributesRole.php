@@ -45,7 +45,7 @@ class UserAttributesRole extends UserRolesAppModel {
  * @see Model::save()
  */
 	public function beforeValidate($options = array()) {
-		$this->validate = Hash::merge($this->validate, array(
+		$this->validate = ValidateMerge::merge($this->validate, array(
 			'role_key' => array(
 				'notBlank' => array(
 					'rule' => array('notBlank'),
